@@ -1,0 +1,395 @@
+@font-face {
+  font-family: "Big Shoulders Display";
+  src: url("/fonts/big-shoulders-display/BigShouldersDisplay.ttf")
+    format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Pangram Sans";
+  src: url("/fonts/pangram-sans/PPPangramSans-Extrabold.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/geist-mono/geist-mono-variable.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+.clientReviews {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #e3e3db;
+  background-image: radial-gradient(
+      1200px 600px at 10% -10%,
+      rgba(255, 255, 255, 0.55),
+      rgba(255, 255, 255, 0)
+    ),
+    radial-gradient(
+      900px 500px at 90% 10%,
+      rgba(255, 255, 255, 0.35),
+      rgba(255, 255, 255, 0)
+    );
+}
+
+.reviewCard {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  padding: clamp(1.5rem, 3vw, 3rem);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+}
+
+.reviewCardContainer {
+  position: relative;
+  width: min(72%, 920px);
+  height: 52%;
+  min-height: 320px;
+  display: flex;
+  padding: clamp(1.75rem, 2.5vw, 3rem);
+  border-radius: 1.6rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  background-image: linear-gradient(
+      120deg,
+      rgba(255, 255, 255, 0.2),
+      rgba(255, 255, 255, 0) 45%
+    ),
+    radial-gradient(
+      160% 130% at 0% 0%,
+      rgba(255, 255, 255, 0.25),
+      rgba(255, 255, 255, 0) 60%
+    );
+  will-change: transform;
+}
+
+.reviewCardContainer::after {
+  content: "";
+  position: absolute;
+  top: -20%;
+  right: -15%;
+  width: 55%;
+  height: 55%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0)
+  );
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.reviewCardContent {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.reviewCardContentWrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: left;
+  gap: 1.75rem;
+}
+
+.reviewCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.reviewCardMeta {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.reviewCardStars {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #f6b94b;
+}
+
+.reviewStar,
+.reviewStarMuted {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background: currentColor;
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25));
+}
+
+.reviewStarMuted {
+  opacity: 0.35;
+  filter: none;
+}
+
+.reviewCardBody {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: stretch;
+  width: 100%;
+}
+
+.reviewCardQuote {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-height: 100%;
+}
+
+.reviewCardText {
+  font-family: "PP Pangram Sans", sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.6rem, 2.4vw, 2.7rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  text-wrap: balance;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-height: calc(1.2em * 5);
+}
+
+.reviewCardDivider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.6),
+    rgba(255, 255, 255, 0.05)
+  );
+  opacity: 0.4;
+  margin-top: 0.75rem;
+}
+
+.reviewCardClientInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-direction: row-reverse;
+}
+
+.reviewCardAvatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 255, 255, 0.95),
+    rgba(255, 255, 255, 0.4)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.reviewCardAvatarImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.reviewCardAvatarFallback {
+  font-family: "Geist Mono", monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08rem;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.reviewCardClientDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.reviewCardClient {
+  text-transform: uppercase;
+  font-family: "Geist Mono", monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.2rem;
+}
+
+.reviewCardClientCompany {
+  text-transform: uppercase;
+  font-family: "PP Pangram Sans", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.2rem;
+  color: currentColor;
+  opacity: 0.55;
+}
+
+.reviewCardMediaStack {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+}
+
+.reviewCardPhoto {
+  position: absolute;
+  width: clamp(140px, 18vw, 200px);
+  aspect-ratio: 4 / 5;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+  padding: 0;
+  left: 50%;
+  top: 50%;
+  z-index: calc(10 - var(--stack-index, 0));
+  transform: translate(-50%, -50%)
+    translate(
+      calc(var(--stack-index, 0) * -12px),
+      calc(var(--stack-index, 0) * 22px)
+    )
+    rotate(calc(var(--stack-index, 0) * -2deg));
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.25s ease;
+  cursor: pointer;
+}
+
+.reviewCardPhoto:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.85);
+  outline-offset: 3px;
+}
+
+.reviewCardPhotoActive {
+  transform: translate(-50%, -50%) translate(0, -22px) rotate(0deg);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.4);
+  z-index: 20;
+}
+
+.reviewCardPhotoImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(1.08) contrast(1.03);
+}
+
+@media (max-width: 1000px) {
+  .reviewCardContainer {
+    flex-direction: column;
+    gap: 0;
+    width: 92%;
+    height: auto;
+    min-height: 280px;
+    padding: 1.5rem;
+  }
+
+  .reviewCardContentWrapper {
+    width: 100%;
+    justify-content: center;
+    gap: 1.4rem;
+  }
+
+  .reviewCardContent {
+    height: 100%;
+  }
+
+  .reviewCardText {
+    font-size: 1.7rem;
+    -webkit-line-clamp: 4;
+    max-height: calc(1.2em * 4);
+  }
+
+  .reviewCardBody {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .reviewCardMediaStack {
+    min-height: 180px;
+  }
+
+  .reviewCardPhoto {
+    width: clamp(120px, 55vw, 170px);
+    transform: translate(-50%, -50%)
+      translate(
+        calc(var(--stack-index, 0) * -10px),
+        calc(var(--stack-index, 0) * 16px)
+      )
+      rotate(calc(var(--stack-index, 0) * -1.6deg));
+  }
+
+  .reviewCardPhotoActive {
+    transform: translate(-50%, -50%) translate(0, -18px) rotate(0deg);
+  }
+
+  .reviewCardPhoto:nth-child(n + 3) {
+    display: none;
+  }
+
+  .reviewCard {
+    padding: 1.25rem 0 0 0;
+  }
+
+  .reviewStar {
+    width: 13px;
+    height: 13px;
+  }
+
+  .reviewStarMuted {
+    width: 13px;
+    height: 13px;
+  }
+
+
+  .reviewCardAvatar {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .reviewCardPhoto:nth-child(n + 2) {
+    display: none;
+  }
+}

@@ -1,0 +1,338 @@
+{
+  "home": {
+    "welcome": "Chào mừng bạn đến với ứng dụng của chúng tôi!"
+  },
+  "notFound": {
+    "title": "Không tìm thấy trang",
+    "description": "Đường dẫn bạn truy cập có thể đã bị xóa hoặc chưa tồn tại.",
+    "ctaHome": "Về trang chủ",
+    "hint": "Kiểm tra lại URL hoặc thử tìm kiếm nội dung khác."
+  },
+  "footer": {
+    "brandName": "Achi Vegan House",
+    "brandTagline": "Nha hang chay/thuan chay",
+    "brandDescription": "Achi Vegan House phuc vu gan 100 mon chay tu rau cu, trai cay va cac loai hat huu co.",
+    "address": "50 Thuy Khue, Thuy Khue, Tay Ho, Ha Noi, Viet Nam",
+    "hoursLabel": "Gio mo cua",
+    "statusOpen": "Dang mo cua",
+    "statusClosed": "Dang dong cua",
+    "viewDetails": "Xem chi tiet",
+    "servicesTitle": "Dich vu",
+    "services": [
+      "Bua an chay cho gia dinh tai nha",
+      "Dich vu tiec chay cho gia dinh va to chuc",
+      "Cho ngoi ngoai troi"
+    ],
+    "features": [
+      "Muc gia: $",
+      "100% de xuat (50 danh gia)"
+    ],
+    "mapTitle": "Ban do Achi Vegan House",
+    "mapCta": "Xem tren Google Maps",
+    "mapRatingValue": 4.5,
+    "mapReviewCount": 271,
+    "mapRatingLabel": "{rating} ({count} danh gia)",
+    "mapRatingSource": "Google Maps",
+    "helpCenter": "Trung tam ho tro",
+    "modal": {
+      "title": "Gio mo cua",
+      "servicesTitle": "Dich vu",
+      "close": "Dong"
+    },
+    "legal": "(c) {year} Achi Vegan House. Moi quyen duoc bao luu.",
+    "weekdays": [
+      "Thu Hai",
+      "Thu Ba",
+      "Thu Tu",
+      "Thu Nam",
+      "Thu Sau",
+      "Thu Bay",
+      "Chu Nhat"
+    ],
+    "privacyPolicy": "Chinh sach bao mat"
+  },
+  "header": {
+    "brandName": "Achi Vegan House",
+    "products": "Thuc don",
+    "about": "Gioi thieu",
+    "contact": "Lien he",
+    "blog": "Blog",
+    "menuTitle": "Menu",
+    "openMenu": "Mo menu",
+    "close": "Dong",
+    "menuDescription": "Mo menu dieu huong di dong cho Achi Vegan House."
+  },
+  "spotlight": {
+    "marqueeTexts": [
+      "Thuan chay",
+      "Tuoi",
+      "Huu co",
+      "Tinh te"
+    ]
+  },
+  "clientReviews": {
+    "items": [
+      {
+        "review": "Huong vi thanh nhat, can bang. Ban be khong an chay van quay lai.",
+        "clientName": "Mai Nguyen",
+        "clientCompany": "Gia dinh Tay Ho",
+        "rating": 5,
+        "reviewImage": "/Ingredient/i1.jpg",
+        "reviewImages": [
+          "/Ingredient/i1.jpg",
+          "/Ingredient/i2.jpg",
+          "/Ingredient/i3.jpg"
+        ]
+      },
+      {
+        "review": "Dich vu tiec chay rat chu dao va dung gio. Ai cung hoi thuc don.",
+        "clientName": "Duc Tran",
+        "clientCompany": "Green Office",
+        "rating": 5,
+        "reviewImage": "/Ingredient/i2.jpg",
+        "reviewImages": [
+          "/Ingredient/i4.jpg",
+          "/Combo/c1.jpg",
+          "/Combo/c2.jpg"
+        ]
+      },
+      {
+        "review": "Rau cu tuoi, gia vi nhe, phan an hau ha. Hop bua toi trong tuan.",
+        "clientName": "Linh Pham",
+        "clientCompany": "Yoga Studio",
+        "rating": 5,
+        "reviewImage": "/Ingredient/i3.jpg",
+        "reviewImages": [
+          "/Combo/c3.jpg",
+          "/Combo/c4.jpg",
+          "/Ingredient/i1.jpg"
+        ]
+      },
+      {
+        "review": "Mon nao cung cam giac lam thu cong. Chat luong huu co rat ro.",
+        "clientName": "Anh Le",
+        "clientCompany": "Local foodie",
+        "rating": 5,
+        "reviewImage": "/Ingredient/i4.jpg",
+        "reviewImages": [
+          "/Ingredient/i2.jpg",
+          "/Ingredient/i3.jpg",
+          "/Ingredient/i4.jpg"
+        ]
+      },
+      {
+        "review": "Cho ngoi ngoai troi thoang va yen. Gia ca hop ly.",
+        "clientName": "Hannah Vo",
+        "clientCompany": "Neighborhood group",
+        "rating": 5,
+        "reviewImage": "/Combo/c1.jpg",
+        "reviewImages": [
+          "/Combo/c1.jpg",
+          "/Combo/c2.jpg",
+          "/Combo/c3.jpg"
+        ]
+      },
+      {
+        "review": "Dat mon gia dinh thuong xuyen, chat luong on dinh.",
+        "clientName": "Quang Do",
+        "clientCompany": "Family gatherings",
+        "rating": 5,
+        "reviewImage": "/Combo/c2.jpg",
+        "reviewImages": [
+          "/Combo/c4.jpg",
+          "/Ingredient/i1.jpg",
+          "/Ingredient/i2.jpg"
+        ]
+      }
+    ]
+  },
+  "privacy": {
+    "metaTitle": "Chinh sach bao mat | Achi Vegan House",
+    "metaDescription": "Tim hieu cach Achi Vegan House thu thap, su dung va bao ve du lieu khi ban truy cap website hoac lien he.",
+    "title": "Chinh sach bao mat",
+    "tagline": "Chung toi bao ve thong tin cua ban khi ban truy cap website hoac lien he ve mon chay, tiec chay hoac su kien.",
+    "updated": "Cap nhat lan cuoi: 13/01/2026",
+    "heroHighlights": [
+      "Khong ban du lieu",
+      "Muc dich ro rang",
+      "Ban kiem soat",
+      "Bao mat uu tien"
+    ],
+    "sectionEyebrow": "Bao mat tai Achi Vegan House",
+    "quickPoints": [
+      {
+        "title": "Muc dich ro rang",
+        "description": "Chi thu thap nhung gi can thiet de phan hoi, gui bao gia, xu ly tiec chay/don hang va cai thien trai nghiem.",
+        "icon": "ShieldCheck"
+      },
+      {
+        "title": "Khong ban du lieu",
+        "description": "Chung toi khong ban du lieu ca nhan. Neu can chia se chi trong pham vi nha cung cap uy tin ho tro van hanh.",
+        "icon": "FileSearch"
+      },
+      {
+        "title": "Ban kiem soat",
+        "description": "Ban co the yeu cau truy cap, chinh sua, xoa du lieu hoac rut lai dong y bat cu luc nao.",
+        "icon": "UserCheck"
+      },
+      {
+        "title": "Bao mat uu tien",
+        "description": "Gioi han truy cap noi bo va ap dung bien phap ky thuat, to chuc de giam rui ro.",
+        "icon": "LockKeyhole"
+      }
+    ],
+    "sections": [
+      {
+        "id": "scope",
+        "title": "1. Pham vi ap dung",
+        "summary": "Chinh sach nay ap dung cho thong tin chung toi thu thap khi ban tuong tac voi Achi Vegan House.",
+        "items": [
+          "Ap dung khi ban truy cap website, gui form lien he, goi dien, email, nhan tin mang xa hoi, hoac trao doi truc tiep tai quan.",
+          "Khi su dung website hoac cung cap thong tin, ban dong y voi chinh sach nay."
+        ],
+        "icon": "Globe2"
+      },
+      {
+        "id": "data",
+        "title": "2. Thong tin chung toi thu thap",
+        "items": [
+          "Thong tin ban cung cap: ho ten, email, so dien thoai, noi dung yeu cau, thong tin don hang/dich vu, phan hoi, danh gia.",
+          "Thong tin ky thuat tu dong: dia chi IP, trinh duyet, thiet bi, he dieu hanh, trang vao/ra, thoi gian xem trang, thao tac co ban.",
+          "Cookie va cong nghe tuong tu de ghi nho tuy chon va do hieu qua website."
+        ],
+        "icon": "Sparkles"
+      },
+      {
+        "id": "use",
+        "title": "3. Cach chung toi su dung thong tin",
+        "items": [
+          "Phan hoi yeu cau, gui bao gia, xac nhan va theo doi don hang hoac tiec chay.",
+          "Cai thien toc do, noi dung va trai nghiem tren website.",
+          "Gui thong tin quan trong (vi du: thay doi gio mo cua, cap nhat menu, theo doi don hang).",
+          "Phat hien va ngan chan gian lan hoac lam dung he thong."
+        ],
+        "icon": "Bell"
+      },
+      {
+        "id": "cookies",
+        "title": "4. Cookie va theo doi",
+        "items": [
+          "Chung toi su dung cookie de ghi nho tuy chon, do tuong tac va toi uu hieu suat website.",
+          "Ban co the tat cookie trong trinh duyet. Mot so tinh nang co the bi han che."
+        ],
+        "icon": "Cookie"
+      },
+      {
+        "id": "sharing",
+        "title": "5. Chia se thong tin",
+        "items": [
+          "Chung toi khong ban du lieu ca nhan cho ben thu ba.",
+          "Co the chia se voi nha cung cap dich vu (luu tru, phan tich, thanh toan, cong cu marketing) de van hanh va cai thien website.",
+          "Co the chia se voi doi tac lien quan don hang/dich vu khi can thiet, kem cam ket bao mat.",
+          "Tuan thu yeu cau hop phap cua co quan chuc nang khi can."
+        ],
+        "icon": "FileSearch"
+      },
+      {
+        "id": "security",
+        "title": "6. Bao mat du lieu",
+        "items": [
+          "Ap dung bien phap ky thuat va to chuc de ngan truy cap trai phep, sua doi hoac tiet lo.",
+          "Gioi han quyen truy cap noi bo theo vai tro va nhu cau cong viec.",
+          "Khong co phuong thuc truyen tai hoac luu tru nao an toan tuyet doi."
+        ],
+        "icon": "Shield"
+      },
+      {
+        "id": "retention",
+        "title": "7. Luu tru du lieu",
+        "items": [
+          "Chi luu tru trong thoi gian can thiet de dap ung muc dich thu thap.",
+          "Xoa hoac an danh du lieu khi ban yeu cau, tru khi phap luat yeu cau luu tru lau hon."
+        ],
+        "icon": "CheckCircle2"
+      },
+      {
+        "id": "rights",
+        "title": "8. Quyen cua ban",
+        "items": [
+          "Yeu cau truy cap, chinh sua hoac xoa du lieu ca nhan.",
+          "Rut lai dong y hoac phan doi mot so hoat dong xu ly.",
+          "Gui yeu cau qua thong tin lien he ben duoi; chung toi phan hoi trong thoi gian hop ly."
+        ],
+        "icon": "UserCheck"
+      },
+      {
+        "id": "links",
+        "title": "9. Lien ket ben thu ba",
+        "items": [
+          "Website co the chua lien ket toi dich vu/website cua ben thu ba.",
+          "Chung toi khong chiu trach nhiem ve noi dung hay chinh sach bao mat cua ho."
+        ],
+        "icon": "Globe2"
+      },
+      {
+        "id": "children",
+        "title": "10. Quyen rieng tu tre em",
+        "items": [
+          "Website khong huong toi tre em duoi 13 tuoi va khong chu y thu thap du lieu tu nhom nay.",
+          "Neu ban tin chung toi co du lieu ve tre em, vui long lien he de chung toi xoa bo."
+        ],
+        "icon": "ShieldCheck"
+      },
+      {
+        "id": "changes",
+        "title": "11. Cap nhat chinh sach",
+        "items": [
+          "Chung toi co the cap nhat chinh sach va se dang phien ban moi nhat tren trang nay.",
+          "Vui long xem lai dinh ky. Cap nhat gan nhat: 13/01/2026."
+        ],
+        "icon": "Bell"
+      }
+    ],
+    "contact": {
+      "eyebrow": "Can ho tro?",
+      "title": "Lien he Achi Vegan House",
+      "description": "Neu ban co cau hoi hoac muon thuc thi quyen rieng tu, vui long lien he qua:",
+      "address": "50 Thuy Khue, Thuy Khue, Tay Ho, Ha Noi, Viet Nam",
+      "phone": "098 531 02 38",
+      "email": "sunnyhoai.vu@gmail.com"
+    },
+    "rightsTitle": "Thuc thi quyen rieng tu",
+    "rightsCopy": "Chung toi phan hoi trong thoi gian hop ly (thuong trong 1-2 ngay lam viec) va co the xac minh danh tinh.",
+    "rightsBullets": [
+      "Yeu cau ban sao du lieu ca nhan ban da cung cap.",
+      "Yeu cau chinh sua thong tin khong chinh xac hoac thieu.",
+      "Yeu cau xoa du lieu, tru khi phap luat yeu cau luu tru.",
+      "Rut lai dong y nhan email/tin nhan khong thiet yeu."
+    ]
+  },
+  "menu": {
+    "metaTitle": "Thuc don | Achi Vegan House",
+    "metaDescription": "Kham pha thuc don Achi Vegan House voi mon chay thu cong va nguyen lieu huu co.",
+    "eyebrow": "Achi Vegan House",
+    "title": "Thuc don",
+    "tagline": "Thuc don chay duoc chau chuot tu rau cu huu co, theo mua va huong vi tinh te.",
+    "highlights": [
+      "Hon 100 mon chay",
+      "Nguyen lieu tuoi",
+      "Tiec chay gia dinh",
+      "Cho ngoi ngoai troi"
+    ],
+    "ctaPrimary": "Goi dat mon",
+    "ctaSecondary": "Lien he",
+    "ctaNote": "Mo cua 07:30 - 22:30",
+    "sectionTitle": "So menu",
+    "sectionSubtitle": "Keo xuong de xem tung trang",
+    "indexTitle": "Chi muc menu",
+    "pageLabel": "Trang menu",
+    "pages": [
+      "Trang menu 01",
+      "Trang menu 02",
+      "Trang menu 03",
+      "Trang menu 04",
+      "Trang menu 05",
+      "Trang menu 06"
+    ]
+  }
+}

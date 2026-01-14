@@ -1,0 +1,401 @@
+.menuShowcase {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(1.5rem, 4.5vw, 4rem);
+  align-items: start;
+  padding: clamp(2.5rem, 6vw, 5rem) clamp(1.5rem, 5vw, 6rem)
+    clamp(5rem, 10vw, 8rem);
+  background: linear-gradient(180deg, #f4fbf6 0%, #eef7f1 100%);
+  overflow: hidden;
+}
+
+.menuShowcase::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+      600px 300px at 15% 5%,
+      rgba(136, 219, 186, 0.35),
+      transparent 60%
+    ),
+    radial-gradient(
+      500px 260px at 85% 10%,
+      rgba(154, 242, 206, 0.25),
+      transparent 60%
+    );
+  pointer-events: none;
+}
+
+.menuCopy {
+  position: sticky;
+  top: 6rem;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 540px;
+}
+
+.menuEyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: #2a6f5e;
+  font-weight: 600;
+}
+
+.menuTitle {
+  font-size: clamp(2.4rem, 4vw, 3.6rem);
+  font-weight: 700;
+  color: #0f2b25;
+}
+
+.menuTagline {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #2b4a41;
+}
+
+.menuBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.menuBadge {
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(38, 112, 92, 0.18);
+  background: rgba(225, 248, 239, 0.9);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #1f5f4f;
+}
+
+.menuIndex {
+  border-radius: 1.4rem;
+  border: 1px solid rgba(38, 112, 92, 0.18);
+  background: rgba(255, 255, 255, 0.92);
+  padding: 1.1rem 1.2rem;
+  box-shadow: 0 18px 35px rgba(24, 100, 80, 0.08);
+}
+
+.menuIndexTitle {
+  font-size: 0.7rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #2a6f5e;
+  font-weight: 600;
+}
+
+.menuIndexList {
+  margin-top: 0.75rem;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.menuIndexItem {
+  list-style: none;
+}
+
+.menuIndexButton {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.45rem 0.65rem;
+  border-radius: 0.9rem;
+  border: none;
+  background: transparent;
+  color: #2b4a41;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.menuIndexButton:hover {
+  background: rgba(52, 211, 153, 0.12);
+  transform: translateX(4px);
+}
+
+.menuIndexButton:focus-visible {
+  outline: 2px solid #34d399;
+  outline-offset: 2px;
+}
+
+.menuIndexItemActive {
+  color: #0f2b25;
+}
+
+.menuIndexItemActive .menuIndexButton {
+  background: rgba(52, 211, 153, 0.18);
+  color: #0f2b25;
+  transform: translateX(6px);
+  box-shadow: 0 10px 25px rgba(24, 100, 80, 0.12);
+}
+
+.menuIndexIcon {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.2);
+  box-shadow: inset 0 0 0 2px rgba(34, 197, 94, 0.35);
+}
+
+.menuIndexItemActive .menuIndexIcon {
+  background: #34d399;
+  box-shadow: 0 0 0 6px rgba(52, 211, 153, 0.18);
+}
+
+.menuIndexNumber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.2rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.15);
+  color: #1f5f4f;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+}
+
+.menuIndexLabel {
+  font-weight: 600;
+}
+
+.menuActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.menuPrimaryCta,
+.menuSecondaryCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.7rem 1.4rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.menuPrimaryCta {
+  background: linear-gradient(120deg, #34d399 0%, #5eead4 100%);
+  color: #0f2b25;
+  box-shadow: 0 16px 30px rgba(24, 100, 80, 0.18);
+}
+
+.menuSecondaryCta {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(38, 112, 92, 0.25);
+  color: #0f2b25;
+}
+
+.menuPrimaryCta:hover,
+.menuSecondaryCta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 35px rgba(24, 100, 80, 0.2);
+}
+
+.menuNote {
+  font-size: 0.85rem;
+  color: #3b5e54;
+}
+
+.menuDeckWrapper {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 1.5rem;
+  min-height: 100vh;
+}
+
+.menuDeck {
+  position: relative;
+  width: min(100%, 620px);
+  height: min(82vh, 760px);
+}
+
+.menuCard {
+  position: absolute;
+  inset: 0;
+  border-radius: 1.7rem;
+  background: #fdfcf9;
+  border: 1px solid rgba(24, 100, 80, 0.16);
+  box-shadow: 0 28px 70px rgba(15, 35, 30, 0.25);
+  overflow: hidden;
+  will-change: transform, opacity;
+}
+
+.menuCardFrame {
+  width: 100%;
+  height: 100%;
+  padding: 0.7rem;
+  background: linear-gradient(180deg, #ffffff 0%, #f6fbf8 100%);
+}
+
+.menuCardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 1.2rem;
+  background: #f8fbf6;
+}
+
+.menuCardLabel {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(15, 43, 37, 0.85);
+  color: #f3fff9;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.menuDeckTitle {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: #2a6f5e;
+  font-weight: 600;
+  text-align: center;
+}
+
+.menuDeckSubtitle {
+  font-size: 0.85rem;
+  color: #3b5e54;
+  text-align: center;
+}
+
+.menuFloatingIndex {
+  position: fixed;
+  left: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: flex-start;
+}
+
+.menuFloatingButton {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(140deg, #34d399 0%, #5eead4 100%);
+  box-shadow: 0 16px 30px rgba(24, 100, 80, 0.25);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.menuFloatingButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 35px rgba(24, 100, 80, 0.3);
+}
+
+.menuFloatingButtonActive {
+  transform: translateY(-2px);
+}
+
+.menuFloatingIcon {
+  display: grid;
+  gap: 0.2rem;
+  width: 1.1rem;
+}
+
+.menuFloatingLine {
+  height: 2px;
+  width: 100%;
+  border-radius: 999px;
+  background: #0f2b25;
+}
+
+.menuFloatingPanel {
+  position: absolute;
+  left: 0;
+  bottom: 3.75rem;
+  width: min(90vw, 320px);
+  padding: 1rem 1.1rem;
+  border-radius: 1.2rem;
+  border: 1px solid rgba(38, 112, 92, 0.18);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 18px 35px rgba(24, 100, 80, 0.18);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px) scale(0.98);
+  transform-origin: bottom left;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.menuFloatingPanelOpen {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.menuFloatingTitle {
+  font-size: 0.7rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #2a6f5e;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 1000px) {
+  .menuShowcase {
+    grid-template-columns: 1fr;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  .menuCopy {
+    position: static;
+    max-width: none;
+  }
+
+  .menuDeckWrapper {
+    min-height: auto;
+  }
+
+  .menuDeck {
+    height: auto;
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .menuCard {
+    position: relative;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .menuIndex {
+    padding: 0.9rem 1rem;
+  }
+
+  .menuIndexList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .menuFloatingIndex {
+    left: 1rem;
+    bottom: 1rem;
+  }
+}

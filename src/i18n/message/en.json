@@ -1,0 +1,337 @@
+{
+  "home": {
+    "welcome": "Welcome to our application!"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The link you followed may be broken or the page may have been removed.",
+    "ctaHome": "Back to home",
+    "hint": "Check the URL or try searching for something else."
+  },
+  "footer": {
+    "brandName": "Achi Vegan House",
+    "brandTagline": "Page - Vegetarian/Vegan Restaurant",
+    "brandDescription": "Achi Vegan House offers nearly 100 vegetarian dishes made from organic vegetables, tubers, fruits, and nuts.",
+    "address": "50 Thuy Khue St, Thuy Khue, Tay Ho, Hanoi 100000, Vietnam",
+    "hoursLabel": "Hours",
+    "statusOpen": "Open now",
+    "statusClosed": "Closed now",
+    "viewDetails": "View details",
+    "servicesTitle": "Services",
+    "services": [
+      "Vegetarian meals for families at home",
+      "Vegetarian party catering for families and organizations",
+      "Outdoor seating"
+    ],
+    "features": [
+      "Price range: $",
+      "100% recommended (50 reviews)"
+    ],
+    "mapTitle": "Achi Vegan House map",
+    "mapCta": "View on Google Maps",
+    "mapRatingValue": 4.5,
+    "mapReviewCount": 271,
+    "mapRatingLabel": "{rating} ({count} reviews)",
+    "mapRatingSource": "Google Maps",
+    "modal": {
+      "title": "Hours",
+      "servicesTitle": "Services",
+      "close": "Close"
+    },
+    "legal": "© {year} Achi Vegan House. All rights reserved.",
+    "weekdays": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ],
+    "privacyPolicy": "Privacy Policy"
+  },
+  "header": {
+    "brandName": "Achi Vegan House",
+    "products": "Menu",
+    "about": "About",
+    "contact": "Contact",
+    "blog": "Blog",
+    "menuTitle": "Menu",
+    "openMenu": "Open menu",
+    "close": "Close",
+    "menuDescription": "Mobile navigation menu for Achi Vegan House."
+  },
+  "spotlight": {
+    "marqueeTexts": [
+      "Plant-based",
+      "Fresh",
+      "Organic",
+      "Thoughtful"
+    ]
+  },
+  "clientReviews": {
+    "items": [
+      {
+        "review": "Clean, balanced flavors. Even my non-veg friends keep coming back.",
+        "clientName": "Mai Nguyen",
+        "clientCompany": "Tay Ho family",
+        "rating": 5,
+        "reviewImage": "/Ingredient/i1.jpg",
+        "reviewImages": [
+          "/Ingredient/i1.jpg",
+          "/Ingredient/i2.jpg",
+          "/Ingredient/i3.jpg"
+        ]
+      },
+      {
+        "review": "Their vegetarian party catering was beautiful and on time. Everyone asked for the menu.",
+        "clientName": "Duc Tran",
+        "clientCompany": "Green Office",
+        "rating": 5,
+        "reviewImage": "/Ingredient/i2.jpg",
+        "reviewImages": [
+          "/Ingredient/i4.jpg",
+          "/Combo/c1.jpg",
+          "/Combo/c2.jpg"
+        ]
+      },
+      {
+        "review": "Fresh produce, light seasoning, and generous portions. Perfect for weekday dinners.",
+        "clientName": "Linh Pham",
+        "clientCompany": "Yoga Studio",
+        "rating": 5,
+        "reviewImage": "/Ingredient/i3.jpg",
+        "reviewImages": [
+          "/Combo/c3.jpg",
+          "/Combo/c4.jpg",
+          "/Ingredient/i1.jpg"
+        ]
+      },
+      {
+        "review": "Almost every dish tastes handmade. The organic focus really shows.",
+        "clientName": "Anh Le",
+        "clientCompany": "Local foodie",
+        "rating": 5,
+        "reviewImage": "/Ingredient/i4.jpg",
+        "reviewImages": [
+          "/Ingredient/i2.jpg",
+          "/Ingredient/i3.jpg",
+          "/Ingredient/i4.jpg"
+        ]
+      },
+      {
+        "review": "Outdoor seating is a plus, the space feels calm and friendly. Prices are fair.",
+        "clientName": "Hannah Vo",
+        "clientCompany": "Neighborhood group",
+        "rating": 5,
+        "reviewImage": "/Combo/c1.jpg",
+        "reviewImages": [
+          "/Combo/c1.jpg",
+          "/Combo/c2.jpg",
+          "/Combo/c3.jpg"
+        ]
+      },
+      {
+        "review": "We order family trays regularly and the quality stays consistent.",
+        "clientName": "Quang Do",
+        "clientCompany": "Family gatherings",
+        "rating": 5,
+        "reviewImage": "/Combo/c2.jpg",
+        "reviewImages": [
+          "/Combo/c4.jpg",
+          "/Ingredient/i1.jpg",
+          "/Ingredient/i2.jpg"
+        ]
+      }
+    ]
+  },
+  "privacy": {
+    "metaTitle": "Privacy Policy | Achi Vegan House",
+    "metaDescription": "Learn how Achi Vegan House collects, uses, and protects your data when you visit our website or contact us.",
+    "title": "Privacy Policy",
+    "tagline": "We protect your information when you browse our website or contact us about vegetarian/vegan meals, catering, or events.",
+    "updated": "Last updated: Jan 13, 2026",
+    "heroHighlights": [
+      "No data selling",
+      "Clear purpose",
+      "Your control",
+      "Security first"
+    ],
+    "sectionEyebrow": "Privacy at Achi Vegan House",
+    "quickPoints": [
+      {
+        "title": "Clear purpose",
+        "description": "We collect only what we need to respond to you, send quotes, handle catering/orders, and improve your experience.",
+        "icon": "ShieldCheck"
+      },
+      {
+        "title": "No selling data",
+        "description": "We never sell personal data. Sharing, when needed, is limited to trusted providers that help us operate.",
+        "icon": "FileSearch"
+      },
+      {
+        "title": "Your control",
+        "description": "You may request access, corrections, deletion, or withdraw consent at any time.",
+        "icon": "UserCheck"
+      },
+      {
+        "title": "Layered security",
+        "description": "Restricted internal access plus technical and organizational safeguards to reduce risk.",
+        "icon": "LockKeyhole"
+      }
+    ],
+    "sections": [
+      {
+        "id": "scope",
+        "title": "1. Scope & applicability",
+        "summary": "This policy covers information we collect whenever you interact with Achi Vegan House.",
+        "items": [
+          "Applies when you visit our website, submit contact forms, call, email, message us on social channels, or speak with us at the restaurant.",
+          "By using the site or sharing information, you agree to the terms in this policy."
+        ],
+        "icon": "Globe2"
+      },
+      {
+        "id": "data",
+        "title": "2. Information we collect",
+        "items": [
+          "Information you provide: name, email, phone number, inquiry details, order/service information, feedback, or reviews.",
+          "Technical data collected automatically: IP address, browser, device, operating system, entry/exit pages, time on page, and basic interactions.",
+          "Cookies and similar technologies to remember preferences and measure site performance."
+        ],
+        "icon": "Sparkles"
+      },
+      {
+        "id": "use",
+        "title": "3. How we use your information",
+        "items": [
+          "Respond to inquiries, send quotes, and confirm or follow up on orders or catering.",
+          "Improve content speed, reliability, and experience on our website.",
+          "Send important updates (for example: opening hours changes, menu updates, or order follow-ups).",
+          "Detect and prevent fraud or misuse of our systems."
+        ],
+        "icon": "Bell"
+      },
+      {
+        "id": "cookies",
+        "title": "4. Cookies & tracking",
+        "items": [
+          "We use cookies to remember preferences, measure engagement, and optimize site performance.",
+          "You can disable cookies in your browser. Some features may be limited when cookies are turned off."
+        ],
+        "icon": "Cookie"
+      },
+      {
+        "id": "sharing",
+        "title": "5. Sharing your information",
+        "items": [
+          "We do not sell personal data to third parties.",
+          "We may share data with service providers (hosting, analytics, payment, marketing tools) to run and improve the site.",
+          "We may share with partners or contractors related to your order/service when necessary, under confidentiality obligations.",
+          "We comply with lawful requests from authorities when required."
+        ],
+        "icon": "FileSearch"
+      },
+      {
+        "id": "security",
+        "title": "6. Data security",
+        "items": [
+          "We apply technical and organizational measures to prevent unauthorized access, alteration, or disclosure.",
+          "Internal access to personal data is limited based on role and business need.",
+          "While we strive for security, no method of transmission or storage is absolutely secure."
+        ],
+        "icon": "Shield"
+      },
+      {
+        "id": "retention",
+        "title": "7. Data retention",
+        "items": [
+          "We keep data only as long as needed to fulfill the purposes for which it was collected.",
+          "We delete or anonymize data upon request unless a longer retention period is required by law."
+        ],
+        "icon": "CheckCircle2"
+      },
+      {
+        "id": "rights",
+        "title": "8. Your rights",
+        "items": [
+          "Request access to, correction of, or deletion of your personal data.",
+          "Withdraw consent or object to certain processing activities.",
+          "Submit a request via the contact details below; we respond within a reasonable time."
+        ],
+        "icon": "UserCheck"
+      },
+      {
+        "id": "links",
+        "title": "9. Third-party links",
+        "items": [
+          "Our site may link to external websites or services.",
+          "We are not responsible for their content or privacy practices. Please review their policies separately."
+        ],
+        "icon": "Globe2"
+      },
+      {
+        "id": "children",
+        "title": "10. Children's privacy",
+        "items": [
+          "Our site is not intended for children under 13, and we do not knowingly collect data from them.",
+          "If you believe we hold data about a child, please contact us so we can remove it promptly."
+        ],
+        "icon": "ShieldCheck"
+      },
+      {
+        "id": "changes",
+        "title": "11. Changes to this policy",
+        "items": [
+          "We may update this policy and will post the latest version on this page.",
+          "We encourage you to review it periodically. Last updated: Jan 13, 2026."
+        ],
+        "icon": "Bell"
+      }
+    ],
+    "contact": {
+      "eyebrow": "Need help?",
+      "title": "Talk to Achi Vegan House",
+      "description": "If you have questions or want to exercise your privacy rights, please reach us via:",
+      "address": "50 Thuy Khue, Thuy Khue, Tay Ho, Ha Noi, Viet Nam",
+      "phone": "098 531 02 38",
+      "email": "sunnyhoai.vu@gmail.com"
+    },
+    "rightsTitle": "Exercising your rights",
+    "rightsCopy": "We respond within a reasonable timeframe (typically within 1-2 business days) and may verify your identity to protect your data.",
+    "rightsBullets": [
+      "Request a copy of the personal data you shared with us.",
+      "Ask for corrections to inaccurate or incomplete information.",
+      "Request deletion unless we must retain it to meet legal obligations.",
+      "Withdraw consent for non-essential emails or messages."
+    ]
+  },
+  "menu": {
+    "metaTitle": "Menu | Achi Vegan House",
+    "metaDescription": "Explore the Achi Vegan House menu with handcrafted vegan dishes and organic ingredients.",
+    "eyebrow": "Achi Vegan House",
+    "title": "Menu",
+    "tagline": "A curated vegan menu built around organic vegetables, seasonal produce, and thoughtful flavors.",
+    "highlights": [
+      "100+ vegan dishes",
+      "Fresh ingredients",
+      "Family-size catering",
+      "Outdoor seating"
+    ],
+    "ctaPrimary": "Call to order",
+    "ctaSecondary": "Contact us",
+    "ctaNote": "Open daily 07:30 - 22:30",
+    "sectionTitle": "Menu book",
+    "sectionSubtitle": "Scroll to reveal each page",
+    "indexTitle": "Menu index",
+    "pageLabel": "Menu page",
+    "pages": [
+      "Menu page 01",
+      "Menu page 02",
+      "Menu page 03",
+      "Menu page 04",
+      "Menu page 05",
+      "Menu page 06"
+    ]
+  }
+}
