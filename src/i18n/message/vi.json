@@ -23,14 +23,11 @@
       "Dich vu tiec chay cho gia dinh va to chuc",
       "Cho ngoi ngoai troi"
     ],
-    "features": [
-      "Muc gia: $",
-      "100% de xuat (50 danh gia)"
-    ],
+    "features": ["Muc gia: $", "100% de xuat (50 danh gia)"],
     "mapTitle": "Ban do Achi Vegan House",
     "mapCta": "Xem tren Google Maps",
     "mapRatingValue": 4.5,
-    "mapReviewCount": 271,
+    "mapReviewCount": 272,
     "mapRatingLabel": "{rating} ({count} danh gia)",
     "mapRatingSource": "Google Maps",
     "helpCenter": "Trung tam ho tro",
@@ -63,12 +60,7 @@
     "menuDescription": "Mo menu dieu huong di dong cho Achi Vegan House."
   },
   "spotlight": {
-    "marqueeTexts": [
-      "Thuan chay",
-      "Tuoi",
-      "Huu co",
-      "Tinh te"
-    ]
+    "marqueeTexts": ["Thuan chay", "Tuoi", "Huu co", "Tinh te"]
   },
   "clientReviews": {
     "items": [
@@ -90,11 +82,7 @@
         "clientCompany": "Green Office",
         "rating": 5,
         "reviewImage": "/Ingredient/i2.jpg",
-        "reviewImages": [
-          "/Ingredient/i4.jpg",
-          "/Combo/c1.jpg",
-          "/Combo/c2.jpg"
-        ]
+        "reviewImages": ["/Ingredient/i4.jpg", "/Combo/c1.jpg", "/Combo/c2.jpg"]
       },
       {
         "review": "Rau cu tuoi, gia vi nhe, phan an hau ha. Hop bua toi trong tuan.",
@@ -102,11 +90,7 @@
         "clientCompany": "Yoga Studio",
         "rating": 5,
         "reviewImage": "/Ingredient/i3.jpg",
-        "reviewImages": [
-          "/Combo/c3.jpg",
-          "/Combo/c4.jpg",
-          "/Ingredient/i1.jpg"
-        ]
+        "reviewImages": ["/Combo/c3.jpg", "/Combo/c4.jpg", "/Ingredient/i1.jpg"]
       },
       {
         "review": "Mon nao cung cam giac lam thu cong. Chat luong huu co rat ro.",
@@ -126,11 +110,7 @@
         "clientCompany": "Neighborhood group",
         "rating": 5,
         "reviewImage": "/Combo/c1.jpg",
-        "reviewImages": [
-          "/Combo/c1.jpg",
-          "/Combo/c2.jpg",
-          "/Combo/c3.jpg"
-        ]
+        "reviewImages": ["/Combo/c1.jpg", "/Combo/c2.jpg", "/Combo/c3.jpg"]
       },
       {
         "review": "Dat mon gia dinh thuong xuyen, chat luong on dinh.",
