@@ -1,14 +1,9 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import type { CSSProperties } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
 import { useTranslations } from "next-intl";
 import styles from "./ClientReviews.module.css";
-
-gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 type ClientReviewContent = {
   review: string;
@@ -16,8 +11,6 @@ type ClientReviewContent = {
   clientCompany: string;
   rating?: number;
   avatar?: string;
-  reviewImage?: string;
-  reviewImages?: string[];
 };
 
 type ClientReview = ClientReviewContent & {
@@ -32,37 +25,35 @@ const reviewStyles: Array<
   Pick<ClientReview, "backgroundColor" | "textColor" | "companyColor">
 > = [
   {
-    backgroundColor: "#ccccc4",
-    textColor: "#1a1614",
-    companyColor: "#1a1614",
+    backgroundColor: "#0f3d2e",
+    textColor: "#f9f7f0",
+    companyColor: "#e6ddc4",
   },
   {
-    backgroundColor: "#1a1614",
-    textColor: "#e3e3db",
+    backgroundColor: "#0a2a4a",
+    textColor: "#f5f7ff",
   },
   {
-    backgroundColor: "#3d2fa9",
-    textColor: "#e3e3db",
+    backgroundColor: "#3b0f2d",
+    textColor: "#fef6f0",
   },
   {
-    backgroundColor: "#ccccc4",
-    textColor: "#1a1614",
-    companyColor: "#1a1614",
+    backgroundColor: "#10463f",
+    textColor: "#f6f3e8",
+    companyColor: "#f6f3e8",
   },
   {
-    backgroundColor: "#ff6e14",
-    textColor: "#1a1614",
-    companyColor: "#1a1614",
+    backgroundColor: "#1c3c68",
+    textColor: "#f5f7ff",
   },
   {
-    backgroundColor: "#1a1614",
-    textColor: "#e3e3db",
+    backgroundColor: "#4a1230",
+    textColor: "#fdf3f6",
   },
 ];
 
 const ClientReviews = () => {
-  const clientReviewsContainerRef = useRef<HTMLDivElement | null>(null);
-  const [activePhotos, setActivePhotos] = useState<Record<number, string>>({});
+  const [activeIndex, setActiveIndex] = useState(0);
   const t = useTranslations("clientReviews");
   const clientReviewsData = useMemo<ClientReview[]>(() => {
     const items = t.raw("items") as ClientReviewContent[] | undefined;
@@ -76,8 +67,8 @@ const ClientReviews = () => {
         .join("");
     return items.map((item, index) => ({
       ...item,
-      ...reviewStyles[index % reviewStyles.length],
-      initials: getInitials(item.clientName),
+        ...reviewStyles[index % reviewStyles.length],
+        initials: getInitials(item.clientName),
       ratingValue: Math.max(
         0,
         Math.min(
@@ -88,234 +79,116 @@ const ClientReviews = () => {
     }));
   }, [t]);
 
-  useGSAP(
-    () => {
-      const container = clientReviewsContainerRef.current;
-      if (!container) return;
+  const totalReviews = clientReviewsData.length;
 
-      const mm = gsap.matchMedia();
-
-      mm.add("(min-width: 1000px)", () => {
-        const reviewCards = container.querySelectorAll<HTMLDivElement>(
-          `.${styles.reviewCard}`
-        );
-        const cardContainers = container.querySelectorAll<HTMLDivElement>(
-          `.${styles.reviewCardContainer}`
-        );
-
-        cardContainers.forEach((cardContainer, index) => {
-          const rotation = index % 2 === 0 ? 3 : -3;
-          gsap.set(cardContainer, { rotation });
-        });
-
-        const scrollTriggerInstances: ScrollTrigger[] = [];
-
-        const delayed = gsap.delayedCall(0.1, () => {
-          reviewCards.forEach((card, index) => {
-            if (index < reviewCards.length - 1) {
-              const trigger = ScrollTrigger.create({
-                trigger: card,
-                start: "top top",
-                endTrigger: reviewCards[reviewCards.length - 1],
-                end: "top top",
-                pin: true,
-                pinSpacing: false,
-                scrub: 1,
-              });
-              scrollTriggerInstances.push(trigger);
-            }
-
-            if (index < reviewCards.length - 1) {
-              const trigger = ScrollTrigger.create({
-                trigger: reviewCards[index + 1],
-                start: "top bottom",
-                end: "top top",
-              });
-              scrollTriggerInstances.push(trigger);
-            }
-          });
-        });
-
-        const refreshHandler = () => ScrollTrigger.refresh();
-        const onLoad = () => ScrollTrigger.refresh();
-
-        window.addEventListener("orientationchange", refreshHandler);
-        window.addEventListener("load", onLoad, { passive: true });
-
-        return () => {
-          delayed.kill();
-          scrollTriggerInstances.forEach((trigger) => trigger.kill());
-          window.removeEventListener("orientationchange", refreshHandler);
-          window.removeEventListener("load", onLoad);
-        };
-      });
-
-      mm.add("(max-width: 999px)", () => {
-        const reviewCards = container.querySelectorAll<HTMLDivElement>(
-          `.${styles.reviewCard}`
-        );
-        const cardContainers = container.querySelectorAll<HTMLDivElement>(
-          `.${styles.reviewCardContainer}`
-        );
-
-        reviewCards.forEach((card) => {
-          gsap.set(card, { clearProps: "all" });
-        });
-        cardContainers.forEach((cardContainer) => {
-          gsap.set(cardContainer, { clearProps: "all" });
-        });
-
-        ScrollTrigger.refresh();
-
-        const refreshHandler = () => ScrollTrigger.refresh();
-        const onLoad = () => ScrollTrigger.refresh();
-
-        window.addEventListener("orientationchange", refreshHandler);
-        window.addEventListener("load", onLoad, { passive: true });
-
-        return () => {
-          window.removeEventListener("orientationchange", refreshHandler);
-          window.removeEventListener("load", onLoad);
-        };
-      });
-
-      return () => {
-        mm.revert();
-      };
-    },
-    { scope: clientReviewsContainerRef }
-  );
+  const shiftActive = (direction: number) => {
+    setActiveIndex((prev) => {
+      const next = prev + direction;
+      if (next < 0) return totalReviews - 1;
+      if (next >= totalReviews) return 0;
+      return next;
+    });
+  };
 
   return (
-    <div className={styles.clientReviews} ref={clientReviewsContainerRef}>
-      {clientReviewsData.map((item, index) => {
-        const images = Array.isArray(item.reviewImages)
-          ? item.reviewImages
-          : item.reviewImage
-          ? [item.reviewImage]
-          : [];
-        const stack = images.slice(0, 3);
-        const activeImage = activePhotos[index];
-        const activeIndex = activeImage ? stack.indexOf(activeImage) : -1;
-        const orderedStack =
-          activeIndex > -1
-            ? [
-                stack[activeIndex],
-                ...stack.slice(0, activeIndex),
-                ...stack.slice(activeIndex + 1),
-              ]
-            : stack;
-
-        return (
-          <div className={styles.reviewCard} key={`${item.clientName}-${index}`}>
-            <div
-              className={styles.reviewCardContainer}
-              style={{
-                backgroundColor: item.backgroundColor,
-                color: item.textColor,
-              }}
+    <section className={styles.clientReviews}>
+      <div className={styles.reviewHeader}>
+        <p className={styles.reviewEyebrow}>Voices</p>
+        <h2 className={styles.reviewTitle}>Testimonials in 3D</h2>
+      </div>
+      <div className={styles.reviewCarousel} role="region" aria-label="Reviews">
+        {clientReviewsData.map((item, index) => {
+          const offset = index - activeIndex;
+          const limitedOffset = Math.max(-2, Math.min(2, offset));
+          return (
+            <button
+              key={`${item.clientName}-${index}`}
+              type="button"
+              className={styles.reviewCard}
+              onClick={() => setActiveIndex(index)}
+              aria-pressed={index === activeIndex}
+              style={
+                {
+                  backgroundColor: item.backgroundColor,
+                  color: item.textColor,
+                  "--offset": limitedOffset,
+                  "--abs-offset": Math.abs(limitedOffset),
+                  zIndex: 10 - Math.abs(limitedOffset),
+                } as CSSProperties
+              }
             >
-              <div className={styles.reviewCardContent}>
-                <div className={styles.reviewCardContentWrapper}>
-                  <div className={styles.reviewCardHeader}>
-                    <div className={styles.reviewCardStars} aria-hidden="true">
-                      {Array.from({ length: 5 }).map((_, starIndex) => (
-                        <span
-                          key={`${item.clientName}-star-${starIndex}`}
-                          className={
-                            starIndex < item.ratingValue
-                              ? styles.reviewStar
-                              : styles.reviewStarMuted
-                          }
-                        />
-                      ))}
-                    </div>
-                    <div className={styles.reviewCardMeta}>
-                      <div className={styles.reviewCardClientInfo}>
-                        <div className={styles.reviewCardAvatar}>
-                          {item.avatar ? (
-                            <img
-                              src={item.avatar}
-                              alt={item.clientName}
-                              className={styles.reviewCardAvatarImage}
-                            />
-                          ) : (
-                            <span className={styles.reviewCardAvatarFallback}>
-                              {item.initials}
-                            </span>
-                          )}
-                        </div>
-                        <div className={styles.reviewCardClientDetails}>
-                          <p className={styles.reviewCardClient}>
-                            {item.clientName}
-                          </p>
-                          <p
-                            className={styles.reviewCardClientCompany}
-                            style={{
-                              color: item.companyColor ?? "currentColor",
-                            }}
-                          >
-                            {item.clientCompany}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className={styles.reviewCardBody}>
-                    <div className={styles.reviewCardQuote}>
-                      <p className={styles.reviewCardText}>{item.review}</p>
-                      <div
-                        className={styles.reviewCardDivider}
-                        aria-hidden="true"
+              <div className={styles.reviewCardInner}>
+                <span className={styles.reviewWatermark} aria-hidden="true">
+                  &ldquo;
+                </span>
+                <p className={styles.reviewCardText}>{item.review}</p>
+                <div className={styles.reviewCardDivider} aria-hidden="true" />
+                <div className={styles.reviewCardFooter}>
+                  <div className={styles.reviewCardStars} aria-hidden="true">
+                    {Array.from({ length: 5 }).map((_, starIndex) => (
+                      <span
+                        key={`${item.clientName}-star-${starIndex}`}
+                        className={
+                          starIndex < item.ratingValue
+                            ? styles.reviewStar
+                            : styles.reviewStarMuted
+                        }
                       />
+                    ))}
+                  </div>
+                  <div className={styles.reviewCardClientInfo}>
+                    <div className={styles.reviewCardAvatar}>
+                      {item.avatar ? (
+                        <img
+                          src={item.avatar}
+                          alt={item.clientName}
+                          className={styles.reviewCardAvatarImage}
+                        />
+                      ) : (
+                        <span className={styles.reviewCardAvatarFallback}>
+                          {item.initials}
+                        </span>
+                      )}
                     </div>
-                    {stack.length > 0 ? (
-                      <div className={styles.reviewCardMediaStack}>
-                        {orderedStack.map((image, imageIndex) => (
-                          <button
-                            key={`${item.clientName}-${image}`}
-                            type="button"
-                            className={`${styles.reviewCardPhoto} ${
-                              image === activeImage
-                                ? styles.reviewCardPhotoActive
-                                : ""
-                            }`}
-                            style={
-                              {
-                                "--stack-index": imageIndex,
-                              } as CSSProperties
-                            }
-                            onClick={() =>
-                              setActivePhotos((prev) => ({
-                                ...prev,
-                                [index]: image,
-                              }))
-                            }
-                            aria-label={`Xem anh ${imageIndex + 1} cua ${
-                              item.clientName
-                            }`}
-                            aria-pressed={image === activeImage}
-                          >
-                            <img
-                              src={image}
-                              alt={`${item.clientName} review ${
-                                imageIndex + 1
-                              }`}
-                              className={styles.reviewCardPhotoImage}
-                              loading="lazy"
-                            />
-                          </button>
-                        ))}
-                      </div>
-                    ) : null}
+                    <div className={styles.reviewCardClientDetails}>
+                      <p className={styles.reviewCardClient}>
+                        {item.clientName}
+                      </p>
+                      <p
+                        className={styles.reviewCardClientCompany}
+                        style={{
+                          color: item.companyColor ?? "currentColor",
+                        }}
+                      >
+                        {item.clientCompany}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        );
-      })}
-    </div>
+            </button>
+          );
+        })}
+      </div>
+      <div className={styles.reviewControls}>
+        <button
+          type="button"
+          className={styles.reviewControlButton}
+          onClick={() => shiftActive(-1)}
+          aria-label="Previous review"
+        >
+          Prev
+        </button>
+        <button
+          type="button"
+          className={styles.reviewControlButton}
+          onClick={() => shiftActive(1)}
+          aria-label="Next review"
+        >
+          Next
+        </button>
+      </div>
+    </section>
   );
 };
 

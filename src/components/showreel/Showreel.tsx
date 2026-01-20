@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { Volume2, VolumeX } from "lucide-react";
+import { useTranslations } from "next-intl";
 import styles from "./Showreel.module.css";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -16,9 +17,13 @@ const DEFAULT_VOLUME = 0.2;
 const Showreel = () => {
   const showreelSecRef = useRef<HTMLElement | null>(null);
   const showreelContainerRef = useRef<HTMLDivElement | null>(null);
+  const showreelImageRef = useRef<HTMLImageElement | null>(null);
+  const headlineRef = useRef<HTMLHeadingElement | null>(null);
+  const subheadRef = useRef<HTMLParagraphElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [currentFrame, setCurrentFrame] = useState(1);
   const [isMuted, setIsMuted] = useState(true);
+  const t = useTranslations("home");
 
   useEffect(() => {
     if (audioRef.current) {
@@ -40,6 +45,31 @@ const Showreel = () => {
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
+      const headline = headlineRef.current;
+      const subhead = subheadRef.current;
+
+      if (headline) {
+        const words = headline.querySelectorAll("span");
+        gsap.fromTo(
+          words,
+          { yPercent: 130, opacity: 0 },
+          {
+            yPercent: 0,
+            opacity: 1,
+            stagger: 0.12,
+            duration: 1.2,
+            ease: "power4.out",
+          }
+        );
+      }
+
+      if (subhead) {
+        gsap.fromTo(
+          subhead,
+          { y: 24, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.9, ease: "power3.out", delay: 0.4 }
+        );
+      }
 
       mm.add("(min-width: 1000px)", () => {
         const scrollTriggerInstances: ScrollTrigger[] = [];
@@ -75,6 +105,20 @@ const Showreel = () => {
         });
 
         scrollTriggerInstances.push(scrollTrigger);
+
+        if (showreelImageRef.current) {
+          const parallax = gsap.to(showreelImageRef.current, {
+            yPercent: -6,
+            ease: "none",
+            scrollTrigger: {
+              trigger: showreelSecRef.current,
+              start: "top top",
+              end: "bottom top",
+              scrub: true,
+            },
+          });
+          scrollTriggerInstances.push(parallax.scrollTrigger as ScrollTrigger);
+        }
 
         const refreshHandler = () => ScrollTrigger.refresh();
         const onLoad = () => ScrollTrigger.refresh();
@@ -125,7 +169,23 @@ const Showreel = () => {
   return (
     <section className={styles.showreel} ref={showreelSecRef}>
       <div className={styles.showreelContainer} ref={showreelContainerRef}>
-        <img src={`/Ingredient/i${currentFrame}.jpg`} alt="Showreel frame" />
+        <img
+          ref={showreelImageRef}
+          src={`/Ingredient/i${currentFrame}.png`}
+          alt="Showreel frame"
+        />
+        <div className={styles.showreelGlow} aria-hidden="true" />
+      </div>
+
+      <div className={styles.showreelCopy}>
+        <h1 className={styles.showreelHeadline} ref={headlineRef}>
+          <span>ACHI</span>
+          <span>VEGAN</span>
+          <span>HOUSE</span>
+        </h1>
+        <p className={styles.showreelSubhead} ref={subheadRef}>
+          {t("heroSubhead")}
+        </p>
       </div>
 
       <button

@@ -2,26 +2,38 @@
   position: relative;
   width: 100%;
   height: 100%;
-  background-color: #e3e3db;
+  background: radial-gradient(
+      1200px 600px at 10% 0%,
+      rgba(255, 255, 255, 0.55),
+      rgba(0, 0, 0, 0)
+    ),
+    radial-gradient(
+      900px 500px at 90% 10%,
+      rgba(255, 255, 255, 0.2),
+      rgba(0, 0, 0, 0)
+    ),
+    #11110f;
   overflow: hidden;
 }
 
 .marquees {
   position: relative;
   width: 100%;
-  height: 150svh;
+  min-height: 160svh;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 2.5rem;
+  padding: clamp(2rem, 5vw, 5rem) 0;
 }
 
 .marqueeContainer {
   position: relative;
-  width: 125%;
-  height: 250px;
+  width: 120%;
+  height: clamp(220px, 35vh, 380px);
   display: flex;
+  align-items: center;
   gap: 1rem;
-  margin-bottom: 1rem;
 }
 
 .marquee {
@@ -32,55 +44,83 @@
   left: 0;
   transform: translate3d(0, -50%, 0);
   display: flex;
-  gap: 1em;
+  gap: clamp(1rem, 3vw, 2.5rem);
   will-change: transform;
 }
 
 #marquee-1 .marquee,
 #marquee-3 .marquee {
-  transform: translate3d(-15%, -50%, 0);
+  transform: translate3d(-12%, -50%, 0);
 }
 
-.marqueeImgItem {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 1rem;
+.marqueeItem {
+  position: relative;
+  width: clamp(220px, 35vw, 520px);
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.marqueeMedia {
+  width: 100%;
+  height: 100%;
+  border-radius: 1.5rem;
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  clip-path: polygon(2% 0%, 96% 4%, 100% 92%, 4% 100%);
+  background: rgba(255, 255, 255, 0.04);
+  display: grid;
+  place-items: center;
+  will-change: transform;
 }
 
-.marqueeTextItem {
-  flex: 1;
+.marqueeItemMasked .marqueeMedia {
+  clip-path: polygon(0% 6%, 100% 0%, 94% 100%, 6% 94%);
 }
 
-.marqueeImgItem h1 {
-  text-transform: uppercase;
-  font-family: "Big Shoulders Display", sans-serif;
-  font-weight: 900;
-  font-size: 4.25rem;
-  line-height: 0.9;
-  letter-spacing: -0.125rem;
-}
-
-.marqueeImgItem img {
+.marqueeMedia img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  filter: saturate(1.2) contrast(1.1);
 }
 
-.marqueeImgItem h1 :global(.char) {
+.marqueeMaskSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.marqueeMaskedWord {
+  position: absolute;
+  inset: auto 0 12%;
+  margin: 0;
+  font-family: var(--font-playfair), "Playfair Display", serif;
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+  text-align: center;
+  white-space: nowrap;
+  color: rgba(245, 244, 238, 0.85);
+  mix-blend-mode: screen;
+  text-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.marqueeMaskedWord :global(.char) {
   will-change: font-weight;
 }
 
 @media (max-width: 1000px) {
   .marquees {
-    height: 100svh;
+    min-height: 120svh;
+    gap: 1.75rem;
   }
 
   .marqueeContainer {
-    width: 250%;
-    height: 150px;
+    width: 180%;
+    height: clamp(180px, 24vh, 260px);
   }
 
   #marquee-2 .marquee,
@@ -88,7 +128,7 @@
     transform: translate3d(-35%, -50%, 0);
   }
 
-  .marqueeImgItem h1 {
-    font-size: 2.5rem;
+  .marqueeMaskedWord {
+    font-size: clamp(2rem, 10vw, 4rem);
   }
 }

@@ -1,6 +1,7 @@
 {
   "home": {
-    "welcome": "Chào mừng bạn đến với ứng dụng của chúng tôi!"
+    "welcome": "Chào mừng bạn đến với ứng dụng của chúng tôi!",
+    "heroSubhead": "Nguyên liệu hữu cơ tinh túy, thể hiện theo phong cách điện ảnh."
   },
   "notFound": {
     "title": "Không tìm thấy trang",
@@ -60,7 +61,13 @@
     "menuDescription": "Mo menu dieu huong di dong cho Achi Vegan House."
   },
   "spotlight": {
-    "marqueeTexts": ["Thuan chay", "Tuoi", "Huu co", "Tinh te"]
+    "marqueeTexts": ["Thuần chay", "Tươi", "Hữu cơ", "Tinh tế"],
+    "marqueeDescriptions": [
+      "Rau củ rop, màu sắc rực rỡ, giữ nguyên độ tươi.",
+      "Gia vị và rau thơm tươi, mùi hương bật lên mạnh mẽ.",
+      "Nguyên liệu hữu cơ, hương đất đậm và tự nhiên.",
+      "Kết hợp khôn khéo, texture đa tầng, dư vị khó quên."
+    ]
   },
   "clientReviews": {
     "items": [
@@ -69,11 +76,11 @@
         "clientName": "Mai Nguyen",
         "clientCompany": "Gia dinh Tay Ho",
         "rating": 5,
-        "reviewImage": "/Ingredient/i1.jpg",
+        "reviewImage": "/Ingredient/i1.png",
         "reviewImages": [
-          "/Ingredient/i1.jpg",
-          "/Ingredient/i2.jpg",
-          "/Ingredient/i3.jpg"
+          "/Ingredient/i1.png",
+          "/Ingredient/i2.png",
+          "/Ingredient/i3.png"
         ]
       },
       {
@@ -81,27 +88,27 @@
         "clientName": "Duc Tran",
         "clientCompany": "Green Office",
         "rating": 5,
-        "reviewImage": "/Ingredient/i2.jpg",
-        "reviewImages": ["/Ingredient/i4.jpg", "/Combo/c1.jpg", "/Combo/c2.jpg"]
+        "reviewImage": "/Ingredient/i2.png",
+        "reviewImages": ["/Ingredient/i4.png", "/Combo/c1.jpg", "/Combo/c2.jpg"]
       },
       {
         "review": "Rau cu tuoi, gia vi nhe, phan an hau ha. Hop bua toi trong tuan.",
         "clientName": "Linh Pham",
         "clientCompany": "Yoga Studio",
         "rating": 5,
-        "reviewImage": "/Ingredient/i3.jpg",
-        "reviewImages": ["/Combo/c3.jpg", "/Combo/c4.jpg", "/Ingredient/i1.jpg"]
+        "reviewImage": "/Ingredient/i3.png",
+        "reviewImages": ["/Combo/c3.jpg", "/Combo/c4.jpg", "/Ingredient/i1.png"]
       },
       {
         "review": "Mon nao cung cam giac lam thu cong. Chat luong huu co rat ro.",
         "clientName": "Anh Le",
         "clientCompany": "Local foodie",
         "rating": 5,
-        "reviewImage": "/Ingredient/i4.jpg",
+        "reviewImage": "/Ingredient/i4.png",
         "reviewImages": [
-          "/Ingredient/i2.jpg",
-          "/Ingredient/i3.jpg",
-          "/Ingredient/i4.jpg"
+          "/Ingredient/i2.png",
+          "/Ingredient/i3.png",
+          "/Ingredient/i4.png"
         ]
       },
       {
@@ -120,8 +127,8 @@
         "reviewImage": "/Combo/c2.jpg",
         "reviewImages": [
           "/Combo/c4.jpg",
-          "/Ingredient/i1.jpg",
-          "/Ingredient/i2.jpg"
+          "/Ingredient/i1.png",
+          "/Ingredient/i2.png"
         ]
       }
     ]

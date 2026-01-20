@@ -21,6 +21,104 @@ const Spotlight = () => {
   const getMarqueeText = (index: number, fallback: string) =>
     marqueeTexts[index] ?? fallback;
 
+  const marqueeDescriptions = useMemo(() => {
+    const items = t.raw("marqueeDescriptions") as string[] | undefined;
+    return Array.isArray(items) ? items : [];
+  }, [t]);
+
+  const getMarqueeDescription = (index: number, fallback: string) =>
+    marqueeDescriptions[index] ?? fallback;
+
+  const marqueeRows = useMemo(
+    () => [
+      {
+        id: "marquee-1",
+        word: getMarqueeText(0, "Plant-based"),
+        description: getMarqueeDescription(
+          0,
+          "Bright, crunchy produce with a fresh-picked bite."
+        ),
+        images: [
+          "/spotlight/spotlight-1.jpg",
+          "/spotlight/spotlight-2.jpg",
+          "/spotlight/spotlight-3.jpg",
+          "/spotlight/spotlight-4.jpg",
+        ],
+      },
+      {
+        id: "marquee-2",
+        word: getMarqueeText(1, "Fresh"),
+        description: getMarqueeDescription(
+          1,
+          "Herbs and vegetables that pop with natural color."
+        ),
+        images: [
+          "/spotlight/spotlight-5.jpg",
+          "/spotlight/spotlight-6.jpg",
+          "/spotlight/spotlight-7.jpg",
+          "/spotlight/spotlight-8.jpg",
+        ],
+      },
+      {
+        id: "marquee-3",
+        word: getMarqueeText(2, "Organic"),
+        description: getMarqueeDescription(
+          2,
+          "Deep earth notes, slow-grown ingredients, bold aroma."
+        ),
+        images: [
+          "/spotlight/spotlight-9.jpg",
+          "/spotlight/spotlight-10.jpg",
+          "/spotlight/spotlight-11.jpg",
+          "/spotlight/spotlight-12.jpg",
+        ],
+      },
+      {
+        id: "marquee-4",
+        word: getMarqueeText(3, "Thoughtful"),
+        description: getMarqueeDescription(
+          3,
+          "Layered textures, careful seasoning, unforgettable finish."
+        ),
+        images: [
+          "/spotlight/spotlight-13.jpg",
+          "/spotlight/spotlight-14.jpg",
+          "/spotlight/spotlight-15.jpg",
+          "/spotlight/spotlight-16.jpg",
+        ],
+      },
+    ],
+    [getMarqueeDescription, getMarqueeText]
+  );
+  const getWordSizing = (word: string) => {
+    const normalizedLength = word.replace(/\s+/g, "").length;
+    if (normalizedLength >= 9) {
+      return {
+        maskFontSize: 210,
+        maskLetterSpacing: -6,
+        maskTextLength: 1040,
+        titleFontSize: "clamp(2.2rem, 6.8vw, 5.2rem)",
+        titleLetterSpacing: "-0.02em",
+      };
+    }
+    if (normalizedLength >= 7) {
+      return {
+        maskFontSize: 230,
+        maskLetterSpacing: -8,
+        maskTextLength: 1100,
+        titleFontSize: "clamp(2.4rem, 7.4vw, 5.6rem)",
+        titleLetterSpacing: "-0.03em",
+      };
+    }
+    return {
+      maskFontSize: 260,
+      maskLetterSpacing: -10,
+      maskTextLength: undefined,
+      titleFontSize: undefined,
+      titleLetterSpacing: undefined,
+    };
+  };
+
   useGSAP(
     () => {
       const spotlightElement = spotlightRef.current;
@@ -33,24 +131,26 @@ const Spotlight = () => {
       let initTimeout: ReturnType<typeof setTimeout> | null = null;
 
       const initSpotlight = () => {
-        const textItems = spotlightElement.querySelectorAll<HTMLHeadingElement>(
-          `.${styles.marqueeTextItem} h1`
-        );
-
-        textItems.forEach((heading) => {
-          splitInstances.push(new SplitType(heading, { types: "chars" }));
-        });
-
         spotlightElement
           .querySelectorAll(`.${styles.marqueeContainer}`)
           .forEach((container, index) => {
             const marquee = container.querySelector(`.${styles.marquee}`);
+            const word = container.querySelector(
+              `.${styles.marqueeMaskedWord}`
+            );
+            const mediaItems = container.querySelectorAll(
+              `.${styles.marqueeMedia}`
+            );
+
+            if (word) {
+              splitInstances.push(new SplitType(word, { types: "chars" }));
+            }
             const chars = container.querySelectorAll(".char");
 
             if (!marquee) return;
 
             const marqueeTrigger = gsap.to(marquee, {
-              x: index % 2 === 0 ? "5%" : "-15%",
+              x: index % 2 === 0 ? "12%" : "-18%",
               scrollTrigger: {
                 trigger: container,
                 start: "top bottom",
@@ -89,6 +189,27 @@ const Spotlight = () => {
             if (charsTrigger.scrollTrigger) {
               scrollTriggers.push(charsTrigger.scrollTrigger);
             }
+
+            mediaItems.forEach((item) => {
+              const scaleTrigger = gsap.fromTo(
+                item,
+                { scale: 1 },
+                {
+                  scale: 1.1,
+                  ease: "none",
+                  scrollTrigger: {
+                    trigger: item,
+                    start: "center bottom",
+                    end: "center top",
+                    scrub: true,
+                  },
+                }
+              );
+              animations.push(scaleTrigger);
+              if (scaleTrigger.scrollTrigger) {
+                scrollTriggers.push(scaleTrigger.scrollTrigger);
+              }
+            });
           });
 
         ScrollTrigger.refresh();
@@ -123,93 +244,88 @@ const Spotlight = () => {
   return (
     <section className={styles.spotlight} ref={spotlightRef}>
       <div className={styles.marquees}>
-        <div className={styles.marqueeContainer} id="marquee-1">
-          <div className={styles.marquee}>
-            <div className={styles.marqueeImgItem}>
-              <img src="/spotlight/spotlight-1.jpg" alt="" />
-            </div>
-            <div
-              className={`${styles.marqueeImgItem} ${styles.marqueeTextItem}`}
-            >
-              <h1>{getMarqueeText(0, "Plant-based")}</h1>
-            </div>
-            <div className={styles.marqueeImgItem}>
-              <img src="/spotlight/spotlight-2.jpg" alt="" />
-            </div>
-            <div className={styles.marqueeImgItem}>
-              <img src="/spotlight/spotlight-3.jpg" alt="" />
-            </div>
-            <div className={styles.marqueeImgItem}>
-              <img src="/spotlight/spotlight-4.jpg" alt="" />
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.marqueeContainer} id="marquee-2">
-          <div className={styles.marquee}>
-            <div className={styles.marqueeImgItem}>
-              <img src="/spotlight/spotlight-5.jpg" alt="" />
-            </div>
-            <div className={styles.marqueeImgItem}>
-              <img src="/spotlight/spotlight-6.jpg" alt="" />
-            </div>
-            <div className={styles.marqueeImgItem}>
-              <img src="/spotlight/spotlight-7.jpg" alt="" />
-            </div>
-            <div
-              className={`${styles.marqueeImgItem} ${styles.marqueeTextItem}`}
-            >
-              <h1>{getMarqueeText(1, "Fresh")}</h1>
-            </div>
-            <div className={styles.marqueeImgItem}>
-              <img src="/spotlight/spotlight-8.jpg" alt="" />
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.marqueeContainer} id="marquee-3">
-          <div className={styles.marquee}>
-            <div className={styles.marqueeImgItem}>
-              <img src="/spotlight/spotlight-9.jpg" alt="" />
-            </div>
-            <div
-              className={`${styles.marqueeImgItem} ${styles.marqueeTextItem}`}
-            >
-              <h1>{getMarqueeText(2, "Organic")}</h1>
-            </div>
-            <div className={styles.marqueeImgItem}>
-              <img src="/spotlight/spotlight-10.jpg" alt="" />
-            </div>
-            <div className={styles.marqueeImgItem}>
-              <img src="/spotlight/spotlight-11.jpg" alt="" />
-            </div>
-            <div className={styles.marqueeImgItem}>
-              <img src="/spotlight/spotlight-12.jpg" alt="" />
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.marqueeContainer} id="marquee-4">
-          <div className={styles.marquee}>
-            <div className={styles.marqueeImgItem}>
-              <img src="/spotlight/spotlight-13.jpg" alt="" />
-            </div>
-            <div className={styles.marqueeImgItem}>
-              <img src="/spotlight/spotlight-14.jpg" alt="" />
-            </div>
-            <div className={styles.marqueeImgItem}>
-              <img src="/spotlight/spotlight-15.jpg" alt="" />
-            </div>
-            <div
-              className={`${styles.marqueeImgItem} ${styles.marqueeTextItem}`}
-            >
-              <h1>{getMarqueeText(3, "Thoughtful")}</h1>
-            </div>
-            <div className={styles.marqueeImgItem}>
-              <img src="/spotlight/spotlight-16.jpg" alt="" />
+        {marqueeRows.map((row, rowIndex) => (
+          <div className={styles.marqueeContainer} id={row.id} key={row.id}>
+            <div className={styles.marquee}>
+              {row.images.map((src, index) => {
+                const isMasked = index === 1;
+                const maskId = `spotlight-mask-${rowIndex}-${index}`;
+                const wordSizing = getWordSizing(row.word);
+                const maskTextProps = wordSizing.maskTextLength
+                  ? {
+                      textLength: wordSizing.maskTextLength,
+                      lengthAdjust: "spacingAndGlyphs" as const,
+                    }
+                  : {};
+                return (
+                  <figure
+                    className={`${styles.marqueeItem} ${
+                      isMasked ? styles.marqueeItemMasked : ""
+                    }`}
+                    key={`${row.id}-${src}`}
+                  >
+                    <div className={styles.marqueeMedia}>
+                      {isMasked ? (
+                        <svg
+                          className={styles.marqueeMaskSvg}
+                          viewBox="0 0 1200 800"
+                          role="img"
+                          aria-label={row.word}
+                        >
+                          <defs>
+                            <mask id={maskId}>
+                              <rect
+                                x="0"
+                                y="0"
+                                width="1200"
+                                height="800"
+                                fill="white"
+                              />
+                              <text
+                                x="50%"
+                                y="54%"
+                                textAnchor="middle"
+                                dominantBaseline="middle"
+                                fontFamily="var(--font-playfair), Playfair Display, serif"
+                                fontSize={wordSizing.maskFontSize}
+                                fontWeight="900"
+                                letterSpacing={wordSizing.maskLetterSpacing}
+                                fill="black"
+                                {...maskTextProps}
+                              >
+                                {row.word}
+                              </text>
+                            </mask>
+                          </defs>
+                          <image
+                            href={src}
+                            width="1200"
+                            height="800"
+                            preserveAspectRatio="xMidYMid slice"
+                            mask={`url(#${maskId})`}
+                          />
+                        </svg>
+                      ) : (
+                        <img src={src} alt="" />
+                      )}
+                    </div>
+                    {isMasked ? (
+                      <h1
+                        className={styles.marqueeMaskedWord}
+                        style={{
+                          fontSize: wordSizing.titleFontSize,
+                          letterSpacing: wordSizing.titleLetterSpacing,
+                        }}
+                      >
+                        {row.word}
+                      </h1>
+                    ) : null}
+                  </figure>
+                );
+              })}
             </div>
           </div>
-        </div>
+        ))}
       </div>
     </section>
   );

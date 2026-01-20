@@ -1,6 +1,7 @@
 {
   "home": {
-    "welcome": "Welcome to our application!"
+    "welcome": "Welcome to our application!",
+    "heroSubhead": "Crafted from organic ingredients. Served with cinematic flair."
   },
   "notFound": {
     "title": "Page not found",
@@ -67,6 +68,12 @@
       "Fresh",
       "Organic",
       "Thoughtful"
+    ],
+    "marqueeDescriptions": [
+      "Crunchy produce with vibrant color and clean bite.",
+      "Herbs and greens that lift the aroma instantly.",
+      "Organic staples with deep, earthy balance.",
+      "Layered textures with a bold, mindful finish."
     ]
   },
   "clientReviews": {
@@ -76,11 +83,11 @@
         "clientName": "Mai Nguyen",
         "clientCompany": "Tay Ho family",
         "rating": 5,
-        "reviewImage": "/Ingredient/i1.jpg",
+        "reviewImage": "/Ingredient/i1.png",
         "reviewImages": [
-          "/Ingredient/i1.jpg",
-          "/Ingredient/i2.jpg",
-          "/Ingredient/i3.jpg"
+          "/Ingredient/i1.png",
+          "/Ingredient/i2.png",
+          "/Ingredient/i3.png"
         ]
       },
       {
@@ -88,9 +95,9 @@
         "clientName": "Duc Tran",
         "clientCompany": "Green Office",
         "rating": 5,
-        "reviewImage": "/Ingredient/i2.jpg",
+        "reviewImage": "/Ingredient/i2.png",
         "reviewImages": [
-          "/Ingredient/i4.jpg",
+          "/Ingredient/i4.png",
           "/Combo/c1.jpg",
           "/Combo/c2.jpg"
         ]
@@ -100,11 +107,11 @@
         "clientName": "Linh Pham",
         "clientCompany": "Yoga Studio",
         "rating": 5,
-        "reviewImage": "/Ingredient/i3.jpg",
+        "reviewImage": "/Ingredient/i3.png",
         "reviewImages": [
           "/Combo/c3.jpg",
           "/Combo/c4.jpg",
-          "/Ingredient/i1.jpg"
+          "/Ingredient/i1.png"
         ]
       },
       {
@@ -112,11 +119,11 @@
         "clientName": "Anh Le",
         "clientCompany": "Local foodie",
         "rating": 5,
-        "reviewImage": "/Ingredient/i4.jpg",
+        "reviewImage": "/Ingredient/i4.png",
         "reviewImages": [
-          "/Ingredient/i2.jpg",
-          "/Ingredient/i3.jpg",
-          "/Ingredient/i4.jpg"
+          "/Ingredient/i2.png",
+          "/Ingredient/i3.png",
+          "/Ingredient/i4.png"
         ]
       },
       {
@@ -139,8 +146,8 @@
         "reviewImage": "/Combo/c2.jpg",
         "reviewImages": [
           "/Combo/c4.jpg",
-          "/Ingredient/i1.jpg",
-          "/Ingredient/i2.jpg"
+          "/Ingredient/i1.png",
+          "/Ingredient/i2.png"
         ]
       }
     ]
