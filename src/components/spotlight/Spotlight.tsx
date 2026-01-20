@@ -143,7 +143,9 @@ const Spotlight = () => {
             );
 
             if (word) {
-              splitInstances.push(new SplitType(word, { types: "chars" }));
+              splitInstances.push(
+                new SplitType(word as HTMLElement, { types: "chars" })
+              );
             }
             const chars = container.querySelectorAll(".char");
 
