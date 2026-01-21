@@ -121,5 +121,25 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-playfair), "Playfair Display", serif;
   }
+}
+
+/* Reservation modal scrollbar (only visible on hover/scroll) */
+.reservation-scroll {
+  scrollbar-width: none;
+  scrollbar-color: transparent transparent;
+}
+
+.reservation-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.reservation-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.reservation-scroll::-webkit-scrollbar-thumb {
+  background: transparent;
 }

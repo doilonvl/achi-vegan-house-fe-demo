@@ -21,54 +21,64 @@ type ClientReview = ClientReviewContent & {
   ratingValue: number;
 };
 
+type ClientReviewsProps = {
+  items?: ClientReviewContent[];
+};
+
 const reviewStyles: Array<
   Pick<ClientReview, "backgroundColor" | "textColor" | "companyColor">
 > = [
   {
-    backgroundColor: "#0f3d2e",
-    textColor: "#f9f7f0",
-    companyColor: "#e6ddc4",
+    backgroundColor: "#e6e2d6",
+    textColor: "#1a2e1a",
+    companyColor: "#36512f",
   },
   {
-    backgroundColor: "#0a2a4a",
-    textColor: "#f5f7ff",
+    backgroundColor: "#ded8cb",
+    textColor: "#1a2e1a",
   },
   {
-    backgroundColor: "#3b0f2d",
-    textColor: "#fef6f0",
+    backgroundColor: "#d9d2c4",
+    textColor: "#1a2e1a",
   },
   {
-    backgroundColor: "#10463f",
-    textColor: "#f6f3e8",
-    companyColor: "#f6f3e8",
+    backgroundColor: "#e1dccf",
+    textColor: "#1a2e1a",
+    companyColor: "#3b5a35",
   },
   {
-    backgroundColor: "#1c3c68",
-    textColor: "#f5f7ff",
+    backgroundColor: "#e8e3d8",
+    textColor: "#1a2e1a",
   },
   {
-    backgroundColor: "#4a1230",
-    textColor: "#fdf3f6",
+    backgroundColor: "#dcd5c7",
+    textColor: "#1a2e1a",
   },
 ];
 
-const ClientReviews = () => {
+const GOOGLE_MAPS_URL =
+  "https://www.google.com/maps/place/Achi+Vegan+House+(Nh%C3%A0+Chay+Achi)/@21.0412605,105.8246087,17z/data=!4m8!3m7!1s0x3135ab57746b2723:0xdb0bd2bed69a7797!8m2!3d21.0412605!4d105.8271836!9m1!1b1!16s%2Fg%2F11gdkq04km?entry=ttu&g_ep=EgoyMDI2MDExMy4wIKXMDSoASAFQAw%3D%3D";
+
+const ClientReviews = ({ items }: ClientReviewsProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const t = useTranslations("clientReviews");
   const clientReviewsData = useMemo<ClientReview[]>(() => {
-    const items = t.raw("items") as ClientReviewContent[] | undefined;
-    if (!Array.isArray(items)) return [];
-    const getInitials = (name: string) =>
-      name
+    const fallbackItems = t.raw("items") as ClientReviewContent[] | undefined;
+    const sourceItems = items?.length ? items : fallbackItems;
+    if (!Array.isArray(sourceItems)) return [];
+    const getInitials = (name: string) => {
+      const initials = name
         .split(" ")
         .filter(Boolean)
         .slice(0, 2)
         .map((part) => part[0]?.toUpperCase() ?? "")
         .join("");
-    return items.map((item, index) => ({
+      return initials || "?";
+    };
+    return sourceItems.map((item, index) => ({
       ...item,
-        ...reviewStyles[index % reviewStyles.length],
-        initials: getInitials(item.clientName),
+      ...reviewStyles[index % reviewStyles.length],
+      initials: getInitials(item.clientName),
       ratingValue: Math.max(
         0,
         Math.min(
@@ -77,7 +87,7 @@ const ClientReviews = () => {
         )
       ),
     }));
-  }, [t]);
+  }, [items, t]);
 
   const totalReviews = clientReviewsData.length;
 
@@ -93,8 +103,8 @@ const ClientReviews = () => {
   return (
     <section className={styles.clientReviews}>
       <div className={styles.reviewHeader}>
-        <p className={styles.reviewEyebrow}>Voices</p>
-        <h2 className={styles.reviewTitle}>Testimonials in 3D</h2>
+        <p className={styles.reviewEyebrow}>{t("eyebrow")}</p>
+        <h2 className={styles.reviewTitle}>{t("title")}</h2>
       </div>
       <div className={styles.reviewCarousel} role="region" aria-label="Reviews">
         {clientReviewsData.map((item, index) => {
@@ -121,7 +131,13 @@ const ClientReviews = () => {
                 <span className={styles.reviewWatermark} aria-hidden="true">
                   &ldquo;
                 </span>
-                <p className={styles.reviewCardText}>{item.review}</p>
+                <p
+                  className={styles.reviewCardText}
+                  onWheel={(event) => event.stopPropagation()}
+                  onTouchMove={(event) => event.stopPropagation()}
+                >
+                  {item.review}
+                </p>
                 <div className={styles.reviewCardDivider} aria-hidden="true" />
                 <div className={styles.reviewCardFooter}>
                   <div className={styles.reviewCardStars} aria-hidden="true">
@@ -164,6 +180,15 @@ const ClientReviews = () => {
                       </p>
                     </div>
                   </div>
+                  <a
+                    className={styles.reviewCardLink}
+                    href={GOOGLE_MAPS_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    View on Google
+                  </a>
                 </div>
               </div>
             </button>
@@ -177,7 +202,7 @@ const ClientReviews = () => {
           onClick={() => shiftActive(-1)}
           aria-label="Previous review"
         >
-          Prev
+          {t("prev")}
         </button>
         <button
           type="button"
@@ -185,7 +210,7 @@ const ClientReviews = () => {
           onClick={() => shiftActive(1)}
           aria-label="Next review"
         >
-          Next
+          {t("next")}
         </button>
       </div>
     </section>

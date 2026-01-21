@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -20,6 +22,8 @@ type TestimonialsEditDialogProps = {
   action: (formData: FormData) => void | Promise<void>;
   deleteAction: (formData: FormData) => void | Promise<void>;
   redirectPath: string;
+  avatarAsset?: { id: string; url: string };
+  mediaAssets?: Array<{ id: string; url: string }>;
 };
 
 export default function TestimonialsEditDialog({
@@ -27,7 +31,11 @@ export default function TestimonialsEditDialog({
   action,
   deleteAction,
   redirectPath,
+  avatarAsset,
+  mediaAssets,
 }: TestimonialsEditDialogProps) {
+  const [currentAvatar, setCurrentAvatar] = useState(avatarAsset);
+  const [currentGallery, setCurrentGallery] = useState(mediaAssets ?? []);
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -49,12 +57,12 @@ export default function TestimonialsEditDialog({
             <input
               type="hidden"
               name="existingAvatarAssetId"
-              value={item.avatarAssetId ?? ""}
+              value={currentAvatar?.id ?? ""}
             />
             <input
               type="hidden"
               name="existingMediaAssetIds"
-              value={item.mediaAssetIds?.join(", ") ?? ""}
+              value={currentGallery.map((asset) => asset.id).join(", ")}
             />
             <div className="grid gap-2">
               <label
@@ -155,15 +163,68 @@ export default function TestimonialsEditDialog({
                 defaultValue={item.avatarInitials ?? ""}
               />
             </div>
+            {currentAvatar ? (
+              <div className="grid gap-2">
+                <p className="text-sm font-medium">Current avatar</p>
+                <div className="relative h-24 w-24 overflow-hidden rounded-lg border bg-muted/20">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={currentAvatar.url}
+                    alt={item.authorName}
+                    className="h-full w-full object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setCurrentAvatar(undefined)}
+                    className="absolute right-2 top-2 rounded-full bg-white/90 p-1 text-muted-foreground shadow hover:text-foreground"
+                    aria-label="Remove avatar image"
+                  >
+                    <X className="size-4" />
+                  </button>
+                </div>
+              </div>
+            ) : null}
             <ImageDropzone
               name="avatarFile"
               label="Replace avatar image (optional)"
               description="Upload a new avatar to replace the current one."
             />
+            {currentGallery.length ? (
+              <div className="grid gap-2">
+                <p className="text-sm font-medium">Current gallery images</p>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {currentGallery.map((asset) => (
+                    <div
+                      key={asset.id}
+                      className="relative overflow-hidden rounded-lg border bg-muted/20"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={asset.url}
+                        alt={item.authorName}
+                        className="h-40 w-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setCurrentGallery((prev) =>
+                            prev.filter((entry) => entry.id !== asset.id)
+                          )
+                        }
+                        className="absolute right-2 top-2 rounded-full bg-white/90 p-1 text-muted-foreground shadow hover:text-foreground"
+                        aria-label="Remove gallery image"
+                      >
+                        <X className="size-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
             <ImageDropzone
               name="mediaFiles"
-              label="Replace gallery images (optional)"
-              description="Upload new images to replace existing gallery images."
+              label="Add gallery images (optional)"
+              description="Upload new images to add alongside existing gallery images."
               multiple
             />
             <div className="grid gap-2">

@@ -1,7 +1,45 @@
 {
   "home": {
     "welcome": "Welcome to our application!",
-    "heroSubhead": "Crafted from organic ingredients. Served with cinematic flair."
+    "heroSubhead": "Crafted from organic ingredients. Served with cinematic flair.",
+    "aboutTitle": "Achi - A Peaceful Corner in Hanoi",
+    "aboutBody": [
+      "In the middle of a busy city, Achi Vegan House offers a calm place where you can slow down and breathe.",
+      "The name \"Achi\" feels familiar, like coming home. For us, vegan cuisine is not only a diet, but a gentle lifestyle that nourishes both body and mind.",
+      "Each dish blends Hanoi traditions with natural plant ingredients, from cool bún riêu to crisp spring rolls, made with clean vegetables, seeds, and mushrooms.",
+      "If you are looking for Achi Vegan House, vegan cuisine in West Lake, or a healthy plant-based meal, this is a quiet home for mindful dining."
+    ],
+    "aboutImageAlt": "Achi Vegan House vegan menu page",
+    "marquee": {
+      "outro": "A short tour of Achi favorites, crafted with seasonal produce and calm, nourishing flavors."
+    },
+    "signature": {
+      "title": "Signature dishes",
+      "xoiChien": {
+        "name": "Crispy sticky rice",
+        "description": "Golden fried sticky rice with a house dipping sauce."
+      },
+      "goiNam": {
+        "name": "Mushroom salad",
+        "description": "Mushroom salad with herbs and peanuts."
+      },
+      "nomDuDu": {
+        "name": "Green papaya salad",
+        "description": "Green papaya salad, fresh and bright."
+      },
+      "chaNamKho": {
+        "name": "Braised mushroom patties",
+        "description": "Mushroom patties braised in a clay pot."
+      },
+      "xienNuongCuQua": {
+        "name": "Grilled veggie skewers",
+        "description": "Seasonal vegetable skewers, grilled."
+      },
+      "rauXaoTheoMua": {
+        "name": "Seasonal stir-fry",
+        "description": "Seasonal vegetables stir-fried to order."
+      }
+    }
   },
   "notFound": {
     "title": "Page not found",
@@ -24,14 +62,11 @@
       "Vegetarian party catering for families and organizations",
       "Outdoor seating"
     ],
-    "features": [
-      "Price range: $",
-      "100% recommended (50 reviews)"
-    ],
+    "features": ["Price range: $", "100% recommended (50 reviews)"],
     "mapTitle": "Achi Vegan House map",
     "mapCta": "View on Google Maps",
     "mapRatingValue": 4.5,
-    "mapReviewCount": 272,
+    "mapReviewCount": 274,
     "mapRatingLabel": "{rating} ({count} reviews)",
     "mapRatingSource": "Google Maps",
     "modal": {
@@ -53,8 +88,11 @@
   },
   "header": {
     "brandName": "Achi Vegan House",
+    "home": "Home",
+    "language": "Language",
     "products": "Menu",
     "about": "About",
+    "reservation": "Reservation",
     "contact": "Contact",
     "blog": "Blog",
     "menuTitle": "Menu",
@@ -63,20 +101,19 @@
     "menuDescription": "Mobile navigation menu for Achi Vegan House."
   },
   "spotlight": {
-    "marqueeTexts": [
-      "Plant-based",
-      "Fresh",
-      "Organic",
-      "Thoughtful"
-    ],
+    "marqueeTexts": ["PURE", "WHOLE", "NATURE", "ROOTED"],
     "marqueeDescriptions": [
-      "Crunchy produce with vibrant color and clean bite.",
-      "Herbs and greens that lift the aroma instantly.",
-      "Organic staples with deep, earthy balance.",
-      "Layered textures with a bold, mindful finish."
+      "Clean, crisp produce with bright color and a fresh bite.",
+      "Whole grains and seeds for depth, balance, and warmth.",
+      "Harvested from the earth with a calm, natural finish.",
+      "Rooted flavors, slow-grown and thoughtfully layered."
     ]
   },
   "clientReviews": {
+    "eyebrow": "Guest Stories",
+    "title": "Gentle Reviews",
+    "prev": "Prev",
+    "next": "Next",
     "items": [
       {
         "review": "Clean, balanced flavors. Even my non-veg friends keep coming back.",
@@ -96,11 +133,7 @@
         "clientCompany": "Green Office",
         "rating": 5,
         "reviewImage": "/Ingredient/i2.png",
-        "reviewImages": [
-          "/Ingredient/i4.png",
-          "/Combo/c1.jpg",
-          "/Combo/c2.jpg"
-        ]
+        "reviewImages": ["/Ingredient/i4.png", "/Combo/c1.jpg", "/Combo/c2.jpg"]
       },
       {
         "review": "Fresh produce, light seasoning, and generous portions. Perfect for weekday dinners.",
@@ -108,11 +141,7 @@
         "clientCompany": "Yoga Studio",
         "rating": 5,
         "reviewImage": "/Ingredient/i3.png",
-        "reviewImages": [
-          "/Combo/c3.jpg",
-          "/Combo/c4.jpg",
-          "/Ingredient/i1.png"
-        ]
+        "reviewImages": ["/Combo/c3.jpg", "/Combo/c4.jpg", "/Ingredient/i1.png"]
       },
       {
         "review": "Almost every dish tastes handmade. The organic focus really shows.",
@@ -132,11 +161,7 @@
         "clientCompany": "Neighborhood group",
         "rating": 5,
         "reviewImage": "/Combo/c1.jpg",
-        "reviewImages": [
-          "/Combo/c1.jpg",
-          "/Combo/c2.jpg",
-          "/Combo/c3.jpg"
-        ]
+        "reviewImages": ["/Combo/c1.jpg", "/Combo/c2.jpg", "/Combo/c3.jpg"]
       },
       {
         "review": "We order family trays regularly and the quality stays consistent.",
@@ -332,6 +357,29 @@
     "sectionSubtitle": "Scroll to reveal each page",
     "indexTitle": "Menu index",
     "pageLabel": "Menu page",
+    "menuSections": [
+      {
+        "title": "Appetizers",
+        "items": [
+          { "label": "Lotus root salad", "image": "/Menu/m-1.jpg" },
+          { "label": "Fresh herb rolls", "image": "/Menu/m-2.jpg" }
+        ]
+      },
+      {
+        "title": "Main plates",
+        "items": [
+          { "label": "Braised mushrooms", "image": "/Menu/m-3.jpg" },
+          { "label": "Herb rice bowl", "image": "/Menu/m-4.jpg" }
+        ]
+      },
+      {
+        "title": "Hotpot & family",
+        "items": [
+          { "label": "Signature hotpot", "image": "/Menu/m-5.jpg" },
+          { "label": "Family platter", "image": "/Combo/c2.jpg" }
+        ]
+      }
+    ],
     "pages": [
       "Menu page 01",
       "Menu page 02",
@@ -340,5 +388,70 @@
       "Menu page 05",
       "Menu page 06"
     ]
+  },
+  "reservation": {
+    "sectionTitle": "Reservations",
+    "heading": "Book a table your way",
+    "description": "Pick your guest count, dining time, and leave your contact details. We'll confirm as soon as we receive it.",
+    "fullNameLabel": "Full name",
+    "fullNamePlaceholder": "John Smith",
+    "phoneLabel": "Phone number",
+    "phonePlaceholder": "090 123 4567",
+    "emailLabel": "Email (for confirmation)",
+    "emailPlaceholder": "you@example.com",
+    "guestLabel": "Guests",
+    "guestSingular": "guest",
+    "guestPlural": "{count} guests",
+    "dateLabel": "Date",
+    "timeLabel": "Time (24h)",
+    "noteLabel": "Additional notes",
+    "notePlaceholder": "Dietary requests, preferred seating, special occasions...",
+    "submit": "Book table",
+    "submitting": "Sending...",
+    "privacy": "We keep your details private and only use them to confirm your booking.",
+    "successTitle": "Reservation submitted",
+    "successDesc": "We'll contact you to confirm in a few minutes.",
+    "errorTitle": "Request failed",
+    "errorDesc": "Unable to send your request, please try again later.",
+    "contactLabel": "Quick contact",
+    "addressLine": "20 Duong Thanh, Hoan Kiem, Ha Noi",
+    "openingHourLabel": "Opening hours",
+    "emailLabelSecondary": "Email",
+    "arrivalNote": "Booking online secures your table during peak hours. Please arrive 5 minutes early for the best experience.",
+    "validation": {
+      "fullNameMin": "Enter your full name (at least 3 characters).",
+      "fullNameMax": "Name must be 80 characters or fewer.",
+      "fullNamePattern": "Name may include letters, spaces, and ', . or - characters.",
+      "fullNameParts": "Please include both first and last name.",
+      "phone": "Phone number is invalid (10 digits starting with 0 or +84).",
+      "email": "Email is not valid",
+      "guestMin": "At least 1 guest",
+      "guestMax": "For parties over 30, please contact us directly",
+      "dateRequired": "Select a date",
+      "timeRequired": "Select a time",
+      "timeInvalid": "Time is not valid.",
+      "timePast": "Please choose a time in the present or future.",
+      "timeOutsideHours": "Please choose a time between 10:00 and 22:00.",
+      "noteMax": "Notes must be 400 characters or fewer"
+    }
+  },
+  "menuPage": {
+    "title": "Menu",
+    "subtitle": "Tap any page to zoom in for details.",
+    "hint": "15 pages",
+    "pageLabel": "Page",
+    "tapHint": "Tap",
+    "prev": "Prev",
+    "next": "Next",
+    "close": "Close",
+    "categories": {
+      "all": "All",
+      "breakfast": "Breakfast",
+      "appetizers": "Appetizers",
+      "mainDishes": "Main dishes",
+      "soup": "Soup",
+      "hotpot": "Hotpot",
+      "drinks": "Drinks"
+    }
   }
 }

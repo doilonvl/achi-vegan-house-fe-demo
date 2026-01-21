@@ -103,7 +103,7 @@
   letter-spacing: -0.04em;
   text-align: center;
   white-space: nowrap;
-  color: rgba(245, 244, 238, 0.85);
+  color: rgba(245, 244, 238, 0.6);
   mix-blend-mode: screen;
   text-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
@@ -119,13 +119,21 @@
   }
 
   .marqueeContainer {
-    width: 180%;
+    width: 200%;
     height: clamp(180px, 24vh, 260px);
+  }
+
+  #marquee-1 .marquee {
+    transform: translate3d(-6%, -50%, 0);
   }
 
   #marquee-2 .marquee,
   #marquee-4 .marquee {
-    transform: translate3d(-35%, -50%, 0);
+    transform: translate3d(-48%, -50%, 0);
+  }
+
+  #marquee-3 .marquee {
+    transform: translate3d(-18%, -50%, 0);
   }
 
   .marqueeMaskedWord {

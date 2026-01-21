@@ -171,7 +171,7 @@ const Showreel = () => {
       <div className={styles.showreelContainer} ref={showreelContainerRef}>
         <img
           ref={showreelImageRef}
-          src={`/Ingredient/i${currentFrame}.png`}
+          src={`/spotlight/spotlight-${currentFrame}.jpg`}
           alt="Showreel frame"
         />
         <div className={styles.showreelGlow} aria-hidden="true" />

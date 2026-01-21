@@ -25,7 +25,7 @@ export async function createMediaAssetFromUpload(
     body: JSON.stringify({
       slug,
       kind: "image",
-      provider: "upload",
+      provider: "cloudinary",
       url: upload.url,
       sortOrder: 0,
       isActive: true,

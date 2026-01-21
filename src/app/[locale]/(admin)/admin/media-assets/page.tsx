@@ -130,7 +130,7 @@ export default async function MediaAssetsPage({
 
   const qs = new URLSearchParams({ page: String(page), limit: String(limit) });
   const data = await fetchAdminServerJson<PaginatedResponse<MediaAsset>>(
-    `/media-assets?${qs.toString()}`
+    `/media-assets/admin?${qs.toString()}`
   );
 
   return (

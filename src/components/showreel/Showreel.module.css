@@ -120,15 +120,25 @@
 
 @media (max-width: 900px) {
   .showreelCopy {
-    left: 1.5rem;
-    bottom: 4rem;
+    left: 50%;
+    bottom: 18vh;
+    transform: translateX(-50%);
+    text-align: center;
   }
 
   .showreelHeadline {
-    font-size: clamp(3.5rem, 18vw, 9rem);
+    font-size: clamp(4.2rem, 22vw, 10rem);
+    align-items: center;
+  }
+
+  .showreelHeadline span:last-child {
+    margin-left: 0;
   }
 
   .showreelSubhead {
+    max-width: 20rem;
+    margin-left: auto;
+    margin-right: auto;
     letter-spacing: 0.2rem;
   }
 }

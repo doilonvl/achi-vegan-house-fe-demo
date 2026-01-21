@@ -7,6 +7,10 @@ import type {
 } from "@reduxjs/toolkit/query";
 import type { Locale, LocalizedString } from "@/types/content";
 import { getApiBaseUrl } from "@/lib/env";
+import type {
+  ReservationRequestPayload,
+  ReservationRequestResponse,
+} from "@/types/reservation";
 
 const BASE_URL = getApiBaseUrl();
 
@@ -70,7 +74,17 @@ export const api = createApi({
   tagTypes: ["Products", "Home"],
   endpoints: (builder) => ({
     // -------- HOME --------
+    createReservationRequest: builder.mutation<
+      ReservationRequestResponse,
+      ReservationRequestPayload
+    >({
+      query: (body) => ({
+        url: "/reservation-requests",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
-export const {} = api;
+export const { useCreateReservationRequestMutation } = api;

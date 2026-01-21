@@ -7,7 +7,7 @@ import { getSiteUrl } from "@/lib/env";
 // import TawkTo from "@/components/TawkTo";
 
 const playfair = Playfair_Display({
-  subsets: ["latin"],
+  subsets: ["latin", "vietnamese"],
   weight: ["400", "600", "700", "800", "900"],
   variable: "--font-playfair",
 });
