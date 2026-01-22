@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import type { Locale } from "@/types/content";
 import { getApiBaseUrl, getSiteUrl } from "@/lib/env";
@@ -294,3 +294,5 @@ export default async function HomePage() {
     </main>
   );
 }
+
+

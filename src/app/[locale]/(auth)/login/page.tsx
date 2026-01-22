@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+﻿/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import * as React from "react";
@@ -101,3 +101,6 @@ async function safeJson(res: Response) {
     return null;
   }
 }
+
+
+

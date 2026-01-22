@@ -6,6 +6,11 @@ export function GET() {
   const content = [
     "User-agent: *",
     "Allow: /",
+    "Disallow: /admin",
+    "Disallow: /en/admin",
+    "Disallow: /login",
+    "Disallow: /en/login",
+    "Disallow: /api",
     `Sitemap: ${baseUrl}/sitemap.xml`,
     "",
   ].join("\n");

@@ -77,7 +77,7 @@ export async function generateMetadata({
   const prefix = getLocalePrefix(locale);
   const canonical = prefix
     ? `${BASE_URL}${prefix}/privacy-policy`
-    : `${BASE_URL}/privacy-policy`;
+    : `${BASE_URL}/chinhsach-baomat`;
 
   return {
     title: { absolute: meta.title },
@@ -85,7 +85,7 @@ export async function generateMetadata({
     alternates: {
       canonical,
       languages: {
-        "vi-VN": `${BASE_URL}/privacy-policy`,
+        "vi-VN": `${BASE_URL}/chinhsach-baomat`,
         en: `${BASE_URL}/en/privacy-policy`,
       },
     },

@@ -1,5 +1,4 @@
-import { getApiBaseUrl, getSiteUrl } from "@/lib/env";
-import type { Locale } from "@/types/content";
+import { getSiteUrl } from "@/lib/env";
 
 function xmlEscape(value: string) {
   return value
@@ -45,13 +44,38 @@ export async function GET() {
       changefreq: "weekly",
       priority: 0.9,
     },
+    {
+      loc: `${base}/thuc-don`,
+      lastmod: now,
+      changefreq: "weekly",
+      priority: 0.8,
+    },
+    {
+      loc: `${base}/en/menu`,
+      lastmod: now,
+      changefreq: "weekly",
+      priority: 0.8,
+    },
+    {
+      loc: `${base}/chinhsach-baomat`,
+      lastmod: now,
+      changefreq: "yearly",
+      priority: 0.5,
+    },
+    {
+      loc: `${base}/en/privacy-policy`,
+      lastmod: now,
+      changefreq: "yearly",
+      priority: 0.5,
+    },
   ];
 
+  const urls = staticUrls.map(toUrlEntry).join("\n");
   const body =
     `<?xml version="1.0" encoding="UTF-8"?>\n` +
     `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-    // [...staticUrls, ...productUrls].map(toUrlEntry).join("\n") +
-    "\n</urlset>\n";
+    `${urls}\n` +
+    `</urlset>\n`;
 
   return new Response(body, {
     headers: {
