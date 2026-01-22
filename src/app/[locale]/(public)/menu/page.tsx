@@ -57,6 +57,9 @@ export default async function MenuPage() {
         eyebrow={t("eyebrow")}
         title={t("title")}
         tagline={t("tagline")}
+        hintTitle={t("hintTitle")}
+        hintBody={t("hintBody")}
+        closeLabel={t("close")}
         sections={menuSections}
       />
     </main>

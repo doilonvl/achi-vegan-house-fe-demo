@@ -62,7 +62,7 @@
       "Vegetarian party catering for families and organizations",
       "Outdoor seating"
     ],
-    "features": ["Price range: $", "100% recommended (50 reviews)"],
+    "features": ["Price range: 30K - 200K", "100% recommended (50 reviews)"],
     "mapTitle": "Achi Vegan House map",
     "mapCta": "View on Google Maps",
     "mapRatingValue": 4.5,
@@ -343,7 +343,9 @@
     "metaDescription": "Explore the Achi Vegan House menu with handcrafted vegan dishes and organic ingredients.",
     "eyebrow": "Achi Vegan House",
     "title": "Menu",
-    "tagline": "A curated vegan menu built around organic vegetables, seasonal produce, and thoughtful flavors.",
+    "tagline": "Clean, simple flavors made from organic vegetables and seasonal produce.",
+    "hintTitle": "Tap dish name",
+    "hintBody": "Open the menu.",
     "highlights": [
       "100+ vegan dishes",
       "Fresh ingredients",
@@ -357,12 +359,13 @@
     "sectionSubtitle": "Scroll to reveal each page",
     "indexTitle": "Menu index",
     "pageLabel": "Menu page",
+    "close": "Close",
     "menuSections": [
       {
         "title": "Appetizers",
         "items": [
-          { "label": "Lotus root salad", "image": "/Menu/m-1.jpg" },
-          { "label": "Fresh herb rolls", "image": "/Menu/m-2.jpg" }
+          { "label": "Lotus flower salad", "image": "/Menu/m-1.jpg" },
+          { "label": "Drinks menu", "image": "/Menu/m-2.jpg" }
         ]
       },
       {

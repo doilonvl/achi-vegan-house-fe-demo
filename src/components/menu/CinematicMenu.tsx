@@ -27,6 +27,9 @@ type CinematicMenuProps = {
   eyebrow: string;
   title: string;
   tagline: string;
+  hintTitle: string;
+  hintBody: string;
+  closeLabel: string;
   sections: MenuSection[];
 };
 
@@ -37,6 +40,9 @@ const CinematicMenu = ({
   eyebrow,
   title,
   tagline,
+  hintTitle,
+  hintBody,
+  closeLabel,
   sections,
 }: CinematicMenuProps) => {
   const [activeItem, setActiveItem] = useState<MenuItemWithIndex | null>(null);
@@ -86,9 +92,6 @@ const CinematicMenu = ({
     [sectionsWithIndex],
   );
   const selectedItem = selectedIndex !== null ? allItems[selectedIndex] : null;
-  const resolvedActiveItem = isCompact
-    ? (activeItem ?? allItems[0] ?? null)
-    : activeItem;
 
   const shiftSelected = (direction: number) => {
     if (selectedIndex === null || allItems.length === 0) return;
@@ -108,23 +111,42 @@ const CinematicMenu = ({
       <header className={styles.menuHero}>
         <p className={styles.menuEyebrow}>{eyebrow}</p>
         <h1 className={styles.menuTitle}>{title}</h1>
-        <p className={styles.menuTagline}>{tagline}</p>
+        <p className={styles.menuTagline}>
+          {tagline}
+          {isCompact ? (
+            <span className={styles.menuTaglineHint}>
+              ({hintTitle}. {hintBody})
+            </span>
+          ) : null}
+        </p>
       </header>
 
-      {isCompact && resolvedActiveItem ? (
-        <div className={styles.menuMobilePreview} aria-live="polite">
-          <img
-            src={resolvedActiveItem.image}
-            alt={resolvedActiveItem.label}
-            className={styles.menuMobilePreviewImage}
-          />
-          <div className={styles.menuMobilePreviewOverlay}>
-            <span className={styles.menuMobilePreviewLabel}>
-              {resolvedActiveItem.label}
-            </span>
-          </div>
+      <div className={styles.menuHintWrap} aria-hidden="true">
+        <div className={styles.menuHintArc}>
+          <svg viewBox="0 0 220 120">
+            <path
+              d="M10 110 C70 10, 150 10, 210 70"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeDasharray="4 6"
+              strokeLinecap="round"
+            />
+            <path
+              d="M198 64 L210 70 L198 76"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </div>
-      ) : null}
+        <div className={styles.menuHintText}>
+          <span>{hintTitle}</span>
+          <span>{hintBody}</span>
+        </div>
+      </div>
 
       <div className={styles.menuList}>
         {sectionsWithIndex.map((section) => (
@@ -132,7 +154,7 @@ const CinematicMenu = ({
             <h2 className={styles.menuSectionTitle}>{section.title}</h2>
             <ul className={styles.menuItems}>
               {section.items.map((item) => {
-                const isActive = resolvedActiveItem?.label === item.label;
+                const isActive = activeItem?.label === item.label;
                 return (
                   <li className={styles.menuItem} key={item.globalIndex}>
                     <button
@@ -140,9 +162,11 @@ const CinematicMenu = ({
                       className={`${styles.menuItemButton} ${
                         isActive ? styles.menuItemButtonActive : ""
                       }`}
-                      onMouseEnter={() => setActiveItem(item)}
+                      onMouseEnter={() => {
+                        if (!isCompact) setActiveItem(item);
+                      }}
                       onPointerDown={(event) => {
-                        if (event.pointerType !== "mouse") {
+                        if (!isCompact && event.pointerType !== "mouse") {
                           setActiveItem(item);
                           setPointer({ x: event.clientX, y: event.clientY });
                         }
@@ -150,8 +174,12 @@ const CinematicMenu = ({
                       onClick={() => {
                         setSelectedIndex(item.globalIndex);
                       }}
-                      onFocus={() => setActiveItem(item)}
-                      onBlur={() => setActiveItem(null)}
+                      onFocus={() => {
+                        if (!isCompact) setActiveItem(item);
+                      }}
+                      onBlur={() => {
+                        if (!isCompact) setActiveItem(null);
+                      }}
                     >
                       {item.label}
                     </button>
@@ -164,9 +192,9 @@ const CinematicMenu = ({
       </div>
 
       <AnimatePresence mode="wait">
-        {resolvedActiveItem ? (
+        {!isCompact && activeItem ? (
           <motion.div
-            key={resolvedActiveItem.label}
+            key={activeItem.label}
             className={styles.menuPreview}
             style={{
               left: previewPosition.x,
@@ -178,8 +206,8 @@ const CinematicMenu = ({
             transition={{ duration: 0.3, ease: "easeOut" }}
           >
             <motion.img
-              src={resolvedActiveItem.image}
-              alt={resolvedActiveItem.label}
+              src={activeItem.image}
+              alt={activeItem.label}
               className={styles.menuPreviewImage}
               initial={{ scale: 1.05 }}
               animate={{ scale: 1 }}
@@ -212,13 +240,13 @@ const CinematicMenu = ({
                   transition={{ duration: 0.25, ease: "easeOut" }}
                   onClick={(event) => event.stopPropagation()}
                 >
-                  <button
-                    type="button"
-                    className={styles.menuModalClose}
-                    onClick={() => setSelectedIndex(null)}
-                    aria-label="Close"
+              <button
+                type="button"
+                className={styles.menuModalClose}
+                onClick={() => setSelectedIndex(null)}
+                aria-label="Close"
               >
-                Đóng
+                {closeLabel}
               </button>
                   <button
                     type="button"

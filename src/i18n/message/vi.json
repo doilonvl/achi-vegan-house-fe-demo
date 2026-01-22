@@ -62,7 +62,7 @@
       "Tiệc chay cho gia đình và tổ chức",
       "Chỗ ngồi ngoài trời thoáng mát"
     ],
-    "features": ["Khoảng giá: $", "100% được đề xuất (50 đánh giá)"],
+    "features": ["Khoảng giá: 30K - 200K", "100% được đề xuất (50 đánh giá)"],
     "mapTitle": "Bản đồ Achi Vegan House",
     "mapCta": "Xem trên Google Maps",
     "mapRatingValue": 4.5,
@@ -342,7 +342,10 @@
     "metaDescription": "Khám phá thực đơn Achi Vegan House với các món chay thủ công và nguyên liệu hữu cơ.",
     "eyebrow": "Achi Vegan House",
     "title": "Thực đơn",
-    "tagline": "Thực đơn chay tinh tế được xây dựng từ rau củ hữu cơ, nông sản theo mùa và hương vị sâu sắc.",
+    "tagline": "Thực đơn chay tinh tế với rau củ hữu cơ, theo mùa.",
+    "hintTitle": "Chạm tên món",
+    "hintBody": "Mở ảnh menu lớn.",
+    "close": "Đóng",
     "highlights": [
       "Hơn 100 món chay",
       "Nguyên liệu tươi mới",

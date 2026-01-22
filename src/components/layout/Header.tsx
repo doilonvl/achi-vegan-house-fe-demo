@@ -18,7 +18,7 @@ type NavItem = {
   label: string;
   target?: string;
   href?: string;
-  icon?: React.ComponentType<{ className?: string }>;
+  icon?: React.ComponentType<{ className?: string; size?: number }>;
 };
 type MenuEntry = NavItem | { type: "language"; label: string; icon?: never };
 
@@ -554,24 +554,24 @@ export default function Header() {
                                 }
                                 handleNavClick(item);
                               }}
-                              className={`flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.28em] shadow-lg backdrop-blur transition ${
-                                isLightHeader
-                                  ? "border border-black/40 bg-white/70 text-black/90 shadow-[0_10px_26px_rgba(0,0,0,0.12)] hover:border-emerald-700/60 hover:bg-emerald-600/20 hover:text-emerald-950"
-                                  : "border border-white/40 bg-white/20 text-white hover:border-emerald-200 hover:bg-emerald-200/30 hover:text-white"
-                              } ${isCompact ? "h-11 w-11 p-0" : ""}`}
-                            >
-                              {item.icon && isCompact ? (
-                                <span className="relative flex h-full w-full items-center justify-center rounded-full border border-transparent">
-                                  <item.icon className="h-7 w-7" />
-                                  {activeMobileHint === item.label ? (
-                                    <span
-                                      className={`absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.22em] ${
-                                        isLightHeader
-                                          ? "bg-white/90 text-black/80"
-                                          : "bg-black/70 text-white/80"
-                                      }`}
-                                    >
-                                      {item.label}
+                            className={`flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.28em] shadow-lg backdrop-blur transition ${
+                              isLightHeader
+                                ? "border border-black/40 bg-white/70 text-black/90 shadow-[0_10px_26px_rgba(0,0,0,0.12)] hover:border-emerald-700/60 hover:bg-emerald-600/20 hover:text-emerald-950"
+                                : "border border-white/40 bg-white/20 text-white hover:border-emerald-200 hover:bg-emerald-200/30 hover:text-white"
+                            } ${isCompact ? "h-14 w-14 p-0" : ""}`}
+                          >
+                            {item.icon && isCompact ? (
+                              <span className="relative flex h-full w-full items-center justify-center rounded-full border border-transparent">
+                                <item.icon size={40} className="h-10 w-10" />
+                                {activeMobileHint === item.label ? (
+                                  <span
+                                    className={`absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.22em] ${
+                                      isLightHeader
+                                        ? "bg-white/90 text-black/80"
+                                        : "bg-black/70 text-white/80"
+                                    }`}
+                                  >
+                                    {item.label}
                                     </span>
                                   ) : null}
                                   {isActive ? (

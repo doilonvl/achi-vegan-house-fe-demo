@@ -23,8 +23,8 @@ const NewMenu: React.FC = () => {
   const menuData = useMemo(() => {
     return SIGNATURE_DISHES_DATA.map((dish) => ({
       ...dish,
-      name: t(dish.name as any),
-      description: t(dish.description as any),
+      name: t(dish.name as any).normalize("NFC"),
+      description: t(dish.description as any).normalize("NFC"),
     }));
   }, [t]);
 
