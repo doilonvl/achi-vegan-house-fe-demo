@@ -5,8 +5,11 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { Volume2, VolumeX } from "lucide-react";
-import { useTranslations } from "next-intl";
+import Image from "next/image";
+import { useLocale, useTranslations } from "next-intl";
 import styles from "./Showreel.module.css";
+import { getLocalePrefix } from "@/lib/routes";
+import type { Locale } from "@/types/content";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -24,6 +27,8 @@ const Showreel = () => {
   const [currentFrame, setCurrentFrame] = useState(1);
   const [isMuted, setIsMuted] = useState(true);
   const t = useTranslations("home");
+  const locale = useLocale() as Locale;
+  const homeHref = getLocalePrefix(locale) || "/";
 
   useEffect(() => {
     if (audioRef.current) {
@@ -168,6 +173,23 @@ const Showreel = () => {
 
   return (
     <section className={styles.showreel} ref={showreelSecRef}>
+      <button
+        type="button"
+        className={styles.showreelCornerLogo}
+        onClick={() => {
+          window.location.href = homeHref;
+        }}
+        aria-label="Achi Vegan House"
+      >
+        <Image
+          src="/Logo/Logo1.jpg"
+          alt="Achi Vegan House"
+          width={88}
+          height={88}
+          className={styles.showreelCornerLogoImage}
+          priority
+        />
+      </button>
       <div className={styles.showreelContainer} ref={showreelContainerRef}>
         <img
           ref={showreelImageRef}

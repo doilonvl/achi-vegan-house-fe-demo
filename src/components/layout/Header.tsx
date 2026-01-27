@@ -12,7 +12,14 @@ import { getLocalePrefix } from "@/lib/routes";
 import { ReservationForm } from "@/components/shared/reservation-form";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import type { Variants } from "framer-motion";
-import { ChefHat, Home, Info, CalendarCheck, PhoneCall } from "lucide-react";
+import {
+  ChefHat,
+  Home,
+  Info,
+  CalendarCheck,
+  PhoneCall,
+  BookOpenText,
+} from "lucide-react";
 
 type NavItem = {
   label: string;
@@ -61,10 +68,10 @@ export default function Header() {
   const navItems: NavItem[] = useMemo(() => {
     const items: NavItem[] = [
       { label: t("products"), href: "/menu", icon: ChefHat },
+      { label: t("blog"), href: "/blog", icon: BookOpenText },
       { label: t("about"), target: "story", icon: Info },
       { label: t("reservation"), target: "reservation", icon: CalendarCheck },
       { label: t("contact"), target: "contact", icon: PhoneCall },
-      // { label: t("blog"), href: "/blog" },
     ];
     if (!isHome && isCompact) {
       items.unshift({ label: t("home"), href: "/", icon: Home });
@@ -428,7 +435,7 @@ export default function Header() {
                   strokeLinejoin="round"
                 />
               </svg>
-              <div className="relative h-[220px] w-[320px] md:h-[260px] md:w-[420px]">
+              <div className="relative h-[220px] w-[320px] md:h-[320px] md:w-[520px] lg:h-[360px] lg:w-[560px]">
                 <motion.div
                   className="absolute inset-0 flex items-center justify-center"
                   variants={orbitVariants}
@@ -613,7 +620,7 @@ export default function Header() {
                   height="380"
                   viewBox="0 0 380 380"
                   fill="none"
-                  className="overflow-visible"
+                  className="h-[320px] w-[320px] overflow-visible md:h-[420px] md:w-[420px] lg:h-[460px] lg:w-[460px]"
                 >
                   <defs>
                     {/* Hiệu ứng phát sáng nhẹ cho cánh hoa */}
@@ -760,7 +767,7 @@ export default function Header() {
                 type="button"
                 aria-label={t("brandName")}
                 aria-expanded={isMenuOpen}
-                className={`pointer-events-auto absolute left-1/2 top-1/2 z-30 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border backdrop-blur transition hover:scale-105 cursor-pointer ${
+                className={`pointer-events-auto absolute left-1/2 top-1/2 z-30 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border backdrop-blur transition hover:scale-105 cursor-pointer md:h-20 md:w-20 lg:h-24 lg:w-24 ${
                   isLightHeader
                     ? "border-black/20 bg-white/85 shadow-[0_12px_40px_rgba(0,0,0,0.35)]"
                     : "border-white/30 bg-black/70 shadow-[0_12px_45px_rgba(0,0,0,0.45)]"
@@ -803,7 +810,7 @@ export default function Header() {
                   alt={t("brandName")}
                   width={80}
                   height={80}
-                  className="h-14 w-14 rounded-full object-cover"
+                  className="h-14 w-14 rounded-full object-cover md:h-16 md:w-16 lg:h-20 lg:w-20"
                   priority
                 />
               </motion.button>

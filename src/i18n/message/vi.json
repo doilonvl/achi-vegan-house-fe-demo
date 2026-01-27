@@ -455,5 +455,25 @@
       "hotpot": "Lẩu",
       "drinks": "Đồ uống"
     }
+  },
+  "blog": {
+    "metaTitle": "Blog | Achi vegan house",
+    "metaDescription": "Tin tức và cập nhật từ Achi vegan house.",
+    "title": "Blog",
+    "subtitle": "Chia sẻ, món ăn, và sự kiện từ Achi vegan house.",
+    "tagLabel": "Chủ đề:",
+    "emptyTitle": "Chưa có bài viết",
+    "emptyBody": "Chúng tôi đang chuẩn bị nội dung mới. Vui lòng quay lại sau.",
+    "noCover": "Chưa có ảnh bìa",
+    "pageLabel": "Trang {page} / {total}",
+    "previous": "Trước",
+    "next": "Sau",
+    "latestTitle": "Mới nhất",
+    "empty": "Chưa có bài viết.",
+    "backToBlog": "Quay lại blog",
+    "updatedLabel": "Cập nhật",
+    "byLabel": "Bởi",
+    "viewsLabel": "lượt xem",
+    "tocTitle": "Mục lục"
   }
 }

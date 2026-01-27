@@ -456,5 +456,25 @@
       "hotpot": "Hotpot",
       "drinks": "Drinks"
     }
+  },
+  "blog": {
+    "metaTitle": "Blog | Achi vegan house",
+    "metaDescription": "News, stories, and updates from Achi vegan house.",
+    "title": "Blog",
+    "subtitle": "Stories, menu insights, and events from Achi vegan house.",
+    "tagLabel": "Tag:",
+    "emptyTitle": "No posts yet",
+    "emptyBody": "We are preparing new stories. Check back soon.",
+    "noCover": "No cover image",
+    "pageLabel": "Page {page} of {total}",
+    "previous": "Previous",
+    "next": "Next",
+    "latestTitle": "Latest",
+    "empty": "No posts yet.",
+    "backToBlog": "Back to blog",
+    "updatedLabel": "Updated",
+    "byLabel": "By",
+    "viewsLabel": "views",
+    "tocTitle": "On this page"
   }
 }
