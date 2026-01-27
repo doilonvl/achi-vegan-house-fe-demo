@@ -15,6 +15,10 @@
     },
     "signature": {
       "title": "Signature dishes",
+      "hotPot": {
+        "name": "Achi vegan hotpot",
+        "description": "A comforting hotpot with mushrooms, tofu, and seasonal greens."
+      },
       "xoiChien": {
         "name": "Crispy sticky rice",
         "description": "Golden fried sticky rice with a house dipping sauce."

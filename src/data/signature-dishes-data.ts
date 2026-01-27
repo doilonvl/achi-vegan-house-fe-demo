@@ -2,6 +2,15 @@ import type { Dish } from '@/types/new-menu';
 
 export const SIGNATURE_DISHES_DATA: Dish[] = [
   {
+    id: 1,
+    name: 'home.signature.hotPot.name',
+    description: 'home.signature.hotPot.description',
+    price: 180000,
+    spiciness: 1,
+    category: 'hotpot',
+    image: '/signature/hot%20pot.jpg',
+  },
+  {
     id: 2,
     name: 'home.signature.goiNam.name',
     description: 'home.signature.goiNam.description',

@@ -15,6 +15,10 @@
     },
     "signature": {
       "title": "Món đặc trưng",
+      "hotPot": {
+        "name": "Lẩu chay Achi",
+        "description": "Lẩu chay ấm áp với nấm, đậu phụ và rau theo mùa."
+      },
       "xoiChien": {
         "name": "Xôi chiên",
         "description": "Xôi chiên giòn rụm, chấm kèm tương."
