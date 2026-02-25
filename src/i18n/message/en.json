@@ -426,6 +426,7 @@
     "emailLabelSecondary": "Email",
     "arrivalNote": "Booking online secures your table during peak hours. Please arrive 5 minutes early for the best experience.",
     "validation": {
+      "fullNameRequired": "Please enter your name.",
       "fullNameMin": "Enter your full name (at least 3 characters).",
       "fullNameMax": "Name must be 80 characters or fewer.",
       "fullNamePattern": "Name may include letters, spaces, and ', . or - characters.",

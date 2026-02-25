@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { getLocale } from "next-intl/server";
 import { Playfair_Display } from "next/font/google";
 import { getSiteUrl } from "@/lib/env";
+import Script from "next/script";
 // import TawkTo from "@/components/TawkTo";
 
 const playfair = Playfair_Display({
@@ -46,6 +47,32 @@ export default async function RootLayout({
   const locale = await getLocale();
   return (
     <html lang={locale} suppressHydrationWarning className={playfair.variable}>
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-WDD481BL2J"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-WDD481BL2J');
+          `}
+        </Script>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-17971414705"
+          strategy="afterInteractive"
+        />
+        <Script id="google-ads" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-17971414705');
+          `}
+        </Script>
+      </head>
       <body>
         <Providers>{children}</Providers>
         {/* <TawkTo /> */}

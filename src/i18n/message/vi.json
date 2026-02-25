@@ -425,6 +425,7 @@
     "emailLabelSecondary": "Email",
     "arrivalNote": "Đặt bàn trực tuyến giúp giữ chỗ vào giờ cao điểm. Vui lòng đến sớm 5 phút để có trải nghiệm tốt nhất.",
     "validation": {
+      "fullNameRequired": "Vui lòng nhập họ tên.",
       "fullNameMin": "Vui lòng nhập họ tên đầy đủ (ít nhất 3 ký tự).",
       "fullNameMax": "Tên không được quá 80 ký tự.",
       "fullNamePattern": "Tên chỉ bao gồm chữ cái, khoảng trắng và các dấu ', . hoặc -.",

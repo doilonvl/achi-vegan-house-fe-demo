@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
     qualities: [75, 85],
     remotePatterns: [
       { protocol: "https", hostname: "res.cloudinary.com" },
-      { protocol: "https", hostname: "dropincafe.com.vn" },
+      { protocol: "https", hostname: "achiveganhouse.com" },
       { protocol: "https", hostname: "upload.wikimedia.org" },
       { protocol: "https", hostname: "cdn.example.com" },
       { protocol: "https", hostname: "example.com" },

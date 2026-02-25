@@ -13,7 +13,7 @@ import NewMenu from "@/components/shared/NewMenu";
 export const revalidate = 300;
 
 const BASE_URL = getSiteUrl();
-const DEFAULT_OG_IMAGE = "https://www.achiveganhouse.com.vn/Logo/Home1.jpg";
+const DEFAULT_OG_IMAGE = "https://www.achiveganhouse.com/Logo/Home1.jpg";
 
 const HOME_META = {
   vi: {
@@ -256,13 +256,16 @@ export default async function HomePage() {
           <FadeIn direction="left" amount={0.2}>
             <div className="relative rounded-[36px] border border-white/15 bg-white/5 p-4 shadow-[0_30px_80px_rgba(0,0,0,0.45)] backdrop-blur">
               <div className="relative overflow-hidden rounded-[28px]">
-                <Image
-                  src="/intro/in1.jpg"
-                  alt={t("aboutImageAlt")}
-                  width={720}
-                  height={900}
+                <video
                   className="h-full w-full object-cover"
-                />
+                  poster="/intro/in1.jpg"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                >
+                  <source src="/intro/intro.mp4" type="video/mp4" />
+                </video>
               </div>
               <div className="mt-5 grid grid-cols-3 gap-3 text-center text-xs uppercase tracking-[0.25em] text-white/60">
                 <div className="rounded-full border border-white/10 px-3 py-2">

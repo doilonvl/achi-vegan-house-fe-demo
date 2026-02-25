@@ -1,5 +1,5 @@
-const PROD_SITE_URL = "https://www.achiveganhouse.com.vn";
-const PROD_API_URL = "https://api.achiveganhouse.com.vn/api/v1";
+const PROD_SITE_URL = "https://www.achiveganhouse.com";
+const PROD_API_URL = "https://api.achiveganhouse.com/api/v1";
 const LOCAL_SITE_URL = "http://localhost:3000";
 const LOCAL_API_URL = "http://localhost:5001/api/v1";
 
