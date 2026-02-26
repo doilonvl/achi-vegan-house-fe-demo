@@ -7,9 +7,7 @@ const API_BASE = getApiBaseUrl();
 
 export async function POST() {
   const cookieStore = cookies();
-  const refreshToken =
-    (await cookieStore).get("refresh_token")?.value ||
-    (await cookieStore).get("refresh_token_public")?.value;
+  const refreshToken = (await cookieStore).get("refresh_token")?.value;
 
   if (!refreshToken) {
     return NextResponse.json(
@@ -65,28 +63,14 @@ export async function POST() {
   res.cookies.set("access_token", access, {
     httpOnly: true,
     secure: isProd,
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 15, // 15 minutes
-  });
-  res.cookies.set("access_token_public", access, {
-    httpOnly: false,
-    secure: isProd,
-    sameSite: "lax",
+    sameSite: "strict",
     path: "/",
     maxAge: 60 * 15,
   });
   res.cookies.set("refresh_token", refresh, {
     httpOnly: true,
     secure: isProd,
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 30, // 30 days
-  });
-  res.cookies.set("refresh_token_public", refresh, {
-    httpOnly: false,
-    secure: isProd,
-    sameSite: "lax",
+    sameSite: "strict",
     path: "/",
     maxAge: 60 * 60 * 24 * 30,
   });

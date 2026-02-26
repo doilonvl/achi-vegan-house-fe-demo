@@ -39,7 +39,8 @@ export default function LoginPage() {
         throw new Error(data?.message || "Đăng nhập thất bại");
       }
 
-      const nextUrl = searchParams.get("next") || adminPath;
+      const raw = searchParams.get("next") || adminPath;
+      const nextUrl = isInternalPath(raw) ? raw : adminPath;
       router.replace(nextUrl);
     } catch (err: any) {
       setError(err?.message || "Có lỗi xảy ra");
@@ -99,6 +100,16 @@ async function safeJson(res: Response) {
     return await res.json();
   } catch {
     return null;
+  }
+}
+
+function isInternalPath(url: string): boolean {
+  if (!url.startsWith("/")) return false;
+  try {
+    const parsed = new URL(url, "http://localhost");
+    return parsed.origin === "http://localhost";
+  } catch {
+    return false;
   }
 }
 

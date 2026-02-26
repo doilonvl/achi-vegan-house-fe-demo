@@ -76,14 +76,7 @@ export async function POST(req: Request) {
     res.cookies.set("access_token", access, {
       httpOnly: true,
       secure: isProd,
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 15,
-    });
-    res.cookies.set("access_token_public", access, {
-      httpOnly: false,
-      secure: isProd,
-      sameSite: "lax",
+      sameSite: "strict",
       path: "/",
       maxAge: 60 * 15,
     });
@@ -93,14 +86,7 @@ export async function POST(req: Request) {
     res.cookies.set("refresh_token", refresh, {
       httpOnly: true,
       secure: isProd,
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 30,
-    });
-    res.cookies.set("refresh_token_public", refresh, {
-      httpOnly: false,
-      secure: isProd,
-      sameSite: "lax",
+      sameSite: "strict",
       path: "/",
       maxAge: 60 * 60 * 24 * 30,
     });

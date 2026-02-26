@@ -177,7 +177,7 @@ export default async function HomePage() {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "AchiVeganHouse",
+        "@type": "Restaurant",
         "@id": `${pageUrl}#cafe`,
         name: "Achi Vegan House",
         alternateName: alternateNames,

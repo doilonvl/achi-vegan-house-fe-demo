@@ -14,21 +14,9 @@ import type {
 
 const BASE_URL = getApiBaseUrl();
 
-function getClientToken() {
-  if (typeof window === "undefined") return null;
-  return localStorage.getItem("access_token");
-}
-
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: BASE_URL,
   credentials: "include",
-  prepareHeaders: (headers) => {
-    const token = getClientToken();
-    if (token && !headers.has("authorization")) {
-      headers.set("authorization", `Bearer ${token}`);
-    }
-    return headers;
-  },
 });
 
 const baseQueryWithReauth: BaseQueryFn<
@@ -46,16 +34,6 @@ const baseQueryWithReauth: BaseQueryFn<
       });
 
       if (refreshRes.ok) {
-        const data = await refreshRes
-          .json()
-          .catch(() => ({ accessToken: null as string | null }));
-        const newAccess =
-          (data as any)?.accessToken ||
-          (data as any)?.access_token ||
-          (data as any)?.token;
-        if (newAccess && typeof window !== "undefined") {
-          localStorage.setItem("access_token", newAccess);
-        }
         result = await rawBaseQuery(args, api, extraOptions);
       }
     } catch (err) {

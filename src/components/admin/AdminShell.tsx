@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { hasRefreshTokenCookie, refreshAccessToken } from "@/lib/auth";
+import { hasSession, refreshAccessToken } from "@/lib/auth";
 import {
   Boxes,
   LayoutDashboard,
@@ -99,7 +99,11 @@ export default function AdminShell({
 
     const attemptRefresh = async () => {
       if (!mounted || refreshInFlightRef.current) return;
-      if (!hasRefreshTokenCookie()) return;
+      const active = await hasSession();
+      if (!active) {
+        router.replace(loginPath);
+        return;
+      }
       refreshInFlightRef.current = true;
       try {
         await refreshAccessToken();
@@ -125,9 +129,6 @@ export default function AdminShell({
     } catch (err) {
       console.error("logout failed", err);
     } finally {
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("access_token");
-      }
       router.replace(loginPath);
     }
   }

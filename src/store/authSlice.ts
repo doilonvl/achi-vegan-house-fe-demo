@@ -10,15 +10,10 @@ const slice = createSlice({
     setAuth(state, action: PayloadAction<AuthState>) {
       state.token = action.payload.token;
       state.user = action.payload.user ?? null;
-      if (typeof window !== "undefined" && action.payload.token) {
-        localStorage.setItem("access_token", action.payload.token);
-      }
     },
     logout(state) {
       state.token = undefined;
       state.user = null;
-      if (typeof window !== "undefined")
-        localStorage.removeItem("access_token");
     },
   },
 });

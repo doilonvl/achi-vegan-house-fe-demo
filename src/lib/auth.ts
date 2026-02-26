@@ -7,15 +7,14 @@ type RefreshPayload = {
   refresh?: string;
 };
 
-function readCookie(name: string) {
-  if (typeof document === "undefined") return null;
-  const pattern = new RegExp(`(?:^|; )${name}=([^;]*)`);
-  const match = document.cookie.match(pattern);
-  return match ? decodeURIComponent(match[1]) : null;
-}
-
-export function hasRefreshTokenCookie() {
-  return !!(readCookie("refresh_token") || readCookie("refresh_token_public"));
+export async function hasSession(): Promise<boolean> {
+  if (typeof window === "undefined") return false;
+  try {
+    const res = await fetch("/api/auth/me", { credentials: "include" });
+    return res.ok;
+  } catch {
+    return false;
+  }
 }
 
 export async function refreshAccessToken() {
@@ -30,7 +29,6 @@ export async function refreshAccessToken() {
     const access =
       data?.accessToken || data?.access_token || data?.token || null;
     if (access) {
-      localStorage.setItem("access_token", access);
       return access;
     }
   } catch {
