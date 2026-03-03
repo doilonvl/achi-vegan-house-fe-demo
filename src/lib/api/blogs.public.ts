@@ -15,6 +15,13 @@ async function readErrorPayload(res: Response) {
   }
 }
 
+function unwrapData<T>(raw: unknown): T {
+  if (raw && typeof raw === "object" && "data" in raw) {
+    return (raw as Record<string, unknown>).data as T;
+  }
+  return raw as T;
+}
+
 async function fetchPublicJson<T>(url: string, init?: RequestInit): Promise<T> {
   const res = await fetch(url, {
     ...init,
@@ -28,7 +35,8 @@ async function fetchPublicJson<T>(url: string, init?: RequestInit): Promise<T> {
     error.payload = await readErrorPayload(res);
     throw error;
   }
-  return (await res.json()) as T;
+  const json = await res.json();
+  return unwrapData<T>(json);
 }
 
 export async function fetchPublicBlogs(params: {
@@ -72,7 +80,8 @@ export async function fetchPublicBlogBySlug(
     throw error;
   }
 
-  return (await res.json()) as Blog;
+  const json = await res.json();
+  return unwrapData<Blog>(json);
 }
 
 export async function incrementBlogView(blogId: string) {

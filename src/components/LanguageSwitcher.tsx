@@ -95,19 +95,21 @@ export default function LanguageSwitcher({
   const goLocale = (target: Locale) => {
     if (target === locale) return;
 
-    const needsParams = pathname.includes("[");
-    const hrefBase =
-      needsParams && routeParams
-        ? {
-            pathname,
-            params: {
-              ...routeParams,
-              ...(routeParams.slug && getSlugOverride(target)
-                ? { slug: getSlugOverride(target) as string }
-                : {}),
-            },
-          }
-        : { pathname };
+    const slugOverride = getSlugOverride(target);
+
+    // When a slug override exists, replace the slug directly in the pathname
+    // because next-intl ignores `params` for routes not declared in pathnames config
+    let resolvedPathname: string = pathname;
+    if (routeParams?.slug && slugOverride) {
+      const currentSlug = Array.isArray(routeParams.slug)
+        ? routeParams.slug[0]
+        : (routeParams.slug as string);
+      if (currentSlug && resolvedPathname.includes(currentSlug)) {
+        resolvedPathname = resolvedPathname.replace(currentSlug, slugOverride);
+      }
+    }
+
+    const hrefBase = { pathname: resolvedPathname as typeof pathname };
     const hrefWithQuery = queryObject
       ? { ...hrefBase, query: queryObject }
       : hrefBase;

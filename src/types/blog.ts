@@ -5,6 +5,14 @@ export type I18nString = { vi: string; en: string };
 export type TocItem = { id: string; text: string; level: 2 | 3 };
 
 export type BlogStatus = "draft" | "published" | "scheduled" | "archived";
+export type BlogTag =
+  | "recipe"
+  | "nutrition"
+  | "lifestyle"
+  | "news"
+  | "event"
+  | "tips"
+  | "story";
 export type RichDocJSON = Record<string, any>;
 
 export type BlogImage = {
@@ -27,7 +35,7 @@ export type Blog = {
   content?: RichDocJSON | string;
   coverImage?: BlogImage;
   gallery?: BlogGalleryItem[];
-  tags?: string[];
+  tags?: BlogTag[];
   status: BlogStatus;
   publishedAt?: string | null;
   scheduledAt?: string | null;
@@ -69,7 +77,7 @@ export type BlogUpsertPayload = {
     publicId?: string;
     alt_i18n?: LocalizedString;
   };
-  tags?: string[];
+  tags?: BlogTag[];
   isFeatured?: boolean;
   sortOrder?: number;
   seoTitle_i18n?: LocalizedString;

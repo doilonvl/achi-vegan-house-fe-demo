@@ -8,6 +8,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, MouseEvent } from "react";
 import { usePathname, useRouter } from "@/i18n/navigation";
+import { useParams } from "next/navigation";
 import { getLocalePrefix } from "@/lib/routes";
 import { ReservationForm } from "@/components/shared/reservation-form";
 import { motion, useMotionValue, useSpring } from "framer-motion";
@@ -51,8 +52,47 @@ export default function Header() {
   const t = useTranslations("header");
   const pathname = usePathname();
   const router = useRouter();
+  const params = useParams();
   const localeCode = typeof locale === "string" ? locale : "vi";
-  const nextLocale = localeCode === "en" ? "vi" : "en";
+
+  const goLocale = useCallback(
+    (target: "vi" | "en") => {
+      if (target === localeCode) return;
+      const slugOverride =
+        typeof window !== "undefined"
+          ? (
+              window as typeof window & {
+                __BLOG_SLUGS__?: Record<string, string>;
+              }
+            ).__BLOG_SLUGS__?.[target]
+          : undefined;
+      const routeParams = params
+        ? Object.fromEntries(
+            Object.entries(params).filter(([key]) => key !== "locale"),
+          )
+        : undefined;
+
+      // When a slug override exists, replace the slug directly in the pathname
+      // because next-intl ignores `params` for routes not declared in pathnames config
+      let resolvedPathname: string = pathname;
+      if (routeParams?.slug && slugOverride) {
+        const currentSlug = Array.isArray(routeParams.slug)
+          ? routeParams.slug[0]
+          : (routeParams.slug as string);
+        if (currentSlug && resolvedPathname.includes(currentSlug)) {
+          resolvedPathname = resolvedPathname.replace(
+            currentSlug,
+            slugOverride,
+          );
+        }
+      }
+
+      router.replace({ pathname: resolvedPathname as typeof pathname } as any, {
+        locale: target,
+      });
+    },
+    [localeCode, params, pathname, router],
+  );
   const localePrefix = getLocalePrefix(locale as "vi" | "en");
   const homeHref = localePrefix || "/";
   const isLightHeader =
@@ -479,13 +519,7 @@ export default function Header() {
                               >
                                 <button
                                   type="button"
-                                  onClick={() => {
-                                    if (localeCode !== "vi") {
-                                      router.replace(pathname as any, {
-                                        locale: "vi",
-                                      });
-                                    }
-                                  }}
+                                  onClick={() => goLocale("vi")}
                                   className={`flex items-center gap-1 rounded-full px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.22em] transition ${
                                     localeCode === "vi"
                                       ? "bg-emerald-400/80 text-black"
@@ -503,13 +537,7 @@ export default function Header() {
                                 </button>
                                 <button
                                   type="button"
-                                  onClick={() => {
-                                    if (localeCode !== "en") {
-                                      router.replace(pathname as any, {
-                                        locale: "en",
-                                      });
-                                    }
-                                  }}
+                                  onClick={() => goLocale("en")}
                                   className={`flex items-center gap-1 rounded-full px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.22em] transition ${
                                     localeCode === "en"
                                       ? "bg-emerald-400/80 text-black"

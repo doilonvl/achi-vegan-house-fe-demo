@@ -14,15 +14,22 @@ import {
   $getSelection,
   $isRangeSelection,
   COMMAND_PRIORITY_EDITOR,
+  COMMAND_PRIORITY_HIGH,
   FORMAT_ELEMENT_COMMAND,
   FORMAT_TEXT_COMMAND,
+  INDENT_CONTENT_COMMAND,
+  OUTDENT_CONTENT_COMMAND,
   type EditorState,
   REDO_COMMAND,
   UNDO_COMMAND,
   createCommand,
   DecoratorNode,
+  ElementNode,
+  KEY_BACKSPACE_COMMAND,
   type EditorConfig,
+  type LexicalNode,
   type NodeKey,
+  type SerializedElementNode,
   type SerializedLexicalNode,
   type Spread,
 } from "lexical";
@@ -44,6 +51,10 @@ import {
   TableCellNode,
   TableNode,
   TableRowNode,
+  $insertTableRow__EXPERIMENTAL,
+  $insertTableColumn__EXPERIMENTAL,
+  $deleteTableRow__EXPERIMENTAL,
+  $deleteTableColumn__EXPERIMENTAL,
 } from "@lexical/table";
 import { TRANSFORMERS } from "@lexical/markdown";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
@@ -71,6 +82,8 @@ import {
   Heading2,
   Heading3,
   Image,
+  IndentDecrease,
+  IndentIncrease,
   Italic,
   Link2,
   List,
@@ -81,13 +94,14 @@ import {
   Table2,
   Underline,
   Undo2,
+  Video,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { uploadBlogImage, uploadBlogImages } from "@/lib/api/blogs.admin";
-import type { LexicalDoc } from "@/components/blog/LexicalContentRenderer";
+import type { RichDocJSON as LexicalDoc } from "@/types/blog";
 
 type ImagePayload = {
   src: string;
@@ -113,6 +127,37 @@ type SerializedImageNode = Spread<
 type ImageAlignment = "full" | "left" | "right" | "center";
 type ImageSize = "full" | "large" | "medium" | "small";
 
+// Video types
+type VideoSource = "youtube" | "vimeo" | "direct";
+type VideoPayload = {
+  src: string;
+  videoSource: VideoSource;
+  title?: string;
+  caption?: string | null;
+};
+
+type SerializedVideoNode = Spread<
+  {
+    type: "video";
+    version: 1;
+    src: string;
+    videoSource: VideoSource;
+    title?: string;
+    caption?: string | null;
+  },
+  SerializedLexicalNode
+>;
+
+// Layout types
+type SerializedLayoutContainerNode = Spread<
+  { type: "layout-container"; version: 1; templateColumns: string },
+  SerializedElementNode
+>;
+type SerializedLayoutItemNode = Spread<
+  { type: "layout-item"; version: 1 },
+  SerializedElementNode
+>;
+
 const IMAGE_CLASSNAME = "w-full rounded-2xl border object-cover";
 const IMAGE_SIZE_CLASSES: Record<ImageSize, string> = {
   full: "md:w-full",
@@ -137,6 +182,58 @@ const getImageLayoutClass = (alignment: ImageAlignment, size: ImageSize) => {
 };
 
 export const INSERT_IMAGE_COMMAND = createCommand<ImagePayload>();
+export const INSERT_VIDEO_COMMAND = createCommand<VideoPayload>();
+export const INSERT_LAYOUT_COMMAND = createCommand<{
+  templateColumns: string;
+  columnCount: number;
+}>();
+export const REMOVE_LAYOUT_COMMAND = createCommand<void>();
+
+// Helper functions for video
+function parseVideoUrl(
+  url: string,
+): { source: VideoSource; id: string } | null {
+  // YouTube patterns
+  const youtubePatterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/,
+  ];
+  for (const pattern of youtubePatterns) {
+    const match = url.match(pattern);
+    if (match) return { source: "youtube", id: match[1] };
+  }
+
+  // Vimeo patterns
+  const vimeoPatterns = [
+    /vimeo\.com\/(\d+)/,
+    /player\.vimeo\.com\/video\/(\d+)/,
+  ];
+  for (const pattern of vimeoPatterns) {
+    const match = url.match(pattern);
+    if (match) return { source: "vimeo", id: match[1] };
+  }
+
+  // Direct video file
+  if (/\.(mp4|webm|ogg|mov)(\?|$)/i.test(url)) {
+    return { source: "direct", id: url };
+  }
+
+  return null;
+}
+
+function getVideoEmbedUrl(src: string, source: VideoSource): string {
+  if (source === "youtube") {
+    const parsed = parseVideoUrl(src);
+    if (parsed)
+      return `https://www.youtube.com/embed/${parsed.id}?rel=0&modestbranding=1`;
+  }
+  if (source === "vimeo") {
+    const parsed = parseVideoUrl(src);
+    if (parsed)
+      return `https://player.vimeo.com/video/${parsed.id}?title=0&byline=0&portrait=0`;
+  }
+  return src;
+}
 
 class ImageNode extends DecoratorNode<ReactNode> {
   __src: string;
@@ -156,7 +253,7 @@ class ImageNode extends DecoratorNode<ReactNode> {
       node.__caption,
       node.__alignment,
       node.__size,
-      node.__key
+      node.__key,
     );
   }
 
@@ -166,7 +263,7 @@ class ImageNode extends DecoratorNode<ReactNode> {
     caption: string | null = null,
     alignment: ImageAlignment = "full",
     size: ImageSize = "full",
-    key?: NodeKey
+    key?: NodeKey,
   ) {
     super(key);
     this.__src = src;
@@ -182,7 +279,7 @@ class ImageNode extends DecoratorNode<ReactNode> {
       serializedNode.altText || "",
       serializedNode.caption ?? null,
       serializedNode.alignment ?? "full",
-      serializedNode.size ?? "full"
+      serializedNode.size ?? "full",
     );
   }
 
@@ -246,7 +343,7 @@ class ImageNode extends DecoratorNode<ReactNode> {
 }
 
 function $isImageNode(
-  node: { getType?: () => string } | null | undefined
+  node: { getType?: () => string } | null | undefined,
 ): node is ImageNode {
   return !!node && node.getType?.() === "image";
 }
@@ -341,7 +438,7 @@ function ImageComponent({
           className={cn(
             "absolute right-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-neutral-700 shadow-sm transition hover:bg-white",
             "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto",
-            isSelected || isEditing ? "opacity-100 pointer-events-auto" : ""
+            isSelected || isEditing ? "opacity-100 pointer-events-auto" : "",
           )}
         >
           Edit image
@@ -430,12 +527,394 @@ function $createImageNode(payload: ImagePayload) {
     payload.altText || "",
     payload.caption ?? null,
     payload.alignment ?? "full",
-    payload.size ?? "full"
+    payload.size ?? "full",
+  );
+}
+
+// ============ VIDEO NODE ============
+
+class VideoNode extends DecoratorNode<ReactNode> {
+  __src: string;
+  __videoSource: VideoSource;
+  __title: string;
+  __caption: string | null;
+
+  static getType() {
+    return "video";
+  }
+
+  static clone(node: VideoNode) {
+    return new VideoNode(
+      node.__src,
+      node.__videoSource,
+      node.__title,
+      node.__caption,
+      node.__key,
+    );
+  }
+
+  constructor(
+    src: string,
+    videoSource: VideoSource = "direct",
+    title = "",
+    caption: string | null = null,
+    key?: NodeKey,
+  ) {
+    super(key);
+    this.__src = src;
+    this.__videoSource = videoSource;
+    this.__title = title;
+    this.__caption = caption;
+  }
+
+  static importJSON(serializedNode: SerializedVideoNode) {
+    return new VideoNode(
+      serializedNode.src,
+      serializedNode.videoSource || "direct",
+      serializedNode.title || "",
+      serializedNode.caption ?? null,
+    );
+  }
+
+  exportJSON(): SerializedVideoNode {
+    return {
+      type: "video",
+      version: 1,
+      src: this.__src,
+      videoSource: this.__videoSource,
+      title: this.__title,
+      caption: this.__caption,
+    };
+  }
+
+  createDOM(_config: EditorConfig) {
+    const span = document.createElement("span");
+    return span;
+  }
+
+  updateDOM(_prevNode: VideoNode, _dom: HTMLElement, _config: EditorConfig) {
+    return false;
+  }
+
+  isInline() {
+    return false;
+  }
+
+  decorate(): ReactNode {
+    return (
+      <VideoComponent
+        src={this.__src}
+        videoSource={this.__videoSource}
+        title={this.__title}
+        caption={this.__caption}
+        nodeKey={this.getKey()}
+      />
+    );
+  }
+
+  setTitle(title: string) {
+    const writable = this.getWritable();
+    writable.__title = title;
+  }
+
+  setCaption(caption: string | null) {
+    const writable = this.getWritable();
+    writable.__caption = caption;
+  }
+}
+
+function $isVideoNode(
+  node: { getType?: () => string } | null | undefined,
+): node is VideoNode {
+  return !!node && node.getType?.() === "video";
+}
+
+// ─── Layout nodes ────────────────────────────────────────────────────────────
+
+class LayoutContainerNode extends ElementNode {
+  __templateColumns: string;
+
+  static getType() {
+    return "layout-container";
+  }
+
+  static clone(node: LayoutContainerNode) {
+    return new LayoutContainerNode(node.__templateColumns, node.__key);
+  }
+
+  constructor(templateColumns: string, key?: NodeKey) {
+    super(key);
+    this.__templateColumns = templateColumns;
+  }
+
+  static importJSON(serializedNode: SerializedLayoutContainerNode) {
+    return new LayoutContainerNode(serializedNode.templateColumns);
+  }
+
+  exportJSON(): SerializedLayoutContainerNode {
+    return {
+      ...super.exportJSON(),
+      type: "layout-container",
+      version: 1,
+      templateColumns: this.__templateColumns,
+    };
+  }
+
+  createDOM(_config: EditorConfig): HTMLElement {
+    const div = document.createElement("div");
+    div.style.display = "grid";
+    div.style.gridTemplateColumns = this.__templateColumns;
+    div.style.gap = "1rem";
+    div.style.margin = "1.5rem 0";
+    div.style.alignItems = "start";
+    return div;
+  }
+
+  updateDOM(prevNode: LayoutContainerNode, dom: HTMLElement): boolean {
+    if (prevNode.__templateColumns !== this.__templateColumns) {
+      (dom as HTMLElement).style.gridTemplateColumns = this.__templateColumns;
+    }
+    return false;
+  }
+
+  isInline() {
+    return false;
+  }
+}
+
+class LayoutItemNode extends ElementNode {
+  static getType() {
+    return "layout-item";
+  }
+
+  static clone(node: LayoutItemNode) {
+    return new LayoutItemNode(node.__key);
+  }
+
+  static importJSON(_serializedNode: SerializedLayoutItemNode) {
+    return new LayoutItemNode();
+  }
+
+  exportJSON(): SerializedLayoutItemNode {
+    return {
+      ...super.exportJSON(),
+      type: "layout-item",
+      version: 1,
+    };
+  }
+
+  createDOM(_config: EditorConfig): HTMLElement {
+    const div = document.createElement("div");
+    div.style.minHeight = "2rem";
+    div.style.padding = "4px";
+    div.style.borderRadius = "8px";
+    div.style.outline = "1px dashed #e2e8f0";
+    div.style.minWidth = "0";
+    return div;
+  }
+
+  updateDOM(): boolean {
+    return false;
+  }
+
+  isInline() {
+    return false;
+  }
+}
+
+function $createLayoutContainerNode(templateColumns: string) {
+  return new LayoutContainerNode(templateColumns);
+}
+
+function $createLayoutItemNode() {
+  return new LayoutItemNode();
+}
+
+// Insert vào trong layout-item nếu cursor đang ở trong đó,
+// nếu không thì insert tại nearest root như bình thường
+function $smartInsertBlock(node: LexicalNode) {
+  const selection = $getSelection();
+  if ($isRangeSelection(selection)) {
+    let current: LexicalNode | null = selection.focus.getNode();
+    while (current !== null) {
+      const p: ElementNode | null = current.getParent();
+      if (p !== null && p.getType() === "layout-item") {
+        // Nếu đang ở trong paragraph rỗng → thay thế luôn, không để lại paragraph thừa
+        const isEmptyParagraph =
+          current.getType() === "paragraph" &&
+          current.getTextContent().trim() === "";
+        if (isEmptyParagraph) {
+          current.replace(node);
+        } else {
+          current.insertAfter(node);
+        }
+        node.selectNext();
+        return;
+      }
+      current = p;
+    }
+  }
+  $insertNodeToNearestRoot(node);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+function VideoComponent({
+  src,
+  videoSource,
+  title,
+  caption,
+  nodeKey,
+}: {
+  src: string;
+  videoSource: VideoSource;
+  title: string;
+  caption: string | null;
+  nodeKey: NodeKey;
+}) {
+  const [editor] = useLexicalComposerContext();
+  const [isSelected, setSelected] = useLexicalNodeSelection(nodeKey);
+  const [isEditing, setIsEditing] = useState(false);
+  const [draftTitle, setDraftTitle] = useState(title);
+  const [draftCaption, setDraftCaption] = useState(caption || "");
+
+  useEffect(() => {
+    setDraftTitle(title);
+  }, [title]);
+
+  useEffect(() => {
+    setDraftCaption(caption || "");
+  }, [caption]);
+
+  const applyChanges = () => {
+    editor.update(() => {
+      const node = $getNodeByKey(nodeKey);
+      if ($isVideoNode(node)) {
+        node.setTitle(draftTitle.trim());
+        node.setCaption(draftCaption.trim() ? draftCaption.trim() : null);
+      }
+    });
+    setIsEditing(false);
+  };
+
+  const embedUrl = getVideoEmbedUrl(src, videoSource);
+
+  return (
+    <figure className="relative my-6 w-full">
+      <div
+        className="group relative"
+        onClick={(event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          setSelected(true);
+        }}
+        onDoubleClick={(event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          setSelected(true);
+          setIsEditing(true);
+        }}
+      >
+        <div
+          className={cn(
+            "relative aspect-video w-full overflow-hidden rounded-2xl border bg-slate-900",
+            isSelected ? "ring-2 ring-amber-300/70" : "",
+          )}
+        >
+          {videoSource === "direct" ? (
+            <video
+              src={src}
+              controls
+              className="h-full w-full object-contain"
+              title={title || "Video"}
+              preload="metadata"
+            >
+              <track kind="captions" />
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            <iframe
+              src={embedUrl}
+              title={title || "Embedded video"}
+              className="h-full w-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            setIsEditing((prev) => !prev);
+          }}
+          className={cn(
+            "absolute right-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-neutral-700 shadow-sm transition hover:bg-white",
+            "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto",
+            isSelected || isEditing ? "opacity-100 pointer-events-auto" : "",
+          )}
+        >
+          Edit video
+        </button>
+      </div>
+      {caption ? (
+        <figcaption className="mt-2 text-center text-xs text-muted-foreground">
+          {caption}
+        </figcaption>
+      ) : null}
+      {isEditing ? (
+        <div
+          className="mt-3 grid gap-2 rounded-lg border bg-white p-3 text-xs shadow-sm"
+          onClick={(event) => event.stopPropagation()}
+        >
+          <div className="grid gap-1">
+            <span className="font-semibold text-neutral-700">Title</span>
+            <Input
+              value={draftTitle}
+              onChange={(event) => setDraftTitle(event.target.value)}
+              placeholder="Video title"
+            />
+          </div>
+          <div className="grid gap-1">
+            <span className="font-semibold text-neutral-700">Caption</span>
+            <Input
+              value={draftCaption}
+              onChange={(event) => setDraftCaption(event.target.value)}
+              placeholder="Caption (optional)"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <Button type="button" size="sm" onClick={applyChanges}>
+              Save
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={() => setIsEditing(false)}
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
+      ) : null}
+    </figure>
+  );
+}
+
+function $createVideoNode(payload: VideoPayload) {
+  return new VideoNode(
+    payload.src,
+    payload.videoSource,
+    payload.title || "",
+    payload.caption ?? null,
   );
 }
 
 const editorTheme = {
   paragraph: "mb-3 text-sm leading-6 text-foreground",
+  indent: "editor-indent",
   heading: {
     h2: "mt-6 mb-2 text-xl font-semibold",
     h3: "mt-5 mb-2 text-lg font-semibold",
@@ -458,15 +937,25 @@ const editorTheme = {
     underlineStrikethrough: "underline line-through",
     code: "rounded bg-muted px-1 py-0.5 font-mono text-xs",
   },
+  table:
+    "my-4 w-full border-collapse overflow-hidden rounded-lg border border-slate-200 text-sm",
+  tableRow: "",
+  tableCell:
+    "border border-slate-200 px-3 py-2 align-top min-w-[80px] relative",
+  tableCellHeader:
+    "border border-slate-300 bg-slate-100 px-3 py-2 align-top font-semibold text-left min-w-[80px]",
+  tableCellSelected: "bg-emerald-50",
+  tableSelected: "outline outline-2 outline-offset-0 outline-emerald-400",
+  tableSelectionCaret: "absolute right-0 bottom-0",
 };
 
 const URL_MATCHER = createLinkMatcherWithRegExp(
   /https?:\/\/[^\s]+/i,
-  (text) => text
+  (text) => text,
 );
 const EMAIL_MATCHER = createLinkMatcherWithRegExp(
   /[\w.+-]+@[\w-]+\.[\w.-]+/i,
-  (text) => `mailto:${text}`
+  (text) => `mailto:${text}`,
 );
 
 function ToolbarButton({
@@ -512,9 +1001,64 @@ function ToolbarPlugin() {
   const [imageUrl, setImageUrl] = useState("");
   const [imageAlt, setImageAlt] = useState("");
   const [imageCaption, setImageCaption] = useState("");
-  const [imageAlignment, setImageAlignment] =
-    useState<ImageAlignment>("full");
+  const [imageAlignment, setImageAlignment] = useState<ImageAlignment>("full");
   const [imageSize, setImageSize] = useState<ImageSize>("full");
+
+  // Video state
+  const [showVideoPanel, setShowVideoPanel] = useState(false);
+  const [videoUrl, setVideoUrl] = useState("");
+  const [videoTitle, setVideoTitle] = useState("");
+  const [videoCaption, setVideoCaption] = useState("");
+
+  // Table state
+  const [showTablePanel, setShowTablePanel] = useState(false);
+  const [tableHoverRows, setTableHoverRows] = useState(0);
+  const [tableHoverCols, setTableHoverCols] = useState(0);
+  const [isInTable, setIsInTable] = useState(false);
+
+  // Detect if cursor is inside a table
+  useEffect(() => {
+    return editor.registerUpdateListener(({ editorState }) => {
+      editorState.read(() => {
+        const selection = $getSelection();
+        if (!$isRangeSelection(selection)) {
+          setIsInTable(false);
+          return;
+        }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let node: any = selection.anchor.getNode();
+        while (node !== null) {
+          if (node.getType?.() === "table") {
+            setIsInTable(true);
+            return;
+          }
+          node = node.getParent?.() ?? null;
+        }
+        setIsInTable(false);
+      });
+    });
+  }, [editor]);
+
+  const addTableRowBelow = () => {
+    editor.update(() => {
+      $insertTableRow__EXPERIMENTAL(true);
+    });
+  };
+  const addTableColumnRight = () => {
+    editor.update(() => {
+      $insertTableColumn__EXPERIMENTAL(true);
+    });
+  };
+  const deleteTableRow = () => {
+    editor.update(() => {
+      $deleteTableRow__EXPERIMENTAL();
+    });
+  };
+  const deleteTableColumn = () => {
+    editor.update(() => {
+      $deleteTableColumn__EXPERIMENTAL();
+    });
+  };
 
   const applyHeading = (tag: "h2" | "h3") => {
     editor.update(() => {
@@ -558,8 +1102,17 @@ function ToolbarPlugin() {
     editor.dispatchCommand(TOGGLE_LINK_COMMAND, url);
   };
 
+  const insertLayout = (templateColumns: string, columnCount: number) => {
+    editor.dispatchCommand(INSERT_LAYOUT_COMMAND, {
+      templateColumns,
+      columnCount,
+    });
+  };
+
   const insertImage = () => {
     setShowImagePanel((prev) => !prev);
+    setShowVideoPanel(false);
+    setShowTablePanel(false);
   };
 
   const confirmInsertImage = () => {
@@ -579,8 +1132,64 @@ function ToolbarPlugin() {
     setShowImagePanel(false);
   };
 
+  const insertVideo = () => {
+    setShowVideoPanel((prev) => !prev);
+    setShowImagePanel(false);
+    setShowTablePanel(false);
+  };
+
+  const confirmInsertVideo = () => {
+    if (!videoUrl.trim()) return;
+    const parsed = parseVideoUrl(videoUrl.trim());
+    if (!parsed) {
+      toast.error(
+        "Invalid video URL. Supports YouTube, Vimeo, or direct video files (.mp4, .webm, .ogg)",
+      );
+      return;
+    }
+    editor.dispatchCommand(INSERT_VIDEO_COMMAND, {
+      src: videoUrl.trim(),
+      videoSource: parsed.source,
+      title: videoTitle.trim(),
+      caption: videoCaption.trim() || null,
+    });
+    setVideoUrl("");
+    setVideoTitle("");
+    setVideoCaption("");
+    setShowVideoPanel(false);
+  };
+
   return (
     <div className="sticky top-0 z-10 border-b bg-white/90 px-3 py-2 backdrop-blur">
+      {isInTable ? (
+        <div className="mb-2 flex flex-wrap items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5">
+          <span className="text-[11px] font-semibold text-emerald-700">
+            Bảng:
+          </span>
+          <ToolbarButton
+            label="Thêm hàng bên dưới"
+            text="+ Hàng"
+            onClick={addTableRowBelow}
+          />
+          <ToolbarButton
+            label="Thêm cột bên phải"
+            text="+ Cột"
+            onClick={addTableColumnRight}
+          />
+          <ToolbarButton
+            label="Xóa hàng hiện tại"
+            text="✕ Hàng"
+            onClick={deleteTableRow}
+            className="text-red-500 hover:text-red-600"
+          />
+          <ToolbarButton
+            label="Xóa cột hiện tại"
+            text="✕ Cột"
+            onClick={deleteTableColumn}
+            className="text-red-500 hover:text-red-600"
+          />
+        </div>
+      ) : null}
       <div className="flex flex-wrap items-center gap-3">
         <ToolbarGroup>
           <ToolbarButton
@@ -700,6 +1309,20 @@ function ToolbarPlugin() {
             }
             icon={<AlignRight className="h-4 w-4" />}
           />
+          <ToolbarButton
+            label="Indent"
+            onClick={() =>
+              editor.dispatchCommand(INDENT_CONTENT_COMMAND, undefined)
+            }
+            icon={<IndentIncrease className="h-4 w-4" />}
+          />
+          <ToolbarButton
+            label="Outdent"
+            onClick={() =>
+              editor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined)
+            }
+            icon={<IndentDecrease className="h-4 w-4" />}
+          />
         </ToolbarGroup>
         <ToolbarGroup>
           <ToolbarButton
@@ -713,14 +1336,48 @@ function ToolbarPlugin() {
             icon={<Image className="h-4 w-4" />}
           />
           <ToolbarButton
+            label="Video"
+            onClick={insertVideo}
+            icon={<Video className="h-4 w-4" />}
+          />
+          <ToolbarButton
             label="Table"
-            onClick={() =>
-              editor.dispatchCommand(INSERT_TABLE_COMMAND, {
-                columns: "3",
-                rows: "3",
-              })
-            }
+            onClick={() => {
+              setShowTablePanel((prev) => !prev);
+              setShowImagePanel(false);
+              setShowVideoPanel(false);
+            }}
             icon={<Table2 className="h-4 w-4" />}
+          />
+        </ToolbarGroup>
+        <ToolbarGroup>
+          <ToolbarButton
+            label="2 cột bằng nhau"
+            onClick={() => insertLayout("1fr 1fr", 2)}
+            text="2 Cols"
+          />
+          <ToolbarButton
+            label="3 cột bằng nhau"
+            onClick={() => insertLayout("1fr 1fr 1fr", 3)}
+            text="3 Cols"
+          />
+          <ToolbarButton
+            label="Ảnh trái | Chữ phải (1:2)"
+            onClick={() => insertLayout("1fr 2fr", 2)}
+            text="Img|Text"
+          />
+          <ToolbarButton
+            label="Chữ trái | Ảnh phải (2:1)"
+            onClick={() => insertLayout("2fr 1fr", 2)}
+            text="Text|Img"
+          />
+          <ToolbarButton
+            label="Bỏ layout — giữ lại nội dung (khi con trỏ đang trong layout)"
+            onClick={() =>
+              editor.dispatchCommand(REMOVE_LAYOUT_COMMAND, undefined)
+            }
+            text="✕ Layout"
+            className="text-red-500 hover:text-red-600"
           />
         </ToolbarGroup>
       </div>
@@ -785,6 +1442,102 @@ function ToolbarPlugin() {
           </div>
         </div>
       ) : null}
+      {showVideoPanel ? (
+        <div className="mt-3 grid gap-2 rounded-lg border bg-white p-3 shadow-sm">
+          <div className="text-xs text-muted-foreground mb-1">
+            Supports YouTube, Vimeo, or direct video files (.mp4, .webm, .ogg)
+          </div>
+          <div className="grid gap-2 md:grid-cols-2">
+            <Input
+              value={videoUrl}
+              onChange={(event) => setVideoUrl(event.target.value)}
+              placeholder="Video URL (YouTube, Vimeo, or direct link)"
+            />
+            <Input
+              value={videoTitle}
+              onChange={(event) => setVideoTitle(event.target.value)}
+              placeholder="Title (optional)"
+            />
+          </div>
+          <div className="flex flex-col gap-2 md:flex-row">
+            <Input
+              value={videoCaption}
+              onChange={(event) => setVideoCaption(event.target.value)}
+              placeholder="Caption (optional)"
+            />
+            <div className="flex items-center gap-2">
+              <Button type="button" onClick={confirmInsertVideo}>
+                Insert Video
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowVideoPanel(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+      {showTablePanel ? (
+        <div className="mt-3 rounded-lg border bg-white p-3 shadow-sm">
+          <div className="mb-2 text-xs font-medium text-muted-foreground">
+            {tableHoverRows > 0 && tableHoverCols > 0
+              ? `Bảng ${tableHoverRows} × ${tableHoverCols} — click để chèn`
+              : "Di chuột để chọn kích thước bảng"}
+          </div>
+          <div
+            className="inline-grid gap-1"
+            style={{ gridTemplateColumns: `repeat(8, 1.5rem)` }}
+            onMouseLeave={() => {
+              setTableHoverRows(0);
+              setTableHoverCols(0);
+            }}
+          >
+            {Array.from({ length: 8 * 8 }).map((_, i) => {
+              const row = Math.floor(i / 8) + 1;
+              const col = (i % 8) + 1;
+              const highlighted =
+                row <= tableHoverRows && col <= tableHoverCols;
+              return (
+                <button
+                  key={i}
+                  type="button"
+                  className={cn(
+                    "h-6 w-6 rounded border transition-colors",
+                    highlighted
+                      ? "bg-emerald-500 border-emerald-600"
+                      : "border-slate-200 bg-slate-50 hover:border-slate-400",
+                  )}
+                  onMouseEnter={() => {
+                    setTableHoverRows(row);
+                    setTableHoverCols(col);
+                  }}
+                  onClick={() => {
+                    if (tableHoverRows > 0 && tableHoverCols > 0) {
+                      editor.dispatchCommand(INSERT_TABLE_COMMAND, {
+                        rows: String(tableHoverRows),
+                        columns: String(tableHoverCols),
+                      });
+                      setShowTablePanel(false);
+                      setTableHoverRows(0);
+                      setTableHoverCols(0);
+                    }
+                  }}
+                />
+              );
+            })}
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowTablePanel(false)}
+            className="mt-2 text-xs text-muted-foreground hover:text-foreground"
+          >
+            Hủy
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -797,11 +1550,179 @@ function ImagePlugin() {
       INSERT_IMAGE_COMMAND,
       (payload) => {
         const imageNode = $createImageNode(payload);
-        $insertNodeToNearestRoot(imageNode);
+        $smartInsertBlock(imageNode);
         return true;
       },
-      COMMAND_PRIORITY_EDITOR
+      COMMAND_PRIORITY_EDITOR,
     );
+  }, [editor]);
+
+  return null;
+}
+
+function VideoPlugin() {
+  const [editor] = useLexicalComposerContext();
+
+  useEffect(() => {
+    return editor.registerCommand(
+      INSERT_VIDEO_COMMAND,
+      (payload) => {
+        const videoNode = $createVideoNode(payload);
+        $smartInsertBlock(videoNode);
+        return true;
+      },
+      COMMAND_PRIORITY_EDITOR,
+    );
+  }, [editor]);
+
+  return null;
+}
+
+function LayoutPlugin() {
+  const [editor] = useLexicalComposerContext();
+
+  useEffect(() => {
+    const removeInsert = editor.registerCommand(
+      INSERT_LAYOUT_COMMAND,
+      ({ templateColumns, columnCount }) => {
+        const container = $createLayoutContainerNode(templateColumns);
+        for (let i = 0; i < columnCount; i++) {
+          const item = $createLayoutItemNode();
+          item.append($createParagraphNode());
+          container.append(item);
+        }
+        $insertNodeToNearestRoot(container);
+        return true;
+      },
+      COMMAND_PRIORITY_EDITOR,
+    );
+
+    // Helper: tìm layout-container chứa selection hiện tại
+    const findLayoutContainer = () => {
+      const selection = $getSelection();
+      if (!$isRangeSelection(selection)) return null;
+      let node: LexicalNode = selection.anchor.getNode();
+      let parent = node.getParent();
+      while (parent !== null) {
+        if (parent.getType() === "layout-container") return parent;
+        if (parent.getType() === "layout-item") {
+          const container = parent.getParent();
+          return container?.getType() === "layout-container" ? container : null;
+        }
+        node = parent;
+        parent = node.getParent();
+      }
+      return null;
+    };
+
+    // Nút ✕ Layout: unwrap content ra khỏi layout (giữ nội dung, xóa container)
+    const removeLayoutCmd = editor.registerCommand(
+      REMOVE_LAYOUT_COMMAND,
+      () => {
+        const container = findLayoutContainer();
+        if (container) {
+          const c = container as ElementNode;
+          // Move all children from every layout-item to before the container
+          for (const item of c.getChildren()) {
+            if (item.getType() === "layout-item") {
+              for (const child of (item as ElementNode).getChildren()) {
+                container.insertBefore(child);
+              }
+            }
+          }
+          container.remove();
+          return true;
+        }
+        return false;
+      },
+      COMMAND_PRIORITY_EDITOR,
+    );
+
+    // Backspace tại ranh giới đầu layout cell:
+    //   - Ô trống → xóa toàn bộ layout
+    //   - Ô có nội dung → chặn thoát khỏi cell (tiêu thụ event, không làm gì)
+    const removeBackspace = editor.registerCommand(
+      KEY_BACKSPACE_COMMAND,
+      () => {
+        const selection = $getSelection();
+        if (!$isRangeSelection(selection) || !selection.isCollapsed()) {
+          return false;
+        }
+
+        // Case: cursor anywhere inside an empty table → delete the whole table.
+        // Works regardless of cursor offset — if table has no text content it's safe to remove.
+        {
+          let tableWalk: LexicalNode | null = selection.anchor.getNode();
+          while (tableWalk !== null) {
+            if (tableWalk.getType() === "table") {
+              if (tableWalk.getTextContent().trim() === "") {
+                tableWalk.remove();
+                return true;
+              }
+              break; // Table has content – don't delete, fall through to normal backspace
+            }
+            tableWalk = tableWalk.getParent();
+          }
+        }
+
+        if (selection.anchor.offset !== 0) return false;
+
+        const anchorNode = selection.anchor.getNode();
+
+        // Case: empty paragraph inside layout-item that is NOT the first child
+        // (e.g. empty paragraph left after an image). Delete it directly.
+        if (
+          anchorNode.getType() === "paragraph" &&
+          anchorNode.getTextContent().trim() === ""
+        ) {
+          const directParent = anchorNode.getParent();
+          if (
+            directParent?.getType() === "layout-item" &&
+            directParent.getFirstChild() !== anchorNode
+          ) {
+            anchorNode.remove();
+            return true;
+          }
+        }
+
+        // Leo lên cây, chỉ xử lý nếu luôn là first child
+        let node: LexicalNode = anchorNode;
+        let parent = node.getParent();
+        while (parent !== null) {
+          // Nếu không phải first child tại tầng này → backspace bình thường
+          if (parent.getFirstChild() !== node) return false;
+
+          if (parent.getType() === "layout-item") {
+            const container = parent.getParent();
+            if (container?.getType() === "layout-container") {
+              if (parent.getTextContent().trim() === "") {
+                // Whole cell is empty → delete the entire container
+                container.remove();
+              } else if (
+                anchorNode.getType() === "paragraph" &&
+                anchorNode.getTextContent().trim() === ""
+              ) {
+                // Empty first-child paragraph but cell has other content
+                // → delete just this empty paragraph to avoid trapping the cursor
+                anchorNode.remove();
+              }
+              return true;
+            }
+            break;
+          }
+          node = parent;
+          parent = node.getParent();
+        }
+        return false;
+      },
+      COMMAND_PRIORITY_HIGH,
+    );
+
+    return () => {
+      removeInsert();
+      removeLayoutCmd();
+      removeBackspace();
+    };
   }, [editor]);
 
   return null;
@@ -815,7 +1736,7 @@ function EditorSurface({ placeholder }: { placeholder?: string }) {
   const handleFiles = useCallback(
     async (files: FileList | File[]) => {
       const list = Array.from(files).filter((file) =>
-        file.type.startsWith("image/")
+        file.type.startsWith("image/"),
       );
       if (!list.length) return;
       setIsUploading(true);
@@ -857,7 +1778,7 @@ function EditorSurface({ placeholder }: { placeholder?: string }) {
       }
       setIsUploading(false);
     },
-    [editor]
+    [editor],
   );
 
   const handleDragOver = (event: DragEvent) => {
@@ -960,6 +1881,9 @@ export default function LexicalEditor({
       TableCellNode,
       TableRowNode,
       ImageNode,
+      VideoNode,
+      LayoutContainerNode,
+      LayoutItemNode,
     ],
     editorState: value ? JSON.stringify(value) : undefined,
   };
@@ -968,14 +1892,14 @@ export default function LexicalEditor({
     (editorState: EditorState) => {
       onChange(editorState.toJSON() as LexicalDoc);
     },
-    [onChange]
+    [onChange],
   );
 
   return (
     <div
       className={cn(
         "overflow-hidden rounded-2xl border bg-white shadow-sm ring-1 ring-transparent transition focus-within:ring-2 focus-within:ring-slate-200",
-        className
+        className,
       )}
     >
       <LexicalComposer initialConfig={initialConfig} key={editorKey}>
@@ -986,9 +1910,11 @@ export default function LexicalEditor({
         <LinkPlugin />
         <AutoLinkPlugin matchers={[URL_MATCHER, EMAIL_MATCHER]} />
         <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
-        <TablePlugin />
+        <TablePlugin hasCellMerge={false} hasCellBackgroundColor={false} />
         <OnChangePlugin onChange={handleChange} />
         <ImagePlugin />
+        <VideoPlugin />
+        <LayoutPlugin />
       </LexicalComposer>
     </div>
   );

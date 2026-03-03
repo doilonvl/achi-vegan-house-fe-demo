@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
-import type { Blog, BlogStatus, BlogUpsertPayload } from "@/types/blog";
+import type { Blog, BlogStatus, BlogTag, BlogUpsertPayload } from "@/types/blog";
 import {
   archiveAdminBlog,
   createAdminBlog,
@@ -30,6 +30,15 @@ import { Separator } from "@/components/ui/separator";
 import { Card } from "@/components/ui/card";
 
 const AUTO_SAVE_INTERVAL = 30000;
+const BLOG_TAG_OPTIONS: { value: BlogTag; label: string }[] = [
+  { value: "recipe", label: "Recipe" },
+  { value: "nutrition", label: "Nutrition" },
+  { value: "lifestyle", label: "Lifestyle" },
+  { value: "news", label: "News" },
+  { value: "event", label: "Event" },
+  { value: "tips", label: "Tips" },
+  { value: "story", label: "Story" },
+];
 const EMPTY_LEXICAL_DOC: LexicalDoc = {
   root: {
     type: "root",
@@ -75,13 +84,6 @@ function slugifyText(value: string) {
     .replace(/^-+|-+$/g, "");
 }
 
-function parseTags(raw: string) {
-  return raw
-    .split(",")
-    .map((tag) => tag.trim())
-    .filter(Boolean);
-}
-
 function getErrorMessage(error: unknown) {
   if (!error || typeof error !== "object") return "Request failed";
   const err = error as AdminApiError;
@@ -100,7 +102,7 @@ function toInputDateTime(value?: string | null) {
   if (Number.isNaN(date.getTime())) return "";
   const pad = (n: number) => String(n).padStart(2, "0");
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
-    date.getDate()
+    date.getDate(),
   )}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
 
@@ -139,6 +141,8 @@ export default function BlogEditor({
   const dirtyRef = useRef(false);
   const autoSavingRef = useRef(false);
   const savingRef = useRef(false);
+  const autoSaveFailCountRef = useRef(0);
+  const MAX_AUTO_SAVE_FAILURES = 3;
 
   const [titleVi, setTitleVi] = useState("");
   const [titleEn, setTitleEn] = useState("");
@@ -154,7 +158,7 @@ export default function BlogEditor({
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [coverUploading, setCoverUploading] = useState(false);
 
-  const [tagsInput, setTagsInput] = useState("");
+  const [selectedTags, setSelectedTags] = useState<BlogTag[]>([]);
   const [isFeatured, setIsFeatured] = useState(false);
   const [sortOrder, setSortOrder] = useState<number>(0);
 
@@ -197,12 +201,12 @@ export default function BlogEditor({
     setSlugVi(
       typeof blog.slug_i18n === "string"
         ? blog.slug_i18n
-        : blog.slug_i18n?.vi || ""
+        : blog.slug_i18n?.vi || "",
     );
     setSlugEn(
       typeof blog.slug_i18n === "string"
         ? blog.slug_i18n
-        : blog.slug_i18n?.en || ""
+        : blog.slug_i18n?.en || "",
     );
     setExcerptVi(blog.excerpt_i18n?.vi || "");
     setExcerptEn(blog.excerpt_i18n?.en || "");
@@ -214,7 +218,7 @@ export default function BlogEditor({
     setCoverFile(null);
     setCoverUploading(false);
 
-    setTagsInput((blog.tags || []).join(", "));
+    setSelectedTags((blog.tags as BlogTag[]) || []);
     setIsFeatured(!!blog.isFeatured);
     setSortOrder(blog.sortOrder ?? 0);
 
@@ -242,6 +246,13 @@ export default function BlogEditor({
       suspendDirtyRef.current = false;
       dirtyRef.current = false;
     }, 0);
+  }, []);
+
+  const syncServerFields = useCallback((blog: Blog) => {
+    setStatus(blog.status || "draft");
+    setPublishedAt(blog.publishedAt ?? null);
+    setScheduledAt(blog.scheduledAt ?? null);
+    setScheduleInput(toInputDateTime(blog.scheduledAt));
   }, []);
 
   useEffect(() => {
@@ -274,16 +285,16 @@ export default function BlogEditor({
   const previewTocVi = useMemo(
     () =>
       normalizeTocIds(
-        contentViDoc ? extractHeadingsFromLexical(contentViDoc) : []
+        contentViDoc ? extractHeadingsFromLexical(contentViDoc) : [],
       ),
-    [contentViDoc]
+    [contentViDoc],
   );
   const previewTocEn = useMemo(
     () =>
       normalizeTocIds(
-        contentEnDoc ? extractHeadingsFromLexical(contentEnDoc) : []
+        contentEnDoc ? extractHeadingsFromLexical(contentEnDoc) : [],
       ),
-    [contentEnDoc]
+    [contentEnDoc],
   );
 
   const validate = () => {
@@ -303,7 +314,7 @@ export default function BlogEditor({
         titleEn: string;
         slugVi: string;
         slugEn: string;
-      }>
+      }>,
     ): BlogUpsertPayload => {
       const finalTitleVi = overrides?.titleVi ?? titleVi.trim();
       const finalTitleEn = overrides?.titleEn ?? titleEn.trim();
@@ -339,8 +350,7 @@ export default function BlogEditor({
         };
       }
 
-      const tags = parseTags(tagsInput);
-      if (tags.length) payload.tags = tags;
+      if (selectedTags.length) payload.tags = selectedTags;
       if (typeof isFeatured === "boolean") payload.isFeatured = isFeatured;
       if (sortOrder) payload.sortOrder = sortOrder;
 
@@ -375,7 +385,7 @@ export default function BlogEditor({
       coverPublicId,
       coverAltVi,
       coverAltEn,
-      tagsInput,
+      selectedTags,
       isFeatured,
       sortOrder,
       seoTitleVi,
@@ -384,7 +394,7 @@ export default function BlogEditor({
       seoDescEn,
       canonicalUrl,
       ogImageUrl,
-    ]
+    ],
   );
 
   const handleSave = async () => {
@@ -412,7 +422,8 @@ export default function BlogEditor({
       }
       if (!activeBlogId) return;
       const updated = await updateAdminBlog(activeBlogId, payload);
-      hydrateFromBlog(updated);
+      syncServerFields(updated);
+      autoSaveFailCountRef.current = 0;
       toast.success("Blog updated");
       setLastSavedAt(new Date().toISOString());
     } catch (error) {
@@ -459,7 +470,7 @@ export default function BlogEditor({
         }
       } else if (activeBlogId) {
         const updated = await updateAdminBlog(activeBlogId, payload);
-        hydrateFromBlog(updated);
+        syncServerFields(updated);
         toast.success("Draft saved");
       }
       setLastSavedAt(new Date().toISOString());
@@ -475,7 +486,7 @@ export default function BlogEditor({
     if (!activeBlogId) return;
     try {
       const updated = await publishAdminBlog(activeBlogId);
-      hydrateFromBlog(updated);
+      syncServerFields(updated);
       toast.success("Blog published");
     } catch (error) {
       toast.error(getErrorMessage(error));
@@ -486,7 +497,7 @@ export default function BlogEditor({
     if (!activeBlogId) return;
     try {
       const updated = await archiveAdminBlog(activeBlogId);
-      hydrateFromBlog(updated);
+      syncServerFields(updated);
       toast.success("Blog archived");
     } catch (error) {
       toast.error(getErrorMessage(error));
@@ -507,7 +518,7 @@ export default function BlogEditor({
       }
       const iso = date.toISOString();
       const updated = await scheduleAdminBlog(activeBlogId, iso);
-      hydrateFromBlog(updated);
+      syncServerFields(updated);
       toast.success("Blog scheduled");
     } catch (error) {
       toast.error(getErrorMessage(error));
@@ -532,7 +543,7 @@ export default function BlogEditor({
     coverPublicId,
     coverAltVi,
     coverAltEn,
-    tagsInput,
+    selectedTags,
     isFeatured,
     sortOrder,
     seoTitleVi,
@@ -554,7 +565,8 @@ export default function BlogEditor({
         autoSavingRef.current ||
         !dirtyRef.current ||
         coverUploading ||
-        ogUploading
+        ogUploading ||
+        autoSaveFailCountRef.current >= MAX_AUTO_SAVE_FAILURES
       ) {
         return;
       }
@@ -563,9 +575,15 @@ export default function BlogEditor({
       try {
         await updateAdminBlog(activeBlogId, buildPayload());
         dirtyRef.current = false;
+        autoSaveFailCountRef.current = 0;
         setLastSavedAt(new Date().toISOString());
       } catch (error) {
-        toast.error(getErrorMessage(error));
+        autoSaveFailCountRef.current += 1;
+        if (autoSaveFailCountRef.current >= MAX_AUTO_SAVE_FAILURES) {
+          toast.error("Auto-save stopped after repeated failures. Please save manually.");
+        } else {
+          toast.error(getErrorMessage(error));
+        }
       } finally {
         autoSavingRef.current = false;
         setAutoSaving(false);
@@ -678,8 +696,8 @@ export default function BlogEditor({
             {autoSaving
               ? "Autosaving..."
               : lastSavedAt
-              ? `Last saved: ${formatTime(lastSavedAt)}`
-              : "Autosave is on"}
+                ? `Last saved: ${formatTime(lastSavedAt)}`
+                : "Autosave is on"}
           </p>
         </div>
         {activeMode === "edit" ? (
@@ -917,11 +935,36 @@ export default function BlogEditor({
               </div>
 
               <div className="grid gap-2">
-                <Label>Tags (comma separated)</Label>
-                <Input
-                  value={tagsInput}
-                  onChange={(event) => setTagsInput(event.target.value)}
-                />
+                <Label>Tags</Label>
+                <div className="flex flex-wrap gap-2">
+                  {BLOG_TAG_OPTIONS.map((opt) => {
+                    const checked = selectedTags.includes(opt.value);
+                    return (
+                      <label
+                        key={opt.value}
+                        className={`inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition ${
+                          checked
+                            ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+                            : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={() =>
+                            setSelectedTags((prev) =>
+                              checked
+                                ? prev.filter((t) => t !== opt.value)
+                                : [...prev, opt.value],
+                            )
+                          }
+                          className="sr-only"
+                        />
+                        {opt.label}
+                      </label>
+                    );
+                  })}
+                </div>
               </div>
 
               <div className="grid gap-2">

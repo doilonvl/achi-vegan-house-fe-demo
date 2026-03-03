@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { ReactLenis, useLenis } from "lenis/react";
 import type { LenisOptions } from "lenis";
 import gsap from "gsap";
@@ -54,6 +55,9 @@ const LenisScrollSync = () => {
 export default function ClientLayout({ children }: ClientLayoutProps) {
   const pageRef = useRef<HTMLDivElement | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const pathname = usePathname();
+  const isNoScrollRoute =
+    pathname.includes("/admin") || pathname.includes("/login");
 
   useEffect(() => {
     const checkMobile = () => {
@@ -90,6 +94,14 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
         smoothWheel: true,
         syncTouch: true,
       };
+
+  if (isNoScrollRoute) {
+    return (
+      <div className="page" ref={pageRef}>
+        {children}
+      </div>
+    );
+  }
 
   return (
     <ReactLenis root options={scrollSettings}>

@@ -25,6 +25,7 @@ import { Card } from "@/components/ui/card";
 import BlogDetailMotion from "@/components/blog/BlogDetailMotion";
 import BlogLocaleBridge from "@/components/blog/BlogLocaleBridge";
 import BlogTocPanel from "@/components/blog/BlogTocPanel";
+import BlogContentZoom from "@/components/blog/BlogContentZoom";
 
 const BASE_URL = getSiteUrl();
 const DEFAULT_OG_IMAGE = `${BASE_URL}/Logo/Home1.jpg`;
@@ -208,16 +209,18 @@ export default async function BlogDetailPage({ params }: PageParams) {
           <section className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_280px]">
             <div className="space-y-6">
               <BlogTocPanel items={tocItems} title={t("tocTitle")} />
-              <article
-                data-article
-                className="prose prose-neutral max-w-none text-neutral-800 prose-headings:scroll-mt-24 prose-img:rounded-2xl prose-img:border"
-              >
-                <LexicalContentRenderer
-                  doc={contentDoc}
-                  toc={tocItems}
-                  locale={locale}
-                />
-              </article>
+              <BlogContentZoom>
+                <article
+                  data-article
+                  className="prose prose-neutral max-w-none text-neutral-800 prose-headings:scroll-mt-24 prose-img:rounded-2xl prose-img:border"
+                >
+                  <LexicalContentRenderer
+                    doc={contentDoc}
+                    toc={tocItems}
+                    locale={locale}
+                  />
+                </article>
+              </BlogContentZoom>
             </div>
 
             <aside className="space-y-6 lg:sticky lg:top-24 lg:h-fit">

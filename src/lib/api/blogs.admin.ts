@@ -7,6 +7,13 @@ const API_BASE_URL = getApiBaseUrl();
 
 export type AdminApiError = Error & { status?: number; payload?: unknown };
 
+function unwrapData<T>(raw: unknown): T {
+  if (raw && typeof raw === "object" && "data" in raw) {
+    return (raw as Record<string, unknown>).data as T;
+  }
+  return raw as T;
+}
+
 function getClientToken() {
   if (typeof window === "undefined") return null;
   return localStorage.getItem("access_token");
@@ -60,7 +67,8 @@ async function fetchAdminJson<T>(
     return null as T;
   }
 
-  return (await res.json()) as T;
+  const json = await res.json();
+  return unwrapData<T>(json);
 }
 
 export async function fetchAdminBlogs(params: {

@@ -12,6 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { hasSession, refreshAccessToken } from "@/lib/auth";
 import {
   Boxes,
+  FileText,
   LayoutDashboard,
   LogOut,
   ChevronsLeft,
@@ -53,6 +54,12 @@ const NAV_SECTIONS: NavSection[] = [
   {
     label: "Content",
     items: [
+      {
+        key: "blogs",
+        label: "Blogs",
+        icon: FileText,
+        slug: "blogs",
+      },
       {
         key: "media-assets",
         label: "Media Assets",
@@ -149,7 +156,9 @@ export default function AdminShell({
               <div className="flex items-center gap-3">
                 {!collapsed && (
                   <div>
-                    <p className="text-sm font-semibold">G-Bros Admin</p>
+                    <p className="text-sm font-semibold">
+                      Achi Vegan House Admin
+                    </p>
                     <p className="text-xs text-muted-foreground">
                       Studio Console
                     </p>
@@ -239,7 +248,7 @@ export default function AdminShell({
                     Admin
                   </p>
                   <p className="truncate text-xs text-muted-foreground">
-                      admin@gmedia.vn
+                    admin@achivegan.vn
                   </p>
                 </div>
               )}
@@ -265,7 +274,9 @@ export default function AdminShell({
         {/* Topbar (mobile) */}
         <div className="sticky top-0 z-10 border-b bg-card/80 backdrop-blur supports-[backdrop-filter]:bg-card/60 md:hidden">
           <div className="flex items-center justify-between px-4 py-3">
-            <span className="text-sm font-semibold">G-Bros Admin</span>
+            <span className="text-sm font-semibold">
+              Achi Vegan House Admin
+            </span>
             <Button size="sm" variant="outline" onClick={handleLogout}>
               <LogOut className="mr-2 size-4" />
               Logout
