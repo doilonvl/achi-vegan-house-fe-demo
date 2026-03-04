@@ -67,17 +67,29 @@ export default async function RootLayout({
     <html lang={locale} suppressHydrationWarning className={playfair.variable}>
       <body>
         <Providers>{children}</Providers>
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-WDD481BL2J"
-          strategy="lazyOnload"
-        />
-        <Script id="gtag-init" strategy="lazyOnload">
+        <Script id="gtag-delayed" strategy="lazyOnload">
           {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-WDD481BL2J');
-            gtag('config', 'AW-17971414705');
+            (function(){
+              var loaded=false;
+              function loadGTM(){
+                if(loaded)return;
+                loaded=true;
+                var s=document.createElement('script');
+                s.src='https://www.googletagmanager.com/gtag/js?id=G-WDD481BL2J';
+                s.async=true;
+                document.head.appendChild(s);
+                window.dataLayer=window.dataLayer||[];
+                function gtag(){dataLayer.push(arguments);}
+                window.gtag=gtag;
+                gtag('js',new Date());
+                gtag('config','G-WDD481BL2J');
+                gtag('config','AW-17971414705');
+              }
+              var t=setTimeout(loadGTM,5000);
+              ['scroll','click','touchstart','keydown'].forEach(function(e){
+                document.addEventListener(e,function(){clearTimeout(t);loadGTM()},{once:true,passive:true});
+              });
+            })();
           `}
         </Script>
       </body>

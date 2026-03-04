@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import styles from "./ClientReviews.module.css";
 
 type ClientReviewContent = {
@@ -155,10 +156,14 @@ const ClientReviews = ({ items }: ClientReviewsProps) => {
                   <div className={styles.reviewCardClientInfo}>
                     <div className={styles.reviewCardAvatar}>
                       {item.avatar ? (
-                        <img
+                        <Image
                           src={item.avatar}
                           alt={item.clientName}
+                          width={56}
+                          height={56}
                           className={styles.reviewCardAvatarImage}
+                          loading="lazy"
+                          quality={60}
                         />
                       ) : (
                         <span className={styles.reviewCardAvatarFallback}>

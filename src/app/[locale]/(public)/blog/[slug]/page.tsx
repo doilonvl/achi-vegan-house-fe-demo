@@ -58,21 +58,25 @@ export async function generateMetadata({
     resolveI18nValue(blog.excerpt_i18n, locale, t("metaDescription"));
   const canonicalSlug = blog.slug || slug;
   const prefix = getLocalePrefix(locale);
+  const blogPath = locale === "vi" ? "/bai-viet" : "/blog";
   const canonical =
     blog.canonicalUrl ||
     (prefix
-      ? `${BASE_URL}${prefix}/blog/${canonicalSlug}`
-      : `${BASE_URL}/blog/${canonicalSlug}`);
+      ? `${BASE_URL}${prefix}${blogPath}/${canonicalSlug}`
+      : `${BASE_URL}${blogPath}/${canonicalSlug}`);
   const ogImage =
     blog.ogImageUrl || blog.ogImage || blog.coverImage?.url || DEFAULT_OG_IMAGE;
+
+  const authorName = blog.authorName || "Achi Vegan House";
 
   return {
     title: { absolute: title },
     description,
+    authors: [{ name: authorName }],
     alternates: {
       canonical,
       languages: {
-        "vi-VN": `${BASE_URL}/blog/${canonicalSlug}`,
+        "vi-VN": `${BASE_URL}/bai-viet/${canonicalSlug}`,
         en: `${BASE_URL}/en/blog/${canonicalSlug}`,
       },
     },
@@ -82,6 +86,10 @@ export async function generateMetadata({
       url: canonical,
       type: "article",
       images: [ogImage],
+      publishedTime: blog.publishedAt || blog.createdAt || undefined,
+      modifiedTime: blog.updatedAt || undefined,
+      authors: [authorName],
+      locale: locale === "en" ? "en_US" : "vi_VN",
     },
     twitter: {
       card: "summary_large_image",
@@ -94,7 +102,8 @@ export async function generateMetadata({
 
 function buildListHref(locale: Locale) {
   const prefix = getLocalePrefix(locale);
-  return `${prefix}/blog` || "/blog";
+  const blogPath = locale === "vi" ? "/bai-viet" : "/blog";
+  return `${prefix}${blogPath}`;
 }
 
 function buildDetailHref(locale: Locale, slug: string) {
@@ -146,8 +155,39 @@ export default async function BlogDetailPage({ params }: PageParams) {
     console.error("FETCH_LATEST_BLOGS_FAILED", error);
   }
 
+  const blogJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: title,
+    description: excerpt || title,
+    image: cover || DEFAULT_OG_IMAGE,
+    datePublished: blog.publishedAt || blog.createdAt,
+    dateModified: blog.updatedAt || blog.publishedAt || blog.createdAt,
+    author: {
+      "@type": "Person",
+      name: authorName,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Achi Vegan House",
+      logo: {
+        "@type": "ImageObject",
+        url: `${BASE_URL}/Logo/Logo1.jpg`,
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${BASE_URL}${getLocalePrefix(locale)}${locale === "vi" ? "/bai-viet" : "/blog"}/${slug}`,
+    },
+    inLanguage: locale === "en" ? "en" : "vi",
+  };
+
   return (
     <main className="relative overflow-hidden bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd) }}
+      />
       <BlogDetailMotion>
         <div className="relative z-10 mx-auto max-w-6xl px-4 pb-16 pt-24 md:px-6 md:pt-28 lg:px-8">
           <BlogLocaleBridge slug={blog.slug} slugI18n={blog.slug_i18n} />

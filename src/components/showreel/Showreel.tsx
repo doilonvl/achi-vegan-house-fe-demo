@@ -57,13 +57,13 @@ const Showreel = () => {
         const words = headline.querySelectorAll("span");
         gsap.fromTo(
           words,
-          { yPercent: 130, opacity: 0 },
+          { yPercent: 20, opacity: 0.7 },
           {
             yPercent: 0,
             opacity: 1,
-            stagger: 0.12,
-            duration: 1.2,
-            ease: "power4.out",
+            stagger: 0.08,
+            duration: 0.8,
+            ease: "power3.out",
           }
         );
       }
@@ -71,8 +71,8 @@ const Showreel = () => {
       if (subhead) {
         gsap.fromTo(
           subhead,
-          { y: 24, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.9, ease: "power3.out", delay: 0.4 }
+          { y: 12, opacity: 0.7 },
+          { y: 0, opacity: 1, duration: 0.6, ease: "power3.out", delay: 0.2 }
         );
       }
 
@@ -198,8 +198,8 @@ const Showreel = () => {
           fill
           sizes="100vw"
           className="object-cover"
-          priority
-          quality={75}
+          priority={currentFrame === 1}
+          quality={65}
         />
         <div className={styles.showreelGlow} aria-hidden="true" />
       </div>
@@ -233,6 +233,7 @@ const Showreel = () => {
         src="/Combo/showreel_music.mp3"
         loop
         muted={isMuted}
+        preload="none"
       />
     </section>
   );

@@ -125,7 +125,7 @@ export async function GET() {
       priority: 0.5,
     },
     {
-      loc: `${base}/blog`,
+      loc: `${base}/bai-viet`,
       lastmod: now,
       changefreq: "weekly",
       priority: 0.7,
@@ -149,7 +149,7 @@ export async function GET() {
       const slug = blog.slug || resolveSlug(blog.slug_i18n, "vi");
       if (!slug) return;
       blogUrls.push({
-        loc: `${base}/blog/${slug}`,
+        loc: `${base}/bai-viet/${slug}`,
         lastmod: resolveBlogLastmod(blog),
         changefreq: "weekly",
         priority: 0.6,

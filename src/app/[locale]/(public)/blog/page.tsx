@@ -27,7 +27,8 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "blog" });
   const prefix = getLocalePrefix(locale);
-  const canonical = prefix ? `${BASE_URL}${prefix}/blog` : `${BASE_URL}/blog`;
+  const blogPath = locale === "vi" ? "/bai-viet" : "/blog";
+  const canonical = prefix ? `${BASE_URL}${prefix}${blogPath}` : `${BASE_URL}${blogPath}`;
 
   return {
     title: { absolute: t("metaTitle") },
@@ -35,7 +36,7 @@ export async function generateMetadata({
     alternates: {
       canonical,
       languages: {
-        "vi-VN": `${BASE_URL}/blog`,
+        "vi-VN": `${BASE_URL}/bai-viet`,
         en: `${BASE_URL}/en/blog`,
       },
     },
@@ -57,12 +58,14 @@ export async function generateMetadata({
 
 function buildDetailHref(locale: Locale, slug: string) {
   const prefix = getLocalePrefix(locale);
-  return `${prefix}/blog/${slug}` || `/blog/${slug}`;
+  const blogPath = locale === "vi" ? "/bai-viet" : "/blog";
+  return `${prefix}${blogPath}/${slug}`;
 }
 
 function buildPageHref(locale: Locale, page: number, tag: string | undefined) {
   const prefix = getLocalePrefix(locale);
-  const base = `${prefix}/blog` || "/blog";
+  const blogPath = locale === "vi" ? "/bai-viet" : "/blog";
+  const base = `${prefix}${blogPath}`;
   const params = new URLSearchParams();
   if (page > 1) params.set("page", String(page));
   if (tag) params.set("tag", tag);

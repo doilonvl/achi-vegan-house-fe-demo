@@ -15,6 +15,14 @@ export const pathnames = {
     vi: "/thuc-don",
     en: "/menu",
   },
+  "/blog": {
+    vi: "/bai-viet",
+    en: "/blog",
+  },
+  "/blog/[slug]": {
+    vi: "/bai-viet/[slug]",
+    en: "/blog/[slug]",
+  },
 } as const;
 
 export const { Link, useRouter, usePathname, redirect, getPathname } =

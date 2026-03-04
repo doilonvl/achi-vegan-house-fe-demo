@@ -1,5 +1,13 @@
 "use client";
-import { motion } from "framer-motion";
+
+import { useEffect, useRef, useState } from "react";
+
+const DIRECTION_STYLES = {
+  up: "translate3d(0, 30px, 0)",
+  down: "translate3d(0, -30px, 0)",
+  left: "translate3d(-30px, 0, 0)",
+  right: "translate3d(30px, 0, 0)",
+} as const;
 
 export default function FadeIn({
   children,
@@ -16,26 +24,40 @@ export default function FadeIn({
   direction?: "up" | "down" | "left" | "right";
   margin?: string;
 }) {
-  const distance = 40; // px
-  const initial =
-    direction === "up"
-      ? { opacity: 0, y: distance }
-      : direction === "down"
-        ? { opacity: 0, y: -distance }
-        : direction === "left"
-          ? { opacity: 0, x: -distance }
-          : { opacity: 0, x: distance };
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
-  const animate = { opacity: 1, x: 0, y: 0 };
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          if (once) observer.disconnect();
+        } else if (!once) {
+          setIsVisible(false);
+        }
+      },
+      { threshold: amount, rootMargin: margin }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [amount, margin, once]);
 
   return (
-    <motion.div
-      initial={initial}
-      whileInView={animate}
-      viewport={{ once, amount, margin }}
-      transition={{ duration: 0.8, ease: "easeOut", delay }}
+    <div
+      ref={ref}
+      style={{
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? "translate3d(0,0,0)" : DIRECTION_STYLES[direction],
+        transition: `opacity 0.8s ease-out ${delay}s, transform 0.8s ease-out ${delay}s`,
+        willChange: isVisible ? "auto" : "opacity, transform",
+      }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

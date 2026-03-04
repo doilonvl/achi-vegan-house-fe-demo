@@ -97,7 +97,7 @@
     "about": "Giới thiệu",
     "reservation": "Đặt bàn",
     "contact": "Liên hệ",
-    "blog": "Blog",
+    "blog": "Bài viết",
     "menuTitle": "Menu",
     "openMenu": "Mở menu",
     "close": "Đóng",
@@ -462,10 +462,10 @@
     }
   },
   "blog": {
-    "metaTitle": "Blog | Achi vegan house",
-    "metaDescription": "Tin tức và cập nhật từ Achi vegan house.",
-    "title": "Blog",
-    "subtitle": "Chia sẻ, món ăn, và sự kiện từ Achi vegan house.",
+    "metaTitle": "Bài viết | Achi Vegan House - Nhà hàng chay Hà Nội",
+    "metaDescription": "Bài viết, chia sẻ món chay, công thức nấu ăn chay và tin tức từ Achi Vegan House - Nhà hàng chay thuần chay hữu cơ tại Hà Nội.",
+    "title": "Bài viết",
+    "subtitle": "Chia sẻ, món ăn, và sự kiện từ Achi Vegan House.",
     "tagLabel": "Chủ đề:",
     "emptyTitle": "Chưa có bài viết",
     "emptyBody": "Chúng tôi đang chuẩn bị nội dung mới. Vui lòng quay lại sau.",

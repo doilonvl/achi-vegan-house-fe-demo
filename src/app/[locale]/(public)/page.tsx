@@ -2,13 +2,22 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import type { Locale } from "@/types/content";
 import { getApiBaseUrl, getSiteUrl } from "@/lib/env";
+import dynamic from "next/dynamic";
 import Image from "next/image";
-import Spotlight from "@/components/spotlight/Spotlight";
 import Showreel from "@/components/showreel/Showreel";
-import ClientReviews from "@/components/client-reviews/ClientReviews";
-import { ReservationForm } from "@/components/shared/reservation-form";
 import FadeIn from "@/components/animate/FadeIn";
-import NewMenu from "@/components/shared/NewMenu";
+import LazyVideo from "@/components/shared/LazyVideo";
+
+const Spotlight = dynamic(() => import("@/components/spotlight/Spotlight"));
+const ClientReviews = dynamic(
+  () => import("@/components/client-reviews/ClientReviews")
+);
+const NewMenu = dynamic(() => import("@/components/shared/NewMenu"));
+const ReservationForm = dynamic(() =>
+  import("@/components/shared/reservation-form").then(
+    (mod) => mod.ReservationForm
+  )
+);
 
 export const revalidate = 300;
 
@@ -271,7 +280,8 @@ export default async function HomePage() {
             fill
             sizes="100vw"
             className="object-cover opacity-40"
-            priority={false}
+            loading="lazy"
+            quality={60}
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-black/80" />
         </div>
@@ -306,17 +316,11 @@ export default async function HomePage() {
           <FadeIn direction="left" amount={0.2}>
             <div className="relative rounded-[36px] border border-white/15 bg-white/5 p-4 shadow-[0_30px_80px_rgba(0,0,0,0.45)] backdrop-blur">
               <div className="relative overflow-hidden rounded-[28px]">
-                <video
-                  className="h-full w-full object-cover"
+                <LazyVideo
+                  src="/intro/intro.mp4"
                   poster="/intro/in1.jpg"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="none"
-                >
-                  <source src="/intro/intro.mp4" type="video/mp4" />
-                </video>
+                  className="h-full w-full"
+                />
               </div>
               <div className="mt-5 grid grid-cols-3 gap-3 text-center text-xs uppercase tracking-[0.25em] text-white/60">
                 <div className="rounded-full border border-white/10 px-3 py-2">
