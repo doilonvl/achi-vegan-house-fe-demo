@@ -19,7 +19,7 @@ export default async function AdminHome({ params }: PageProps) {
           Admin
         </p>
         <h1 className="mt-2 text-2xl font-semibold text-neutral-900">
-          Welcome to Achi Vegan Console
+          Welcome to Achi Vegan House Console
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Manage services, portfolios, and blog content in one place. Drafts are

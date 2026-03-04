@@ -18,15 +18,19 @@ const DEFAULT_OG_IMAGE = "https://www.achiveganhouse.com/Logo/Home1.jpg";
 const HOME_META = {
   vi: {
     title:
-      "Achi Vegan House - Nhà Chay Achi cung cấp gần 100 món ăn chay được chế biến từ rau, củ, quả, hạt.. sạch hữu cơ.",
+      "Achi Vegan House - Nhà hàng chay Hà Nội | Quán ăn chay thuần chay hữu cơ Thụy Khuê",
     description:
-      "Achi Vegan House tại 50 đường Thụy Khuê, Hà Nội nổi tiếng với các món chay thuần chay ngon. Ghé quán, thưởng thức món ăn hoặc đặt mang đi đúng giờ bạn cần.",
+      "Nhà hàng chay Achi Vegan House tại 50 Thụy Khuê, Tây Hồ, Hà Nội. Gần 100 món ăn chay, thuần chay, vegan từ nguyên liệu hữu cơ sạch. Đặt bàn, giao hàng tận nơi. Quán chay ngon Hà Nội.",
+    keywords:
+      "nhà hàng chay, quán ăn chay, thuần chay, vegan, chay Hà Nội, quán chay Thụy Khuê, quán chay Tây Hồ, ăn chay Hà Nội, món chay ngon, đồ ăn chay, nhà hàng thuần chay, vegan Hanoi, thực dưỡng, ăn chay hữu cơ, organic vegan, plant-based, chay sạch, quán chay gần đây, đặt bàn nhà hàng chay, giao đồ ăn chay, buffet chay, cơm chay, lẩu chay, bún chay",
   },
   en: {
     title:
-      "Achi Vegan House – Vegan restaurant in Hanoi with nearly 100 organic vegan dishes.",
+      "Achi Vegan House – Best Vegan Restaurant in Hanoi | Plant-Based & Organic Dining",
     description:
-      "Achi Vegan House at 50 Thuy Khue Street, Hanoi, known for delicious vegan dishes. Visit, enjoy a meal, or order takeout on time.",
+      "Top-rated vegan restaurant in Hanoi at 50 Thuy Khue Street, Tay Ho. Nearly 100 plant-based, organic vegan dishes. Dine-in, takeout & delivery. Best vegetarian food in Hanoi.",
+    keywords:
+      "vegan restaurant Hanoi, vegetarian restaurant Hanoi, plant-based dining, organic vegan food, vegan food Hanoi, best vegan restaurant, vegetarian food Vietnam, vegan Tay Ho, vegan Thuy Khue, healthy eating Hanoi, vegan delivery Hanoi, vegan takeout, meat-free restaurant, cruelty-free dining, whole food plant-based",
   },
 } as const;
 
@@ -133,6 +137,7 @@ export async function generateMetadata({
   return {
     title: { absolute: meta.title },
     description: meta.description,
+    keywords: meta.keywords,
     alternates: {
       canonical,
       languages: {
@@ -168,9 +173,10 @@ export default async function HomePage() {
 
   const alternateNames = [
     "Achi Vegan House",
+    "Nhà Chay Achi",
     "Achi Vegan House Hanoi",
-    "Achi Vegan House Vegan Restaurant",
-    "Achi Vegan House Vegan Food",
+    "Nhà hàng chay Achi",
+    "Quán chay Achi Thụy Khuê",
   ];
 
   const homeJsonLd = {
@@ -178,20 +184,64 @@ export default async function HomePage() {
     "@graph": [
       {
         "@type": "Restaurant",
-        "@id": `${pageUrl}#cafe`,
+        "@id": `${pageUrl}#restaurant`,
         name: "Achi Vegan House",
         alternateName: alternateNames,
+        description:
+          locale === "en"
+            ? "Top-rated vegan restaurant in Hanoi with nearly 100 plant-based organic dishes"
+            : "Nhà hàng chay Hà Nội với gần 100 món ăn chay thuần chay hữu cơ",
         url: pageUrl,
-        image: `${baseUrl}/Logo/Logo1.jpg`,
+        image: [
+          `${baseUrl}/Logo/Logo1.jpg`,
+          `${baseUrl}/Logo/Home1.jpg`,
+        ],
+        telephone: "+84985310238",
+        email: "sunnyhoai.vu@gmail.com",
         address: {
-          addressLocality: "Hanoi",
+          "@type": "PostalAddress",
+          streetAddress: "50 Thụy Khuê",
+          addressLocality: "Hà Nội",
+          addressRegion: "Tây Hồ",
           addressCountry: "VN",
         },
-        servesCuisine: ["Vegan", "Vegetarian"],
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: 21.0412605,
+          longitude: 105.8271836,
+        },
+        openingHoursSpecification: {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday",
+          ],
+          opens: "07:30",
+          closes: "22:30",
+        },
+        servesCuisine: [
+          "Vegan",
+          "Vegetarian",
+          "Plant-based",
+          "Organic",
+          "Vietnamese Vegan",
+        ],
+        priceRange: "$$",
+        acceptsReservations: "True",
+        menu: `${baseUrl}/menu`,
         sameAs: [
           "https://www.facebook.com/nhachayachi",
           "https://www.instagram.com/achiveganhouse",
         ],
+        keywords:
+          locale === "en"
+            ? "vegan, vegetarian, plant-based, organic, healthy food, vegan restaurant Hanoi"
+            : "chay, thuần chay, vegan, hữu cơ, nhà hàng chay, quán chay Hà Nội, ăn chay, đồ ăn chay",
       },
       {
         "@type": "WebSite",
@@ -263,6 +313,7 @@ export default async function HomePage() {
                   muted
                   loop
                   playsInline
+                  preload="none"
                 >
                   <source src="/intro/intro.mp4" type="video/mp4" />
                 </video>

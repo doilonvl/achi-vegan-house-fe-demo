@@ -9,15 +9,33 @@ import Script from "next/script";
 
 const playfair = Playfair_Display({
   subsets: ["latin", "vietnamese"],
-  weight: ["400", "600", "700", "800", "900"],
+  weight: ["400", "600", "700", "900"],
   variable: "--font-playfair",
+  display: "swap",
 });
 
 const BASE_URL = getSiteUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
-  title: { default: "Achi Vegan House", template: "%s | Achi Vegan House" },
+  title: { default: "Achi Vegan House - Nhà hàng chay Hà Nội", template: "%s | Achi Vegan House" },
+  description:
+    "Nhà hàng chay Achi Vegan House - Quán ăn chay, thuần chay, vegan hữu cơ tại Hà Nội. Gần 100 món chay ngon từ nguyên liệu sạch.",
+  keywords: [
+    "nhà hàng chay",
+    "quán ăn chay",
+    "thuần chay",
+    "vegan",
+    "chay Hà Nội",
+    "vegan Hanoi",
+    "plant-based",
+    "organic",
+    "hữu cơ",
+    "ăn chay",
+    "đồ ăn chay",
+    "vegetarian",
+    "quán chay ngon",
+  ],
   icons: {
     icon: [
       { url: "/favicon.png", type: "image/png", sizes: "96x96" },
@@ -47,12 +65,13 @@ export default async function RootLayout({
   const locale = await getLocale();
   return (
     <html lang={locale} suppressHydrationWarning className={playfair.variable}>
-      <head>
+      <body>
+        <Providers>{children}</Providers>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-WDD481BL2J"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="gtag-init" strategy="afterInteractive">
+        <Script id="gtag-init" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -61,10 +80,6 @@ export default async function RootLayout({
             gtag('config', 'AW-17971414705');
           `}
         </Script>
-      </head>
-      <body>
-        <Providers>{children}</Providers>
-        {/* <TawkTo /> */}
       </body>
     </html>
   );

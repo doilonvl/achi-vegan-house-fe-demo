@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 import {
   CheckCircle2,
@@ -14,6 +13,7 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { getLocalePrefix } from "@/lib/routes";
 
@@ -38,7 +38,7 @@ export default function Footer() {
   const t = useTranslations("footer");
   const locale = useLocale();
   const localePrefix = getLocalePrefix(locale as "vi" | "en");
-  const [isOpen, setIsOpen] = useState(isOpenNow());
+  const [isOpen, setIsOpen] = useState<boolean | null>(null);
   const [showPopup, setShowPopup] = useState(false);
 
   const weeklyHours: DayHours[] = useMemo(() => {
@@ -72,12 +72,13 @@ export default function Footer() {
   const hasHalfStar = mapRatingValue - fullStars >= 0.5;
 
   useEffect(() => {
+    setIsOpen(isOpenNow());
     const id = setInterval(() => setIsOpen(isOpenNow()), 60_000);
     return () => clearInterval(id);
   }, []);
 
   const statusLabel = useMemo(
-    () => (isOpen ? t("statusOpen") : t("statusClosed")),
+    () => (isOpen === null ? "" : isOpen ? t("statusOpen") : t("statusClosed")),
     [isOpen, t]
   );
 
@@ -89,10 +90,14 @@ export default function Footer() {
           <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
             <div className="space-y-5">
               <div className="flex items-center gap-3">
-                <img
+                <Image
                   src="/Logo/Logo1.jpg"
                   alt={t("brandName")}
+                  width={48}
+                  height={48}
                   className="h-12 w-12 rounded-full border border-white/20 object-cover shadow-sm"
+                  loading="lazy"
+                  quality={75}
                 />
                 <div>
                   <p className="text-base font-semibold text-white">
@@ -144,7 +149,9 @@ export default function Footer() {
             <div className="space-y-4">
               <div className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3 shadow-sm">
                 <div className="flex items-center gap-3">
-                  {isOpen ? (
+                  {isOpen === null ? (
+                    <Clock className="h-6 w-6 text-white/40" />
+                  ) : isOpen ? (
                     <CheckCircle2 className="h-6 w-6 text-emerald-400" />
                   ) : (
                     <XCircle className="h-6 w-6 text-amber-300" />
@@ -238,7 +245,7 @@ export default function Footer() {
                     count: mapReviewCount,
                   })}
                 </span>
-                <span className="text-white/40">{t("mapRatingSource")}</span>
+                <span className="text-white/60">{t("mapRatingSource")}</span>
               </div>
             </div>
           </div>

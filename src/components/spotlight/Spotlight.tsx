@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import SplitType from "split-type";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import styles from "./Spotlight.module.css";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -308,7 +309,7 @@ const Spotlight = () => {
                           />
                         </svg>
                       ) : (
-                        <img src={src} alt="" />
+                        <Image src={src} alt="" width={368} height={245} sizes="(max-width: 768px) 50vw, 368px" loading="lazy" quality={75} />
                       )}
                     </div>
                     {isMasked ? (

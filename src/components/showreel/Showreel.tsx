@@ -191,10 +191,15 @@ const Showreel = () => {
         />
       </button>
       <div className={styles.showreelContainer} ref={showreelContainerRef}>
-        <img
+        <Image
           ref={showreelImageRef}
           src={`/spotlight/spotlight-${currentFrame}.jpg`}
           alt="Showreel frame"
+          fill
+          sizes="100vw"
+          className="object-cover"
+          priority
+          quality={75}
         />
         <div className={styles.showreelGlow} aria-hidden="true" />
       </div>

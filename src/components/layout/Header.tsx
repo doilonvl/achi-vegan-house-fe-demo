@@ -527,11 +527,12 @@ export default function Header() {
                                   }`}
                                   aria-pressed={localeCode === "vi"}
                                 >
-                                  <img
+                                  <Image
                                     src="/Flag/vn.png"
                                     alt="Vietnam"
+                                    width={20}
+                                    height={20}
                                     className="h-4 w-4 rounded-[3px] object-cover"
-                                    loading="lazy"
                                   />
                                   VI
                                 </button>
@@ -545,11 +546,12 @@ export default function Header() {
                                   }`}
                                   aria-pressed={localeCode === "en"}
                                 >
-                                  <img
+                                  <Image
                                     src="/Flag/usa.png"
                                     alt="English"
+                                    width={20}
+                                    height={20}
                                     className="h-4 w-4 rounded-[3px] object-cover"
-                                    loading="lazy"
                                   />
                                   EN
                                 </button>
@@ -579,6 +581,7 @@ export default function Header() {
                           >
                             <button
                               type="button"
+                              aria-label={item.label}
                               onClick={() => {
                                 if (isCompact) {
                                   if (activeMobileHint !== item.label) {

@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
 import { useCreateReservationRequestMutation } from "@/services/api";
 import type { ReservationRequestPayload } from "@/types/reservation";
 
@@ -186,7 +187,11 @@ export function ReservationForm({
   const t = useTranslations("reservation");
   const locale = useLocale();
   const schema = useMemo(() => buildReservationSchema(t), [t]);
-  const defaultDate = useMemo(() => formatDateInput(new Date()), []);
+  const [defaultDate, setDefaultDate] = useState("");
+
+  useEffect(() => {
+    setDefaultDate(formatDateInput(new Date()));
+  }, []);
   const [minSelectableTime, setMinSelectableTime] = useState<
     string | undefined
   >(undefined);
@@ -270,10 +275,14 @@ export function ReservationForm({
     <div className="mx-auto w-full max-w-6xl">
       <div className="grid gap-0 overflow-hidden rounded-[32px] border border-emerald-900/10 bg-[#f6f1e6] shadow-[0_40px_120px_rgba(18,22,14,0.25)] lg:grid-cols-[1fr_1.2fr]">
         <div className="relative min-h-[320px] lg:min-h-full">
-          <img
+          <Image
             src="/intro/in1.jpg"
             alt="Achi Vegan House"
-            className="absolute inset-0 h-full w-full object-cover"
+            fill
+            sizes="(max-width: 1024px) 100vw, 45vw"
+            className="object-cover"
+            loading="lazy"
+            quality={75}
           />
           <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-transparent" />
           <div className="relative flex h-full flex-col justify-end p-10 text-white">
@@ -313,24 +322,25 @@ export function ReservationForm({
           ) : (
             <>
               <div className="mb-10">
-                <span className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-800/60">
+                <span className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-800/80">
                   {t("sectionTitle")}
                 </span>
                 <h2 className="mt-4 font-[var(--font-playfair)] text-4xl text-emerald-900">
                   {t("heading")}
                 </h2>
-                <p className="mt-4 text-sm text-emerald-900/70">
+                <p className="mt-4 text-sm text-emerald-900/80">
                   {t("arrivalNote")}
                 </p>
               </div>
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-3">
-                    <label className="text-[10px] uppercase tracking-[0.4em] text-emerald-900/60 font-semibold">
+                    <label htmlFor="fullName" className="text-[10px] uppercase tracking-[0.4em] text-emerald-900/80 font-semibold">
                       {t("fullNameLabel")}
                     </label>
                     <input
                       {...register("fullName")}
+                      id="fullName"
                       className="w-full border-b border-emerald-900/15 bg-transparent py-3 text-base text-emerald-900 focus:border-emerald-600 focus:outline-none"
                       aria-invalid={Boolean(errors.fullName)}
                     />
@@ -341,11 +351,12 @@ export function ReservationForm({
                     )}
                   </div>
                   <div className="space-y-3">
-                    <label className="text-[10px] uppercase tracking-[0.4em] text-emerald-900/60 font-semibold">
+                    <label htmlFor="phoneNumber" className="text-[10px] uppercase tracking-[0.4em] text-emerald-900/80 font-semibold">
                       {t("phoneLabel")}
                     </label>
                     <input
                       {...register("phoneNumber")}
+                      id="phoneNumber"
                       type="tel"
                       className="w-full border-b border-emerald-900/15 bg-transparent py-3 text-base text-emerald-900 focus:border-emerald-600 focus:outline-none"
                       aria-invalid={Boolean(errors.phoneNumber)}
@@ -358,11 +369,12 @@ export function ReservationForm({
                   </div>
                 </div>
                 <div className="space-y-3">
-                  <label className="text-[10px] uppercase tracking-[0.4em] text-emerald-900/60 font-semibold">
+                  <label htmlFor="email" className="text-[10px] uppercase tracking-[0.4em] text-emerald-900/80 font-semibold">
                     {t("emailLabel")}
                   </label>
                   <input
                     {...register("email")}
+                    id="email"
                     type="email"
                     className="w-full border-b border-emerald-900/15 bg-transparent py-3 text-base text-emerald-900 focus:border-emerald-600 focus:outline-none"
                     aria-invalid={Boolean(errors.email)}
@@ -376,11 +388,12 @@ export function ReservationForm({
 
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
                   <div className="space-y-3">
-                    <label className="text-[10px] uppercase tracking-[0.4em] text-emerald-900/60 font-semibold">
+                    <label htmlFor="reservationDate" className="text-[10px] uppercase tracking-[0.4em] text-emerald-900/80 font-semibold">
                       {t("dateLabel")}
                     </label>
                     <input
                       {...register("reservationDate")}
+                      id="reservationDate"
                       type="date"
                       min={defaultDate}
                       className="w-full appearance-none border-b border-emerald-900/15 bg-transparent py-3 text-sm text-emerald-900 focus:border-emerald-600 focus:outline-none"
@@ -393,11 +406,12 @@ export function ReservationForm({
                     )}
                   </div>
                   <div className="space-y-3">
-                    <label className="text-[10px] uppercase tracking-[0.4em] text-emerald-900/60 font-semibold">
+                    <label htmlFor="reservationTime" className="text-[10px] uppercase tracking-[0.4em] text-emerald-900/80 font-semibold">
                       {t("timeLabel")}
                     </label>
                     <input
                       {...register("reservationTime")}
+                      id="reservationTime"
                       type="time"
                       min={minSelectableTime}
                       max={OPENING_HOURS.end}
@@ -411,11 +425,12 @@ export function ReservationForm({
                     )}
                   </div>
                   <div className="space-y-3 col-span-2 md:col-span-1">
-                    <label className="text-[10px] uppercase tracking-[0.4em] text-emerald-900/60 font-semibold">
+                    <label htmlFor="guestCount" className="text-[10px] uppercase tracking-[0.4em] text-emerald-900/80 font-semibold">
                       {t("guestLabel")}
                     </label>
                     <select
                       {...register("guestCount", { valueAsNumber: true })}
+                      id="guestCount"
                       className="w-full border-b border-emerald-900/15 bg-transparent py-3 text-sm text-emerald-900 focus:border-emerald-600 focus:outline-none"
                       aria-invalid={Boolean(errors.guestCount)}
                     >
@@ -435,11 +450,12 @@ export function ReservationForm({
                   </div>
                 </div>
                 <div className="space-y-3">
-                  <label className="text-[10px] uppercase tracking-[0.4em] text-emerald-900/60 font-semibold">
+                  <label htmlFor="note" className="text-[10px] uppercase tracking-[0.4em] text-emerald-900/80 font-semibold">
                     {t("noteLabel")}
                   </label>
                   <textarea
                     {...register("note")}
+                    id="note"
                     rows={2}
                     placeholder={t("notePlaceholder")}
                     className="w-full border-b border-emerald-900/15 bg-transparent py-3 text-base text-emerald-900 focus:border-emerald-600 focus:outline-none"
@@ -459,7 +475,7 @@ export function ReservationForm({
                 >
                   {isBusy ? t("submitting") : t("submit")}
                 </button>
-                <p className="pt-4 text-center text-xs text-emerald-900/60">
+                <p className="pt-4 text-center text-xs text-emerald-900/80">
                   {t("privacy")}
                 </p>
               </form>
