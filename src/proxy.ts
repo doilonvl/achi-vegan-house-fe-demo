@@ -18,7 +18,7 @@ export default function proxy(req: NextRequest) {
   if (!req.cookies.get("NEXT_LOCALE")) {
     res.cookies.set("NEXT_LOCALE", defaultLocale, {
       path: "/",
-      
+
       sameSite: "lax",
     });
   }

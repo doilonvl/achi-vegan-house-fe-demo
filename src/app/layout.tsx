@@ -65,6 +65,10 @@ export default async function RootLayout({
   const locale = await getLocale();
   return (
     <html lang={locale} suppressHydrationWarning className={playfair.variable}>
+      <head>
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+      </head>
       <body>
         <Providers>{children}</Providers>
         <Script id="gtag-delayed" strategy="lazyOnload">
@@ -74,16 +78,17 @@ export default async function RootLayout({
               function loadGTM(){
                 if(loaded)return;
                 loaded=true;
-                var s=document.createElement('script');
-                s.src='https://www.googletagmanager.com/gtag/js?id=G-WDD481BL2J';
-                s.async=true;
-                document.head.appendChild(s);
                 window.dataLayer=window.dataLayer||[];
                 function gtag(){dataLayer.push(arguments);}
                 window.gtag=gtag;
                 gtag('js',new Date());
-                gtag('config','G-WDD481BL2J');
-                gtag('config','AW-17971414705');
+                gtag('config','G-WDD481BL2J',{send_page_view:false});
+                gtag('config','AW-17971414705',{send_page_view:false});
+                var s=document.createElement('script');
+                s.src='https://www.googletagmanager.com/gtag/js?id=G-WDD481BL2J&l=dataLayer';
+                s.async=true;
+                document.head.appendChild(s);
+                gtag('event','page_view');
               }
               var t=setTimeout(loadGTM,5000);
               ['scroll','click','touchstart','keydown'].forEach(function(e){

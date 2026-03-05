@@ -278,10 +278,10 @@ export default async function HomePage() {
             src="/intro/in1.jpg"
             alt={t("aboutImageAlt")}
             fill
-            sizes="100vw"
+            sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover opacity-40"
             loading="lazy"
-            quality={60}
+            quality={40}
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-black/80" />
         </div>

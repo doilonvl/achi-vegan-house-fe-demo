@@ -314,7 +314,7 @@ export function ReservationForm({
               </p>
               <button
                 onClick={handleModify}
-                className="border-b border-emerald-700/60 pb-1 text-xs font-semibold uppercase tracking-[0.3em] text-emerald-800/70 hover:text-emerald-900"
+                className="border-b border-emerald-700/60 pb-1 text-xs font-semibold uppercase tracking-[0.3em] text-emerald-800 hover:text-emerald-900"
               >
                 Make Another Reservation
               </button>
@@ -322,7 +322,7 @@ export function ReservationForm({
           ) : (
             <>
               <div className="mb-10">
-                <span className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-800/80">
+                <span className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-800">
                   {t("sectionTitle")}
                 </span>
                 <h2 className="mt-4 font-[var(--font-playfair)] text-4xl text-emerald-900">

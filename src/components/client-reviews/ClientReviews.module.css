@@ -221,7 +221,10 @@
   color: inherit;
   opacity: 0.6;
   border-bottom: 1px solid rgba(26, 46, 26, 0.25);
-  padding-bottom: 0.25rem;
+  padding: 0.75rem 0.5rem;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
   transition: opacity 0.2s ease, border-color 0.2s ease;
   white-space: nowrap;
 }

@@ -5,14 +5,10 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { ReactLenis, useLenis } from "lenis/react";
 import type { LenisOptions } from "lenis";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 type ClientLayoutProps = {
   children: ReactNode;
 };
-
-gsap.registerPlugin(ScrollTrigger);
 
 const LenisScrollSync = () => {
   const lenis = useLenis();
@@ -20,33 +16,44 @@ const LenisScrollSync = () => {
   useEffect(() => {
     if (!lenis) return;
 
-    const onScroll = () => ScrollTrigger.update();
-    lenis.on("scroll", onScroll);
+    let cleanup: (() => void) | undefined;
 
-    ScrollTrigger.scrollerProxy(document.documentElement, {
-      scrollTop(value) {
-        if (typeof value === "number") {
-          lenis.scrollTo(value, { immediate: true });
-        }
-        return lenis.scroll;
-      },
-      getBoundingClientRect() {
-        return {
-          top: 0,
-          left: 0,
-          width: window.innerWidth,
-          height: window.innerHeight,
-        };
-      },
-      pinType: document.documentElement.style.transform ? "transform" : "fixed",
+    Promise.all([
+      import("gsap"),
+      import("gsap/ScrollTrigger"),
+    ]).then(([{ default: gsap }, { ScrollTrigger }]) => {
+      gsap.registerPlugin(ScrollTrigger);
+
+      const onScroll = () => ScrollTrigger.update();
+      lenis.on("scroll", onScroll);
+
+      ScrollTrigger.scrollerProxy(document.documentElement, {
+        scrollTop(value) {
+          if (typeof value === "number") {
+            lenis.scrollTo(value, { immediate: true });
+          }
+          return lenis.scroll;
+        },
+        getBoundingClientRect() {
+          return {
+            top: 0,
+            left: 0,
+            width: window.innerWidth,
+            height: window.innerHeight,
+          };
+        },
+        pinType: document.documentElement.style.transform ? "transform" : "fixed",
+      });
+
+      ScrollTrigger.refresh();
+
+      cleanup = () => {
+        lenis.off("scroll", onScroll);
+        ScrollTrigger.scrollerProxy(document.documentElement, {});
+      };
     });
 
-    ScrollTrigger.refresh();
-
-    return () => {
-      lenis.off("scroll", onScroll);
-      ScrollTrigger.scrollerProxy(document.documentElement, {});
-    };
+    return () => cleanup?.();
   }, [lenis]);
 
   return null;
