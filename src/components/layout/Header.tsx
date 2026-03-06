@@ -72,24 +72,22 @@ export default function Header() {
           )
         : undefined;
 
-      // When a slug override exists, replace the slug directly in the pathname
-      // because next-intl ignores `params` for routes not declared in pathnames config
-      let resolvedPathname: string = pathname;
-      if (routeParams?.slug && slugOverride) {
-        const currentSlug = Array.isArray(routeParams.slug)
+      const currentSlug = routeParams?.slug
+        ? Array.isArray(routeParams.slug)
           ? routeParams.slug[0]
-          : (routeParams.slug as string);
-        if (currentSlug && resolvedPathname.includes(currentSlug)) {
-          resolvedPathname = resolvedPathname.replace(
-            currentSlug,
-            slugOverride,
-          );
-        }
-      }
+          : (routeParams.slug as string)
+        : undefined;
 
-      router.replace({ pathname: resolvedPathname as typeof pathname } as any, {
-        locale: target,
-      });
+      const targetSlug = currentSlug ? slugOverride || currentSlug : undefined;
+
+      const finalParams = routeParams
+        ? { ...routeParams, ...(targetSlug ? { slug: targetSlug } : {}) }
+        : undefined;
+
+      const href: Record<string, unknown> = { pathname };
+      if (finalParams) href.params = finalParams;
+
+      router.replace(href as any, { locale: target });
     },
     [localeCode, params, pathname, router],
   );

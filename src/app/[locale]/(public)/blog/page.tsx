@@ -179,7 +179,7 @@ export default async function BlogPage({ params, searchParams }: PageParams) {
                 <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
                   {items.map((item) => {
                     const slug =
-                      item.slug || resolveSlug(item.slug_i18n, locale);
+                      resolveSlug(item.slug_i18n, locale) || item.slug || "";
                     const title = resolveI18nValue(item.title_i18n, locale);
                     const excerpt = resolveI18nValue(
                       item.excerpt_i18n,
@@ -292,7 +292,7 @@ export default async function BlogPage({ params, searchParams }: PageParams) {
                   ) : (
                     latest.map((item) => {
                       const slug =
-                        item.slug || resolveSlug(item.slug_i18n, locale);
+                        resolveSlug(item.slug_i18n, locale) || item.slug || "";
                       const title = resolveI18nValue(item.title_i18n, locale);
                       const cover = item.coverImage?.url;
                       const detailHref = buildDetailHref(locale, slug);

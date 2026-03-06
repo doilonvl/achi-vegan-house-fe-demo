@@ -279,7 +279,7 @@ export default async function BlogDetailPage({ params }: PageParams) {
                   ) : (
                     latestPosts.map((item) => {
                       const itemSlug =
-                        item.slug || resolveSlug(item.slug_i18n, locale);
+                        resolveSlug(item.slug_i18n, locale) || item.slug || "";
                       const itemTitle = resolveI18nValue(
                         item.title_i18n,
                         locale

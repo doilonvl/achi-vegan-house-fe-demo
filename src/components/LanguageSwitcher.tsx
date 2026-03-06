@@ -97,19 +97,22 @@ export default function LanguageSwitcher({
 
     const slugOverride = getSlugOverride(target);
 
-    // When a slug override exists, replace the slug directly in the pathname
-    // because next-intl ignores `params` for routes not declared in pathnames config
-    let resolvedPathname: string = pathname;
-    if (routeParams?.slug && slugOverride) {
-      const currentSlug = Array.isArray(routeParams.slug)
+    // usePathname() from next-intl returns the internal template path (e.g. /blog/[slug]),
+    // not the actual URL. We must pass params separately so next-intl fills in the slug.
+    const currentSlug = routeParams?.slug
+      ? Array.isArray(routeParams.slug)
         ? routeParams.slug[0]
-        : (routeParams.slug as string);
-      if (currentSlug && resolvedPathname.includes(currentSlug)) {
-        resolvedPathname = resolvedPathname.replace(currentSlug, slugOverride);
-      }
-    }
+        : (routeParams.slug as string)
+      : undefined;
 
-    const hrefBase = { pathname: resolvedPathname as typeof pathname };
+    const targetSlug = currentSlug ? slugOverride || currentSlug : undefined;
+
+    const finalParams = routeParams
+      ? { ...routeParams, ...(targetSlug ? { slug: targetSlug } : {}) }
+      : undefined;
+
+    const hrefBase: Record<string, unknown> = { pathname };
+    if (finalParams) hrefBase.params = finalParams;
     const hrefWithQuery = queryObject
       ? { ...hrefBase, query: queryObject }
       : hrefBase;

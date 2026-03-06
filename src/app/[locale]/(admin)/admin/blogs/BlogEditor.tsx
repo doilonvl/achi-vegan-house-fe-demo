@@ -148,6 +148,8 @@ export default function BlogEditor({
   const [titleEn, setTitleEn] = useState("");
   const [slugVi, setSlugVi] = useState("");
   const [slugEn, setSlugEn] = useState("");
+  const [slugViTouched, setSlugViTouched] = useState(false);
+  const [slugEnTouched, setSlugEnTouched] = useState(false);
   const [excerptVi, setExcerptVi] = useState("");
   const [excerptEn, setExcerptEn] = useState("");
 
@@ -174,6 +176,8 @@ export default function BlogEditor({
 
   const [contentViDoc, setContentViDoc] = useState<LexicalDoc | null>(null);
   const [contentEnDoc, setContentEnDoc] = useState<LexicalDoc | null>(null);
+  const [previewViDoc, setPreviewViDoc] = useState<LexicalDoc | null>(null);
+  const [previewEnDoc, setPreviewEnDoc] = useState<LexicalDoc | null>(null);
 
   const [status, setStatus] = useState<BlogStatus | "draft">("draft");
   const [publishedAt, setPublishedAt] = useState<string | null>(null);
@@ -185,14 +189,24 @@ export default function BlogEditor({
   }, [saving]);
 
   useEffect(() => {
-    if (slugVi || !titleVi) return;
+    if (slugViTouched || !titleVi) return;
     setSlugVi(slugifyText(titleVi));
-  }, [slugVi, titleVi]);
+  }, [titleVi, slugViTouched]);
 
   useEffect(() => {
-    if (slugEn || !titleEn) return;
+    if (slugEnTouched || !titleEn) return;
     setSlugEn(slugifyText(titleEn));
-  }, [slugEn, titleEn]);
+  }, [titleEn, slugEnTouched]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setPreviewViDoc(contentViDoc), 600);
+    return () => clearTimeout(timer);
+  }, [contentViDoc]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setPreviewEnDoc(contentEnDoc), 600);
+    return () => clearTimeout(timer);
+  }, [contentEnDoc]);
 
   const hydrateFromBlog = useCallback((blog: Blog) => {
     suspendDirtyRef.current = true;
@@ -208,6 +222,8 @@ export default function BlogEditor({
         ? blog.slug_i18n
         : blog.slug_i18n?.en || "",
     );
+    setSlugViTouched(true);
+    setSlugEnTouched(true);
     setExcerptVi(blog.excerpt_i18n?.vi || "");
     setExcerptEn(blog.excerpt_i18n?.en || "");
 
@@ -285,16 +301,16 @@ export default function BlogEditor({
   const previewTocVi = useMemo(
     () =>
       normalizeTocIds(
-        contentViDoc ? extractHeadingsFromLexical(contentViDoc) : [],
+        previewViDoc ? extractHeadingsFromLexical(previewViDoc) : [],
       ),
-    [contentViDoc],
+    [previewViDoc],
   );
   const previewTocEn = useMemo(
     () =>
       normalizeTocIds(
-        contentEnDoc ? extractHeadingsFromLexical(contentEnDoc) : [],
+        previewEnDoc ? extractHeadingsFromLexical(previewEnDoc) : [],
       ),
-    [contentEnDoc],
+    [previewEnDoc],
   );
 
   const validate = () => {
@@ -831,7 +847,7 @@ export default function BlogEditor({
                     <Card className="p-4">
                       <article className="prose prose-neutral max-w-none">
                         <LexicalContentRenderer
-                          doc={contentViDoc}
+                          doc={previewViDoc}
                           toc={previewTocVi}
                           locale="vi"
                         />
@@ -842,7 +858,7 @@ export default function BlogEditor({
                     <Card className="p-4">
                       <article className="prose prose-neutral max-w-none">
                         <LexicalContentRenderer
-                          doc={contentEnDoc}
+                          doc={previewEnDoc}
                           toc={previewTocEn}
                           locale="en"
                         />
@@ -856,20 +872,54 @@ export default function BlogEditor({
             <div className="grid gap-4">
               <div className="grid gap-2">
                 <Label>Slug (VI)</Label>
-                <Input
-                  value={slugVi}
-                  onChange={(event) => setSlugVi(event.target.value)}
-                />
+                <div className="flex gap-2">
+                  <Input
+                    value={slugVi}
+                    onChange={(event) => {
+                      setSlugVi(event.target.value);
+                      setSlugViTouched(true);
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="shrink-0"
+                    onClick={() => {
+                      if (titleVi) setSlugVi(slugifyText(titleVi));
+                    }}
+                    title="Generate from title"
+                  >
+                    ↺
+                  </Button>
+                </div>
                 {errors.slugVi ? (
                   <p className="text-xs text-destructive">{errors.slugVi}</p>
                 ) : null}
               </div>
               <div className="grid gap-2">
                 <Label>Slug (EN)</Label>
-                <Input
-                  value={slugEn}
-                  onChange={(event) => setSlugEn(event.target.value)}
-                />
+                <div className="flex gap-2">
+                  <Input
+                    value={slugEn}
+                    onChange={(event) => {
+                      setSlugEn(event.target.value);
+                      setSlugEnTouched(true);
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="shrink-0"
+                    onClick={() => {
+                      if (titleEn) setSlugEn(slugifyText(titleEn));
+                    }}
+                    title="Generate from title"
+                  >
+                    ↺
+                  </Button>
+                </div>
                 {errors.slugEn ? (
                   <p className="text-xs text-destructive">{errors.slugEn}</p>
                 ) : null}
