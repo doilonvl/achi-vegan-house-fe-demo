@@ -20,6 +20,7 @@ const OPENING_HOURS = {
 function buildReservationSchema(t: ReturnType<typeof useTranslations>) {
   return z
     .object({
+      website: z.string().optional(),
       fullName: z
         .string()
         .trim()
@@ -202,10 +203,12 @@ export function ReservationForm({
     handleSubmit,
     reset,
     watch,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<ReservationFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
+      website: "",
       fullName: "",
       phoneNumber: "",
       email: "",
@@ -251,6 +254,7 @@ export function ReservationForm({
       note: values.note?.trim() || undefined,
       source: "website",
       locale,
+      website: values.website || "",
     };
 
     try {
@@ -259,9 +263,29 @@ export function ReservationForm({
       setSubmitted(true);
       onSuccess?.(payload);
     } catch (error) {
-      const message =
-        (error as { data?: { message?: string } })?.data?.message ||
-        t("errorDesc");
+      const err = error as {
+        status?: number;
+        data?: {
+          message?: string;
+          errors?: Array<{ field: string; message: string }>;
+        };
+      };
+
+      if (err.status === 429) {
+        toast.error(t("errorTitle"), { description: t("errorRateLimit") });
+        return;
+      }
+
+      if (err.status === 400 && err.data?.errors?.length) {
+        for (const fieldError of err.data.errors) {
+          setError(fieldError.field as keyof ReservationFormValues, {
+            message: fieldError.message,
+          });
+        }
+        return;
+      }
+
+      const message = err.data?.message || t("errorDesc");
       toast.error(t("errorTitle"), { description: message });
     }
   };
@@ -468,6 +492,21 @@ export function ReservationForm({
                   )}
                 </div>
 
+                {/* Honeypot — bẫy bot, người thật không nhìn thấy */}
+                <input
+                  {...register("website")}
+                  type="text"
+                  name="website"
+                  style={{
+                    position: "absolute",
+                    left: "-9999px",
+                    opacity: 0,
+                    pointerEvents: "none",
+                  }}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                />
                 <button
                   type="submit"
                   disabled={isBusy}

@@ -8,6 +8,7 @@ export type ReservationRequestPayload = {
   note?: string;
   source?: string;
   locale?: string;
+  website?: string;
 };
 
 export type ReservationRequestResponse = {

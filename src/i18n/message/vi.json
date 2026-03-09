@@ -419,6 +419,7 @@
     "successDesc": "Chúng tôi sẽ liên hệ để xác nhận trong vài phút nữa.",
     "errorTitle": "Gửi thất bại",
     "errorDesc": "Không thể gửi yêu cầu, vui lòng thử lại sau.",
+    "errorRateLimit": "Bạn đã gửi quá nhiều yêu cầu đặt bàn. Vui lòng thử lại sau ít phút.",
     "contactLabel": "Liên hệ nhanh",
     "addressLine": "50 Thụy Khuê, Tây Hồ, Hà Nội",
     "openingHourLabel": "Giờ mở cửa",

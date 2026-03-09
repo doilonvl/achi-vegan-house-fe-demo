@@ -51,6 +51,13 @@ export async function fetchAdminJson<T>(
     ) as AdminApiError;
     error.status = res.status;
     error.payload = await readErrorPayload(res);
+
+    if (res.status >= 500) {
+      import("@sentry/nextjs").then(({ captureException }) => {
+        captureException(error, { extra: { path, payload: error.payload } });
+      });
+    }
+
     throw error;
   }
 

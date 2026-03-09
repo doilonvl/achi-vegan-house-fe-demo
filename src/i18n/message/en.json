@@ -420,6 +420,7 @@
     "successDesc": "We'll contact you to confirm in a few minutes.",
     "errorTitle": "Request failed",
     "errorDesc": "Unable to send your request, please try again later.",
+    "errorRateLimit": "Too many reservation requests. Please try again in a few minutes.",
     "contactLabel": "Quick contact",
     "addressLine": "20 Duong Thanh, Hoan Kiem, Ha Noi",
     "openingHourLabel": "Opening hours",
