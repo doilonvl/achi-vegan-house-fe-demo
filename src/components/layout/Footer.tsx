@@ -72,6 +72,7 @@ export default function Footer() {
   const hasHalfStar = mapRatingValue - fullStars >= 0.5;
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsOpen(isOpenNow());
     const id = setInterval(() => setIsOpen(isOpenNow()), 60_000);
     return () => clearInterval(id);

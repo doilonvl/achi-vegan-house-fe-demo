@@ -80,7 +80,9 @@ export default function AdminBlogsPage() {
 
   useEffect(() => {
     const controller = new AbortController();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setError(null);
     fetchAdminBlogs({
       page,

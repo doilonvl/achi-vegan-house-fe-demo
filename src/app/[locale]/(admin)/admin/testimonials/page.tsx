@@ -135,7 +135,7 @@ async function updateTestimonial(formData: FormData) {
     avatarAssetId = asset._id;
   }
 
-  let mediaAssetIds = existingMediaAssetIds;
+  const mediaAssetIds = existingMediaAssetIds;
   if (mediaFiles.length) {
     for (const [index, file] of mediaFiles.entries()) {
       const asset = await createMediaAssetFromUpload(
