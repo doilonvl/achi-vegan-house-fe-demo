@@ -33,6 +33,13 @@ export default function LoginPage() {
       });
 
       if (!res.ok) {
+        if (res.status === 429) {
+          throw new Error(
+            locale === "vi"
+              ? "Bạn đã đăng nhập sai quá nhiều lần. Vui lòng thử lại sau 15 phút."
+              : "Too many login attempts. Please try again in 15 minutes."
+          );
+        }
         const data = await safeJson(res);
         throw new Error(data?.message || "Đăng nhập thất bại");
       }
